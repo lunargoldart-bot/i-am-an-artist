@@ -1,0 +1,1 @@
+import { firebaseService } from '../services';

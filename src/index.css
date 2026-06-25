@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 28 15% 6%;
+    --foreground: 40 20% 95%;
+    --card: 28 12% 9%;
+    --card-foreground: 40 20% 95%;
+    --popover: 28 12% 9%;
+    --popover-foreground: 40 20% 95%;
+    --primary: 42 78% 58%;
+    --primary-foreground: 28 15% 6%;
+    --secondary: 28 10% 15%;
+    --secondary-foreground: 40 20% 95%;
+    --muted: 28 10% 15%;
+    --muted-foreground: 40 10% 55%;
+    --accent: 42 78% 58%;
+    --accent-foreground: 28 15% 6%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 28 10% 18%;
+    --input: 28 10% 18%;
+    --ring: 42 78% 58%;
+    --chart-1: 42 78% 58%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 28 12% 9%;
+    --sidebar-foreground: 40 20% 95%;
+    --sidebar-primary: 42 78% 58%;
+    --sidebar-primary-foreground: 28 15% 6%;
+    --sidebar-accent: 28 10% 15%;
+    --sidebar-accent-foreground: 40 20% 95%;
+    --sidebar-border: 28 10% 18%;
+    --sidebar-ring: 42 78% 58%;
+    --gold: 42 78% 58%;
+    --gold-light: 42 78% 72%;
+    --charcoal: 28 15% 6%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-inter;
+  }
+}
+
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-inter { font-family: 'Inter', sans-serif; }
+
+.gold-gradient {
+  background: linear-gradient(135deg, hsl(42, 78%, 58%), hsl(35, 70%, 45%));
+}
+
+.gallery-card-hover {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+}
+.gallery-card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px hsl(42, 78%, 58%, 0.3);
+}
+
+.masonry-grid {
+  columns: 3;
+  column-gap: 1.5rem;
+}
+@media (max-width: 1024px) { .masonry-grid { columns: 2; } }
+@media (max-width: 640px) { .masonry-grid { columns: 1; } }
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.text-gold { color: hsl(var(--gold)); }
+.bg-gold { background-color: hsl(var(--gold)); }
+.border-gold { border-color: hsl(var(--gold)); }
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
