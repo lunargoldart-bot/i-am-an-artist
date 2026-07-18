@@ -1,0 +1,209 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function email() { return request.auth.token.email; }
+    function isAdmin() {
+      return signedIn() && get(/databases/$(database)/documents/users/$(uid())).data.role == 'admin';
+    }
+    function ownsEmail(value) { return signedIn() && value == email(); }
+    function participant(data) {
+      return signedIn() && (data.buyer_email == email() || data.seller_email == email() || data.courier_email == email());
+    }
+
+    match /users/{userId} {
+      allow read: if resource.data.role == 'artist' || (signedIn() && (userId == uid() || isAdmin()));
+      allow create: if signedIn() && userId == uid()
+                    && request.resource.data.uid == uid()
+                    && request.resource.data.email == email()
+                    && request.resource.data.role == 'user'
+                    && request.resource.data.subscription_tier == 'free';
+      allow update: if isAdmin() || (signedIn() && userId == uid()
+                    && request.resource.data.uid == resource.data.uid
+                    && request.resource.data.email == resource.data.email
+                    && request.resource.data.role in ['user', 'artist', 'buyer', 'courier']
+                    && request.resource.data.subscription_tier in ['free', 'basic']
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+                      'is_verified', 'is_verified_artist', 'verification_status',
+                      'subscription_status', 'subscription_start_date'
+                    ]));
+      allow delete: if isAdmin();
+    }
+
+    match /artworks/{id} {
+      allow read: if true;
+      allow create: if signedIn() && ownsEmail(request.resource.data.artist_email);
+      allow update: if isAdmin() || (signedIn() && ownsEmail(resource.data.artist_email)
+                    && request.resource.data.artist_email == resource.data.artist_email
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+                      'current_bid_zmw', 'highest_bidder_email', 'reserved_by_uid'
+                    ]));
+      allow delete: if isAdmin() || ownsEmail(resource.data.artist_email);
+    }
+
+    match /artists/{id} {
+      allow read: if true;
+      allow create: if signedIn() && ownsEmail(request.resource.data.user_email);
+      allow update, delete: if isAdmin() || ownsEmail(resource.data.user_email);
+    }
+
+    match /artist_registry/{id} {
+      allow read: if true;
+      allow create: if signedIn() && (ownsEmail(request.resource.data.user_email) || isAdmin());
+      allow update, delete: if isAdmin() || ownsEmail(resource.data.user_email);
+    }
+
+    match /exhibitions/{id} {
+      allow read: if true;
+      allow create: if signedIn() && ownsEmail(request.resource.data.organizer_email);
+      allow update, delete: if isAdmin() || ownsEmail(resource.data.organizer_email);
+    }
+
+    match /news_feed/{id} {
+      allow read: if true;
+      allow create: if signedIn() && ownsEmail(request.resource.data.author_email);
+      allow update, delete: if isAdmin() || ownsEmail(resource.data.author_email);
+    }
+
+    match /news_posts/{id} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    match /sponsored_ads/{id} {
+      allow read: if true;
+      allow create: if signedIn() && ownsEmail(request.resource.data.artist_email)
+                    && request.resource.data.status == 'paused'
+                    && request.resource.data.payment_status == 'unpaid';
+      allow update: if isAdmin() || (signedIn() && ownsEmail(resource.data.artist_email)
+                    && request.resource.data.artist_email == resource.data.artist_email
+                    && request.resource.data.payment_status == resource.data.payment_status
+                    && request.resource.data.payment_reference == resource.data.payment_reference
+                    && (request.resource.data.status != 'active' || resource.data.payment_status == 'paid'));
+      allow delete: if isAdmin() || ownsEmail(resource.data.artist_email);
+    }
+
+    match /orders/{id} {
+      allow read: if participant(resource.data) || isAdmin();
+      allow write: if false;
+    }
+
+    match /bids/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /messages/{id} {
+      allow read: if signedIn() && (resource.data.sender_email == email() || resource.data.recipient_email == email());
+      allow create: if signedIn() && request.resource.data.sender_email == email();
+      allow update: if false;
+      allow delete: if isAdmin() || (signedIn() && resource.data.sender_email == email());
+    }
+
+    match /wishlists/{id} {
+      allow read, delete: if isAdmin() || (signedIn() && resource.data.user_email == email());
+      allow create: if signedIn() && request.resource.data.user_email == email();
+      allow update: if isAdmin() || (signedIn() && resource.data.user_email == email());
+    }
+
+    match /collaboration_requests/{id} {
+      allow read: if isAdmin() || (signedIn() && (resource.data.initiator_email == email() || resource.data.collaborator_email == email()));
+      allow create: if signedIn()
+                    && request.resource.data.initiator_email == email()
+                    && request.resource.data.collaborator_email is string
+                    && request.resource.data.collaborator_email != email();
+      allow update: if false;
+      allow delete: if isAdmin() || (signedIn() && resource.data.initiator_email == email());
+    }
+
+    match /collaborations/{id} {
+      allow read: if isAdmin() || (signedIn() && (resource.data.initiator_email == email() || resource.data.collaborator_email == email()));
+      allow write: if false;
+    }
+
+    match /user_verifications/{id} {
+      allow read: if isAdmin() || (signedIn() && (resource.data.user_uid == uid() || resource.data.user_email == email()));
+      allow write: if false;
+    }
+
+    match /user_progress/{id} {
+      allow read: if isAdmin() || (signedIn() && (id == uid() || resource.data.user_email == email()));
+      allow write: if false;
+    }
+
+    match /buyer_preferences/{id} {
+      allow read, delete: if isAdmin() || (signedIn() && (resource.data.user_uid == uid() || resource.data.user_email == email()));
+      allow create: if signedIn() && (request.resource.data.user_uid == uid() || request.resource.data.user_email == email());
+      allow update: if isAdmin() || (signedIn() && (resource.data.user_uid == uid() || resource.data.user_email == email()));
+    }
+
+    match /delivery_updates/{id} {
+      allow read: if isAdmin() || (signedIn() && participant(
+        get(/databases/$(database)/documents/orders/$(resource.data.order_id)).data
+      ));
+      allow write: if false;
+    }
+
+    match /courier_reviews/{id} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.reviewer_email == email();
+      allow update, delete: if isAdmin() || ownsEmail(resource.data.reviewer_email);
+    }
+
+    match /artwork_reviews/{id} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.reviewer_email == email();
+      allow update, delete: if isAdmin() || ownsEmail(resource.data.reviewer_email);
+    }
+
+    match /grievances/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.user_uid == uid());
+      allow write: if false;
+    }
+
+    match /couriers/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /courier_payouts/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.courier_email == email());
+      allow write: if false;
+    }
+
+    match /payment_escrow/{id} {
+      allow read: if isAdmin() || (signedIn() && (resource.data.buyer_email == email() || resource.data.seller_email == email()));
+      allow write: if false;
+    }
+
+    match /membership_payments/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.user_uid == uid());
+      allow write: if false;
+    }
+
+    match /platform_revenue/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    match /referral_rewards/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.artist_email == email());
+      allow write: if false;
+    }
+
+    match /feature_queue/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.artist_email == email();
+      allow update, delete: if isAdmin() || (signedIn() && resource.data.artist_email == email());
+    }
+
+    match /badges/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /tutorials/{id} { allow read: if true; allow write: if isAdmin(); }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
