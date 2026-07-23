@@ -40,3 +40,4 @@ dist-ssr
 functions/.env
 functions/.env.*
 !functions/.env.example
+.env*
