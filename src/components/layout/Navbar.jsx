@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import authService from '@/services/auth';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Palette, Crown, Bookmark, Mail, Trophy, Package, Frame } from 'lucide-react';
+import { Menu, X, Crown, Bookmark, Mail, Trophy, Package, Frame } from 'lucide-react';
 
 const navLinks = [
   { label: 'Gallery', path: '/gallery' },
@@ -21,11 +21,8 @@ export default function Navbar({ user }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="I Am An Artist" className="w-8 h-8" />
-            <span className="font-playfair font-bold text-lg text-foreground">
-              I Am An <span className="text-gold">Artist</span>
-            </span>
+          <Link to="/">
+            <img src="/logo.png" alt="I Am An Artist" className="w-12 h-12" />
           </Link>
 
           {/* Desktop Nav */}

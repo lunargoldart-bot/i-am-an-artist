@@ -1,4 +1,4 @@
-import { Palette, Instagram, Twitter, Facebook, Youtube } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Youtube } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -7,11 +7,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.png" alt="I Am An Artist" className="w-8 h-8" />
-              <span className="font-playfair font-bold text-lg">
-                I Am An <span className="text-gold">Artist</span>
-              </span>
+            <div className="mb-4">
+              <img src="/logo.png" alt="I Am An Artist" className="w-16 h-16" />
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
               Empowering Zambian artists to showcase, sell, and thrive. 
