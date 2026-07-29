@@ -14,7 +14,7 @@ export default function FinalCTA() {
           poster="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=1920&q=80"
           className="w-full h-full object-cover opacity-30"
         >
-          <source src="https://cdn.coverr.co/videos/coverr-artist-painting-on-canvas-in-studio-5823/1080p.mp4" type="video/mp4" />
+          <source src="/hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-black/40 to-[#0D0D0D]/60" />
       </div>

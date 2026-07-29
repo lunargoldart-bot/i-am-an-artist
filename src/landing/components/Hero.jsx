@@ -59,7 +59,7 @@ export default function Hero() {
           poster="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1920&q=80"
           className="w-full h-full object-cover opacity-40"
         >
-          <source src="https://cdn.coverr.co/videos/coverr-artist-painting-on-canvas-in-studio-5823/1080p.mp4" type="video/mp4" />
+          <source src="/hero.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0D0D0D]" />
         <div className="absolute inset-0 hero-overlay" />
