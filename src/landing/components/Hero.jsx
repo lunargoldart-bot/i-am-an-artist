@@ -57,11 +57,11 @@ export default function Hero() {
           loop
           playsInline
           poster="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1920&q=80"
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-60"
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#0D0D0D]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-[#0D0D0D]" />
         <div className="absolute inset-0 hero-overlay" />
       </div>
 
