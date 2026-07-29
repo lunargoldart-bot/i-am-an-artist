@@ -6,7 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AppLayout from './components/layout/AppLayout';
-import Home from './pages/Home';
+import LandingPage from './landing/LandingPage';
 import Explore from './pages/Explore';
 import ArtworkDetail from './pages/ArtworkDetail';
 import Rankings from './pages/Rankings';
@@ -58,9 +58,9 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route element={<AppLayout />}>
-        <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/marketplace" element={<Explore />} />
         <Route path="/gallery" element={<Gallery />} />
