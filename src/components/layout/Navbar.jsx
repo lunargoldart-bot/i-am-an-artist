@@ -22,9 +22,7 @@ export default function Navbar({ user }) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 gold-gradient rounded-sm flex items-center justify-center">
-              <Palette className="w-4 h-4 text-background" />
-            </div>
+            <img src="/logo.png" alt="I Am An Artist" className="w-8 h-8" />
             <span className="font-playfair font-bold text-lg text-foreground">
               I Am An <span className="text-gold">Artist</span>
             </span>

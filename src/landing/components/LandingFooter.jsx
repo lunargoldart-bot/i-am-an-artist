@@ -25,9 +25,7 @@ export default function LandingFooter() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center">
-                <span className="text-black font-bold text-sm">A</span>
-              </div>
+              <img src="/logo.png" alt="I Am An Artist" className="w-8 h-8" />
               <span className="text-white font-playfair text-lg tracking-wide">I Am An Artist</span>
             </Link>
             <p className="text-white/40 text-sm font-inter leading-relaxed mb-6">

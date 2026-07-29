@@ -8,9 +8,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 gold-gradient rounded-sm flex items-center justify-center">
-                <Palette className="w-4 h-4 text-background" />
-              </div>
+              <img src="/logo.png" alt="I Am An Artist" className="w-8 h-8" />
               <span className="font-playfair font-bold text-lg">
                 I Am An <span className="text-gold">Artist</span>
               </span>

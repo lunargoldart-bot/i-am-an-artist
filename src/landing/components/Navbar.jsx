@@ -32,9 +32,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center">
-              <span className="text-black font-bold text-sm">A</span>
-            </div>
+            <img src="/logo.png" alt="I Am An Artist" className="w-8 h-8" />
             <span className="text-white font-playfair text-xl tracking-wide">I Am An Artist</span>
           </Link>
 
