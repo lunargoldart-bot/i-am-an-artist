@@ -4,14 +4,9 @@ import { functions } from "@/lib/firebase";
 import { httpsCallable } from "firebase/functions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Heart, Eye, Shield, Truck, ShoppingBag, Gavel, TrendingUp } from "lucide-react";
+import { ArrowLeft, Heart, Eye, Shield, Truck, ShoppingBag, ShoppingCart, Gavel, TrendingUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import QuickContactCard from "@/components/messaging/QuickContactCard";
@@ -20,6 +15,7 @@ import SocialShareButtons from "@/components/artwork/SocialShareButtons";
 import WishlistButton from "@/components/artwork/WishlistButton";
 import BidHistory from "@/components/auction/BidHistory";
 import PlaceBidDialog from "@/components/auction/PlaceBidDialog";
+import { useCart } from "@/lib/CartContext";
 
 const categoryLabels = {
   painting: "Painting", sculpture: "Sculpture", photography: "Photography",
@@ -40,6 +36,8 @@ export default function ArtworkDetail() {
   const [messageDialogOpen, setMessageDialogOpen] = useState(false);
   const [currentHighBid, setCurrentHighBid] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState("courier");
+  const { addItem, items: cartItems } = useCart();
+  const inCart = cartItems.some((i) => i.id === id);
   const [orderForm, setOrderForm] = useState({
     delivery_address: "", delivery_phone: "", delivery_notes: "", buyer_name: "",
   });
@@ -226,67 +224,26 @@ export default function ArtworkDetail() {
           />
 
           {artwork.status === "available" ? (
-            <Dialog open={buyDialogOpen} onOpenChange={setBuyDialogOpen}>
-              <DialogTrigger asChild>
-                <Button size="lg" className="w-full rounded-full font-body gap-2 text-base">
-                  <ShoppingBag className="w-5 h-5" /> Purchase This Artwork
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="font-display text-xl">Complete Your Order</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 mt-4">
-                  <div className="p-3 bg-muted rounded-lg text-sm font-body">
-                    <p className="font-medium">{artwork.title}</p>
-                    <p className="text-primary font-semibold mt-1">ZMW {artwork.price?.toLocaleString()}</p>
-                    <p className="text-muted-foreground text-xs mt-1">Pay on delivery</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm">Your Name</Label>
-                    <Input value={orderForm.buyer_name} onChange={(e) => setOrderForm({...orderForm, buyer_name: e.target.value})} placeholder="Full name" className="font-body" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm">Delivery Method</Label>
-                    <RadioGroup value={deliveryMethod} onValueChange={setDeliveryMethod} className="grid grid-cols-1 gap-2">
-                      <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${deliveryMethod === 'yango' ? 'border-primary bg-primary/5' : 'border-border'}`}>
-                        <RadioGroupItem value="yango" />
-                        <div className="font-body text-sm"><p className="font-medium">Yango Delivery</p><p className="text-xs text-muted-foreground">Fast delivery via Yango</p></div>
-                      </label>
-                      <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${deliveryMethod === 'courier' ? 'border-primary bg-primary/5' : 'border-border'}`}>
-                        <RadioGroupItem value="courier" />
-                        <div className="font-body text-sm"><p className="font-medium">Contact a Courier</p><p className="text-xs text-muted-foreground">We'll connect you with a courier</p></div>
-                      </label>
-                      <label className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${deliveryMethod === 'pickup' ? 'border-primary bg-primary/5' : 'border-border'}`}>
-                        <RadioGroupItem value="pickup" />
-                        <div className="font-body text-sm"><p className="font-medium">Pickup</p><p className="text-xs text-muted-foreground">Collect from the artist</p></div>
-                      </label>
-                    </RadioGroup>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm">Delivery Address</Label>
-                    <Input value={orderForm.delivery_address} onChange={(e) => setOrderForm({...orderForm, delivery_address: e.target.value})} placeholder="Your delivery address" className="font-body" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm">Phone Number</Label>
-                    <Input value={orderForm.delivery_phone} onChange={(e) => setOrderForm({...orderForm, delivery_phone: e.target.value})} placeholder="+260..." className="font-body" required />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm">Notes (optional)</Label>
-                    <Textarea value={orderForm.delivery_notes} onChange={(e) => setOrderForm({...orderForm, delivery_notes: e.target.value})} placeholder="Special instructions..." className="font-body" rows={2} />
-                  </div>
-
-                  <Button onClick={handleOrder} disabled={orderMutation.isPending} className="w-full rounded-full font-body">
-                    {orderMutation.isPending ? "Placing Order..." : "Place Order — Pay on Delivery"}
+            <div className="flex flex-col sm:flex-row gap-3">
+              {inCart ? (
+                <Link to="/cart" className="flex-1">
+                  <Button size="lg" className="w-full rounded-full font-body gap-2 text-base bg-green-primary hover:bg-green-secondary">
+                    <Check className="w-5 h-5" /> View in Cart
                   </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </Link>
+              ) : (
+                <Button size="lg" onClick={() => { addItem(artwork); toast.success('Added to cart'); }} className="flex-1 rounded-full font-body gap-2 text-base">
+                  <ShoppingCart className="w-5 h-5" /> Add to Cart
+                </Button>
+              )}
+              {!inCart && (
+                <Link to={`/checkout?quickBuy=${artwork.id}`} className="flex-1">
+                  <Button size="lg" variant="outline" className="w-full rounded-full font-body gap-2 text-base border-primary text-primary hover:bg-primary/5">
+                    <ShoppingBag className="w-5 h-5" /> Buy Now
+                  </Button>
+                </Link>
+              )}
+            </div>
           ) : (
             <Button size="lg" disabled className="w-full rounded-full font-body text-base">
               {artwork.status === "sold" ? "Sold" : artwork.status === "reserved" ? "Reserved" : "Unavailable"}

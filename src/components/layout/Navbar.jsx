@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import authService from '@/services/auth';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Crown, Bookmark, Mail, Trophy, Package, Frame } from 'lucide-react';
+import { Menu, X, Crown, Bookmark, Mail, Trophy, Package, Frame, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/lib/CartContext';
 
 const navLinks = [
   { label: 'Gallery', path: '/gallery' },
@@ -15,6 +16,7 @@ const navLinks = [
 export default function Navbar({ user }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { count } = useCart();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-primary/20">
@@ -42,6 +44,14 @@ export default function Navbar({ user }) {
 
           {/* Actions */}
           <div className="hidden md:flex items-center gap-3">
+            <Link to="/cart" className="relative text-muted-foreground hover:text-gold transition-colors">
+              <ShoppingCart className="w-5 h-5" />
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                  {count > 9 ? '9+' : count}
+                </span>
+              )}
+            </Link>
             {/* Elite badge */}
             <div className="flex items-center gap-1.5 bg-gold/10 border border-gold/25 text-gold text-xs font-bold px-2.5 py-1 rounded-full cursor-pointer hover:bg-gold/20 transition-colors">
               <Crown className="w-3 h-3 fill-gold/50" />
@@ -128,6 +138,11 @@ export default function Navbar({ user }) {
             </Link>
           ))}
           <div className="pt-2 border-t border-border space-y-2">
+            <Link to="/cart" onClick={() => setOpen(false)}>
+              <Button variant="outline" size="sm" className="w-full gap-2 relative">
+                <ShoppingCart className="w-4 h-4" /> Cart {count > 0 && `(${count})`}
+              </Button>
+            </Link>
             {user && (
               <>
                 {user.role === 'admin' && (

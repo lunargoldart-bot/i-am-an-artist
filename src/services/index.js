@@ -22,7 +22,6 @@ export * as BadgeService from './BadgeService.js';
 export * as TutorialService from './TutorialService.js';
 export * as UserProgressService from './UserProgressService.js';
 export * as FeatureQueueService from './FeatureQueueService.js';
-export * as PaymentEscrowService from './PaymentEscrowService.js';
 export * as PlatformRevenueService from './PlatformRevenueService.js';
 export * as ReferralRewardService from './ReferralRewardService.js';
 export * as ArtworkReviewService from './ArtworkReviewService.js';

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { motion } from 'framer-motion';
-import { Megaphone, Plus, Trash2, PauseCircle, PlayCircle, Crown, Eye, MousePointerClick, CreditCard } from 'lucide-react';
+import { Megaphone, Plus, Trash2, PauseCircle, PlayCircle, Crown, Eye, MousePointerClick } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import LipilaPaymentModal from './LipilaPaymentModal';
 
 const TIER_LABEL = { pro: 'Pro', elite: 'Elite' };
 const TIER_COLOR = { pro: 'text-sky-400 border-sky-400/25 bg-sky-400/10', elite: 'text-gold border-gold/25 bg-gold/10' };
@@ -245,16 +244,16 @@ export default function ManageAds() {
         </div>
       )}
     {payingAd && (
-      <LipilaPaymentModal
-        open={!!payingAd}
-        ad={payingAd}
-        onClose={() => setPayingAd(null)}
-        onSuccess={async () => {
-          const updated = await firebaseClient.entities.SponsoredAd.filter({ artist_email: user.email }, '-created_date');
-          setAds(updated || []);
-          toast.success('Payment initiated! Ad will activate once confirmed.');
-        }}
-      />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setPayingAd(null)}>
+        <div className="bg-card border border-border rounded-xl max-w-sm w-full p-6 text-center" onClick={(e) => e.stopPropagation()}>
+          <Megaphone className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
+          <h3 className="font-display font-bold text-lg mb-2">Ad Payment</h3>
+          <p className="text-muted-foreground font-body text-sm mb-4">
+            Ad payments are being migrated to DPO Pay. Please contact admin to activate this ad.
+          </p>
+          <Button variant="outline" onClick={() => setPayingAd(null)} className="rounded-full">Close</Button>
+        </div>
+      </div>
     )}
     </div>
   );

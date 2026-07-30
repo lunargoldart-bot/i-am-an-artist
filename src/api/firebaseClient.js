@@ -25,7 +25,6 @@ import * as BadgeService from '@/services/BadgeService';
 import * as TutorialService from '@/services/TutorialService';
 import * as UserProgressService from '@/services/UserProgressService';
 import * as FeatureQueueService from '@/services/FeatureQueueService';
-import * as PaymentEscrowService from '@/services/PaymentEscrowService';
 import * as PlatformRevenueService from '@/services/PlatformRevenueService';
 import * as ReferralRewardService from '@/services/ReferralRewardService';
 import * as ArtworkReviewService from '@/services/ArtworkReviewService';
@@ -94,7 +93,6 @@ export const firebaseClient = {
     Tutorial: entity(TutorialService),
     UserProgress: entity(UserProgressService),
     FeatureQueue: entity(FeatureQueueService),
-    PaymentEscrow: entity(PaymentEscrowService),
     PlatformRevenue: entity(PlatformRevenueService),
     ReferralReward: entity(ReferralRewardService),
     ArtworkReview: entity(ArtworkReviewService),
@@ -102,6 +100,16 @@ export const firebaseClient = {
     BuyerPreference: entity(BuyerPreferenceService),
   },
   functions: { invoke },
+  dpo: {
+    async createCheckoutSession(options) {
+      const response = await invoke('createCheckoutSession', options);
+      return response.data;
+    },
+    async verifyPayment(sessionId) {
+      const response = await invoke('verifyDPOPayment', { sessionId });
+      return response.data;
+    },
+  },
   integrations: {
     Core: {
       UploadFile: uploadFile,

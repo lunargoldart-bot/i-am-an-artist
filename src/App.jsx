@@ -4,6 +4,7 @@ import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import { CartProvider } from '@/lib/CartContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AppLayout from './components/layout/AppLayout';
 import LandingPage from './landing/LandingPage';
@@ -30,6 +31,10 @@ import Login from './pages/Login';
 import Artists from './pages/Artists';
 import Gallery from './pages/Gallery';
 import Dashboard from './pages/Dashboard';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import OrderSuccess from './pages/OrderSuccess';
+import OrderFailure from './pages/OrderFailure';
 import { ProtectedRoute, AdminRoute } from './components/auth/RouteGuards';
 
 const AuthenticatedApp = () => {
@@ -69,6 +74,10 @@ const AuthenticatedApp = () => {
         <Route path="/rankings" element={<Rankings />} />
         <Route path="/exhibitions" element={<Exhibitions />} />
         <Route path="/news" element={<NewsFeed />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order/success" element={<OrderSuccess />} />
+        <Route path="/order/failure" element={<OrderFailure />} />
         <Route path="/artist/:id" element={<ArtistProfile />} />
         <Route path="/gallery/:exhibitionId" element={<VirtualGallery />} />
         <Route element={<ProtectedRoute />}>
@@ -99,10 +108,12 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <AuthenticatedApp />
-        </Router>
-        <Toaster />
+        <CartProvider>
+          <Router>
+            <AuthenticatedApp />
+          </Router>
+          <Toaster />
+        </CartProvider>
       </QueryClientProvider>
     </AuthProvider>
   )
