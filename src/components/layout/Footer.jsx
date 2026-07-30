@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4">
-              <img src="/logo.png" alt="I Am An Artist" className="w-16 h-16" />
+              <img src="/logo.png" alt="I Am An Artist" className="h-16 w-auto" />
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
               Empowering Zambian artists to showcase, sell, and thrive. 

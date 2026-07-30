@@ -23,7 +23,7 @@ export default function LandingFooter() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="block mb-5">
-              <img src="/logo.png" alt="I Am An Artist" className="h-10 w-auto" />
+              <img src="/logo.png" alt="I Am An Artist" className="h-14 w-auto" />
             </Link>
             <p className="text-text-muted text-sm font-inter leading-relaxed mb-6">
               Empowering artists worldwide to showcase, connect, and sell their creative work.

@@ -22,7 +22,7 @@ export default function Navbar({ user }) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/">
-            <img src="/logo.png" alt="I Am An Artist" className="w-12 h-12" />
+            <img src="/logo.png" alt="I Am An Artist" className="h-14 w-auto" />
           </Link>
 
           {/* Desktop Nav */}
