@@ -39,14 +39,14 @@ Copy the web values into a local `.env.local` based on `.env.example`.
 
 Create `functions/.env.<project-id>` using `functions/.env.example` as the template. Configure the services actually being deployed:
 
-- `OPENROUTER_API_KEY`, `OPENROUTER_BASE_URL`, `OPENROUTER_MODEL`
+- `OPENAI_API_KEY`, `OPENAI_MODEL`
 - `SENDGRID_API_KEY`, `FROM_EMAIL`, `FROM_NAME`
 - `LIPILA_API_KEY`, charge URL, callback URLs, and `LIPILA_WEBHOOK_SECRET`
 - `ADMIN_REPORT_EMAIL`
 
 Never place service-account JSON, API secrets, signing keys, or live webhook secrets in the frontend `.env`.
 
-Never copy backend secrets (OpenRouter, SendGrid, Lipila, etc.) into Vercel frontend environment variables.
+Never copy backend secrets (OpenAI, SendGrid, Lipila, etc.) into Vercel frontend environment variables.
 
 ## 4. Install and validate
 

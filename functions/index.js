@@ -29,12 +29,8 @@ const getProfile = async (uid) => {
 };
 
 const getOpenAI = () => {
-  const apiKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
-  if (!apiKey) throw new HttpsError('failed-precondition', 'OPENROUTER_API_KEY is not configured');
-  return new OpenAI({
-    apiKey,
-    baseURL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
-  });
+  if (!process.env.OPENAI_API_KEY) throw new HttpsError('failed-precondition', 'OPENAI_API_KEY is not configured');
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 };
 
 const sendMail = async ({ to, subject, html, text }) => {
@@ -75,12 +71,12 @@ export const sendEmail = onCall(async (request) => {
   return { success: true };
 });
 
-export const invokeLLM = onCall({ secrets: ['OPENROUTER_API_KEY'] }, async (request) => {
+export const invokeLLM = onCall(async (request) => {
   requireUser(request);
   const prompt = String(request.data?.prompt || '').trim();
   if (!prompt) throw new HttpsError('invalid-argument', 'prompt is required');
   const completion = await getOpenAI().chat.completions.create({
-    model: process.env.OPENROUTER_MODEL || process.env.OPENAI_MODEL || 'google/gemini-2.0-flash-exp:free',
+    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     messages: [
       { role: 'system', content: 'You are a practical advisor for Zambian artists and art collectors. Avoid unsupported claims.' },
       { role: 'user', content: prompt.slice(0, 5000) },
