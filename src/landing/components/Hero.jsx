@@ -4,15 +4,6 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 
-const particles = Array.from({ length: 30 }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 4 + 1,
-  duration: Math.random() * 20 + 10,
-  delay: Math.random() * 10,
-}));
-
 export default function Hero() {
   const containerRef = useRef(null);
   const titleRef = useRef(null);
@@ -24,11 +15,11 @@ export default function Hero() {
       const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
       tl.fromTo(
         titleRef.current?.children,
-        { y: 120, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, delay: 0.8 }
+        { y: 100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, stagger: 0.12, delay: 0.6 }
       );
-      tl.fromTo(subtitleRef.current, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.4');
-      tl.fromTo(ctaRef.current?.children, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 }, '-=0.3');
+      tl.fromTo(subtitleRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.4');
+      tl.fromTo(ctaRef.current?.children, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 }, '-=0.3');
     }, containerRef);
     return () => ctx.revert();
   }, []);
@@ -38,10 +29,10 @@ export default function Hero() {
       const container = containerRef.current;
       if (!container) return;
       const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth - 0.5) * 20;
-      const y = (clientY / window.innerHeight - 0.5) * 20;
+      const x = (clientX / window.innerWidth - 0.5) * 16;
+      const y = (clientY / window.innerHeight - 0.5) * 16;
       gsap.to(container.querySelector('.parallax-bg'), {
-        x, y, duration: 1, ease: 'power2.out',
+        x, y, duration: 1.2, ease: 'power2.out',
       });
     };
     window.addEventListener('mousemove', handleMouse);
@@ -49,85 +40,64 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen overflow-hidden bg-[#0D0D0D]">
+    <section ref={containerRef} className="relative h-screen overflow-hidden bg-cream">
       <div className="parallax-bg absolute inset-0">
         <video
           autoPlay
           muted
           loop
           playsInline
-          poster="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1920&q=80"
-          className="w-full h-full object-cover opacity-60"
+          poster="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=1920&q=80"
+          className="w-full h-full object-cover opacity-60 scale-105"
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-[#0D0D0D]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/5 to-cream" />
         <div className="absolute inset-0 hero-overlay" />
       </div>
 
-      {particles.map((p) => (
+      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-6">
         <motion.div
-          key={p.id}
-          className="floating-particle"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size * 3,
-            height: p.size * 3,
-            opacity: 0.3,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.1, 0.4, 0.1],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            delay: p.delay,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-
-      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-6"
         >
-          <span className="inline-block px-4 py-1.5 text-xs tracking-[0.2em] uppercase text-gold border border-gold/20 rounded-full glass-gold">
+          <span className="inline-block px-5 py-1.5 text-xs tracking-[0.25em] uppercase text-green-primary font-inter font-medium bg-white/60 backdrop-blur-sm rounded-full border border-border-light">
             Premium African Art Marketplace
           </span>
         </motion.div>
 
-        <div ref={titleRef} className="overflow-hidden mb-6">
-          <h1 className="hero-title-line text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-playfair font-bold text-white leading-[0.9] tracking-tight">
+        <div ref={titleRef} className="mb-5">
+          <h1 className="font-playfair text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-text-dark leading-[0.9] tracking-tight">
             Every Artist
           </h1>
-          <h1 className="hero-title-line text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-playfair font-bold text-gradient-gold leading-[0.9] tracking-tight mt-2">
+          <h1 className="font-playfair text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-green-primary leading-[0.9] tracking-tight mt-2">
             Has A Stage.
           </h1>
-          <h1 className="hero-title-line text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-playfair italic font-light text-white/40 leading-[0.9] tracking-tight mt-2">
+          <h1 className="font-cormorant text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light italic text-text-muted leading-[0.9] mt-3">
             This Is Yours.
           </h1>
         </div>
 
-        <p ref={subtitleRef} className="text-white/40 text-lg sm:text-xl max-w-xl mx-auto mb-10 font-inter tracking-wide">
-          Discover, collect, and sell extraordinary African art. Connect with a global community of artists and collectors.
+        <p
+          ref={subtitleRef}
+          className="text-text-muted text-base sm:text-lg max-w-xl mx-auto mb-10 font-inter leading-relaxed"
+        >
+          Discover original artwork, connect with talented artists and experience Africa's modern digital art marketplace.
         </p>
 
         <div ref={ctaRef} className="flex flex-wrap gap-4 justify-center">
           <Link
             to="/explore"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gold text-black font-medium rounded-full text-sm tracking-wide hover:bg-gold-light transition-all gold-glow"
+            className="group inline-flex items-center gap-2 px-8 py-4 green-gradient text-white font-medium rounded-full text-sm tracking-wide hover:opacity-90 transition-all green-glow"
           >
-            Explore Marketplace
+            Explore Artwork
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 px-8 py-4 border border-white/10 text-white/80 font-medium rounded-full text-sm tracking-wide hover:border-white/20 hover:text-white transition-all glass"
+            className="inline-flex items-center gap-2 px-8 py-4 border border-border-light text-text-dark font-medium rounded-full text-sm tracking-wide hover:border-green-primary/20 hover:text-green-primary transition-all bg-white/40"
           >
             Become an Artist
           </Link>
@@ -138,11 +108,16 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-          className="scroll-indicator flex flex-col items-center gap-2"
+          transition={{ delay: 2.5, duration: 1 }}
+          className="flex flex-col items-center gap-2"
         >
-          <span className="text-white/20 text-xs tracking-widest uppercase">Scroll</span>
-          <ChevronDown className="w-4 h-4 text-white/30" />
+          <span className="text-text-muted text-[10px] tracking-[0.2em] uppercase font-inter">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <ChevronDown className="w-4 h-4 text-text-muted" />
+          </motion.div>
         </motion.div>
       </div>
     </section>

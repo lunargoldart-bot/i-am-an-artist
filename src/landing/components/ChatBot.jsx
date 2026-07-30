@@ -17,7 +17,7 @@ export default function ChatBot() {
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    const greetTimer = setTimeout(() => setShowGreeting(false), 8000);
+    const greetTimer = setTimeout(() => setShowGreeting(false), 4000);
     return () => clearTimeout(greetTimer);
   }, []);
 
@@ -52,7 +52,7 @@ export default function ChatBot() {
   };
 
   return (
-    <div className="chat-widget fixed bottom-6 right-6 flex flex-col items-end gap-3">
+    <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50">
       <AnimatePresence>
         {showGreeting && !open && (
           <motion.div
@@ -60,9 +60,9 @@ export default function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ duration: 0.3 }}
-            className="glass rounded-2xl px-5 py-3 text-white text-sm font-inter shadow-xl"
+            className="glass-card rounded-2xl px-5 py-3 text-text-dark text-sm font-inter shadow-xl"
           >
-            &#x1F44B; Welcome! Need help?
+            👋 Welcome to I Am An Artist.
           </motion.div>
         )}
       </AnimatePresence>
@@ -74,22 +74,25 @@ export default function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            className="glass rounded-2xl w-[360px] max-w-[calc(100vw-48px)] flex flex-col shadow-2xl overflow-hidden"
+            className="glass-card rounded-2xl w-[360px] max-w-[calc(100vw-48px)] flex flex-col shadow-2xl overflow-hidden"
             style={{ maxHeight: '520px' }}
           >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-light">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center">
-                  <span className="text-black font-bold text-xs">AI</span>
+                <div className="w-8 h-8 rounded-full green-gradient flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">AI</span>
                 </div>
                 <div>
-                  <p className="text-white text-sm font-medium font-inter">AI Assistant</p>
-                  <p className="text-white/30 text-[10px] font-inter">Online</p>
+                  <p className="text-text-dark text-sm font-medium font-inter">Art Assistant</p>
+                  <p className="flex items-center gap-1.5 text-text-muted text-[10px] font-inter">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-primary pulse-dot" />
+                    Online
+                  </p>
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="text-white/40 hover:text-white transition-colors"
+                className="text-text-muted hover:text-text-dark transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -105,8 +108,8 @@ export default function ChatBot() {
                   <div
                     className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm font-inter leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-gold text-black rounded-tr-sm'
-                        : 'bg-white/5 text-white/80 rounded-tl-sm'
+                        ? 'green-gradient text-white rounded-tr-sm'
+                        : 'bg-cream text-text-dark rounded-tl-sm border border-border-light'
                     }`}
                   >
                     {msg.text}
@@ -115,11 +118,11 @@ export default function ChatBot() {
               ))}
               {typing && (
                 <div className="flex justify-start">
-                  <div className="bg-white/5 px-4 py-2.5 rounded-2xl rounded-tl-sm">
+                  <div className="bg-cream border border-border-light px-4 py-2.5 rounded-2xl rounded-tl-sm">
                     <div className="flex gap-1">
-                      <span className="w-2 h-2 rounded-full bg-white/30 animate-bounce" />
-                      <span className="w-2 h-2 rounded-full bg-white/30 animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <span className="w-2 h-2 rounded-full bg-white/30 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                      <span className="w-2 h-2 rounded-full bg-green-primary/40 animate-bounce" />
+                      <span className="w-2 h-2 rounded-full bg-green-primary/40 animate-bounce" style={{ animationDelay: '0.1s' }} />
+                      <span className="w-2 h-2 rounded-full bg-green-primary/40 animate-bounce" style={{ animationDelay: '0.2s' }} />
                     </div>
                   </div>
                 </div>
@@ -127,7 +130,7 @@ export default function ChatBot() {
               <div ref={bottomRef} />
             </div>
 
-            <div className="p-4 border-t border-white/5">
+            <div className="p-4 border-t border-border-light">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -135,18 +138,18 @@ export default function ChatBot() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type a message..."
-                  className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-full text-white text-sm font-inter placeholder:text-white/30 focus:outline-none focus:border-gold/30 transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-cream border border-border-light rounded-full text-text-dark text-sm font-inter placeholder:text-text-muted focus:outline-none focus:border-green-primary/30 transition-colors"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!input.trim()}
-                  className="w-10 h-10 rounded-full bg-gold flex items-center justify-center hover:bg-gold-light transition-all flex-shrink-0 disabled:opacity-40"
+                  className="w-10 h-10 rounded-full green-gradient flex items-center justify-center hover:opacity-90 transition-all flex-shrink-0 disabled:opacity-40"
                   aria-label="Send"
                 >
-                  <Send className="w-4 h-4 text-black" />
+                  <Send className="w-4 h-4 text-white" />
                 </button>
               </div>
-              <p className="text-white/20 text-[10px] text-center mt-2 font-inter">
+              <p className="text-text-muted/40 text-[10px] text-center mt-2 font-inter">
                 Powered by OpenRouter
               </p>
             </div>
@@ -156,13 +159,13 @@ export default function ChatBot() {
 
       <button
         onClick={() => setOpen(!open)}
-        className="w-14 h-14 rounded-full bg-gold shadow-xl hover:bg-gold-light transition-all flex items-center justify-center gold-glow"
+        className="w-14 h-14 rounded-full green-gradient shadow-xl hover:opacity-90 transition-all flex items-center justify-center green-glow"
         aria-label="Toggle chat"
       >
         {open ? (
-          <X className="w-6 h-6 text-black" />
+          <X className="w-6 h-6 text-white" />
         ) : (
-          <MessageCircle className="w-6 h-6 text-black" />
+          <MessageCircle className="w-6 h-6 text-white" />
         )}
       </button>
     </div>

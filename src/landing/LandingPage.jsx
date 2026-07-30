@@ -1,15 +1,16 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import Hero from './components/Hero';
 import Navbar from './components/Navbar';
+import Hero from './components/Hero';
 import TrustedBy from './components/TrustedBy';
-import Categories from './components/Categories';
 import WhyChooseUs from './components/WhyChooseUs';
 import FeaturedArtwork from './components/FeaturedArtwork';
-import ArtistStory from './components/ArtistStory';
+import Categories from './components/Categories';
+import SellYourArt from './components/SellYourArt';
 import LiveAuctions from './components/LiveAuctions';
-import HowItWorks from './components/HowItWorks';
+import ArtistStory from './components/ArtistStory';
 import Testimonials from './components/Testimonials';
+import HowItWorks from './components/HowItWorks';
 import Newsletter from './components/Newsletter';
 import FinalCTA from './components/FinalCTA';
 import LandingFooter from './components/LandingFooter';
@@ -38,17 +39,18 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="bg-[#0D0D0D] text-white font-inter overflow-x-hidden">
+    <div className="bg-cream text-text-dark font-inter overflow-x-hidden">
       <Navbar />
       <Hero />
       <TrustedBy />
-      <Categories />
       <WhyChooseUs />
       <FeaturedArtwork />
-      <ArtistStory />
+      <Categories />
+      <SellYourArt />
       <LiveAuctions />
-      <HowItWorks />
+      <ArtistStory />
       <Testimonials />
+      <HowItWorks />
       <Newsletter />
       <FinalCTA />
       <LandingFooter />

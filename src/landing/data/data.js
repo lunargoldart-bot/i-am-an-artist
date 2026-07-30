@@ -1,29 +1,26 @@
 export const stats = [
   { label: 'Verified Artists', value: 1240, suffix: '+' },
-  { label: 'Artworks', value: 8500, suffix: '+' },
-  { label: 'Countries', value: 47, suffix: '' },
+  { label: 'Original Artworks', value: 8500, suffix: '+' },
   { label: 'Collectors', value: 3200, suffix: '+' },
+  { label: 'Countries', value: 47, suffix: '' },
   { label: 'Auctions', value: 580, suffix: '+' },
+];
+
+export const features = [
+  { title: 'Authentic Artwork', description: 'Every piece is verified for authenticity. Our curators ensure only genuine, original works are featured on the platform.', icon: 'ShieldCheck' },
+  { title: 'Verified Artists', description: 'All artists undergo a rigorous verification process to ensure genuine talent and professional quality.', icon: 'BadgeCheck' },
+  { title: 'Secure Payments', description: 'Protected transactions with enterprise-grade escrow, ensuring peace of mind for buyers and sellers.', icon: 'Lock' },
+  { title: 'Direct Communication', description: 'Connect directly with artists. Discuss commissions, negotiate prices, and build meaningful relationships.', icon: 'MessageCircle' },
+  { title: 'Nationwide Delivery', description: 'Reliable shipping network across Zambia and expanding globally. Artwork delivered safely to your door.', icon: 'Truck' },
 ];
 
 export const categories = [
   { title: 'Painting', image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80', count: 2140 },
   { title: 'Photography', image: 'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=800&q=80', count: 1870 },
   { title: 'Digital Art', image: 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=800&q=80', count: 1620 },
-  { title: 'Sculpture', image: 'https://images.unsplash.com/photo-1544717301-9cdcb1f5940f?w=800&q=80', count: 890 },
-  { title: 'Crafts', image: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe6ef?w=800&q=80', count: 760 },
-  { title: 'Fashion', image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=80', count: 540 },
-  { title: 'Music', image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80', count: 430 },
-  { title: 'Performance', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80', count: 320 },
-];
-
-export const whyChooseUs = [
-  { title: 'Authentic Artwork', description: 'Every piece is verified for authenticity by our expert curators and blockchain-certified.', icon: 'ShieldCheck' },
-  { title: 'Verified Artists', description: 'All artists undergo a rigorous verification process to ensure genuine talent.', icon: 'BadgeCheck' },
-  { title: 'Secure Payments', description: 'Enterprise-grade escrow payment system protecting both buyers and sellers.', icon: 'Lock' },
-  { title: 'Worldwide Reach', description: 'Global shipping and delivery network spanning 47 countries across the world.', icon: 'Globe' },
-  { title: 'Zero Commission', description: 'Artists keep 100% of their earnings. We believe creators should be fully rewarded.', icon: 'Percent' },
-  { title: 'Expert Curation', description: 'Our team of art professionals curates every collection for exceptional quality.', icon: 'Sparkles' },
+  { title: 'African Heritage', image: 'https://images.unsplash.com/photo-1544717301-9cdcb1f5940f?w=800&q=80', count: 1190 },
+  { title: 'Modern Sculpture', image: 'https://images.unsplash.com/photo-1549887534-1541e9326642?w=800&q=80', count: 890 },
+  { title: 'Crafts & Textiles', image: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe6ef?w=800&q=80', count: 760 },
 ];
 
 export const featuredArtworks = [
@@ -46,13 +43,28 @@ export const auctions = [
 ];
 
 export const testimonials = [
-  { name: 'Sarah Johnson', role: 'Art Collector, London', text: 'I Am An Artist connected me with incredible African artists I would never have discovered otherwise. The platform is world-class.' },
-  { name: 'James Ochieng', role: 'Artist, Nairobi', text: 'This platform transformed my career. I now sell my artwork internationally and connect with collectors globally.' },
-  { name: 'Maria Fernandez', role: 'Gallery Owner, Barcelona', text: 'The quality of art on this platform is exceptional. We\'ve acquired over 50 pieces for our gallery.' },
-  { name: 'David Kimani', role: 'Art Collector, New York', text: 'The verification process gives me confidence that every piece I purchase is authentic and fairly priced.' },
-  { name: 'Aisha Mohammed', role: 'Artist, Lagos', text: 'I love the community aspect. I\'ve collaborated with other artists and participated in amazing virtual exhibitions.' },
-  { name: 'Lucia Pereira', role: 'Curator, Lisbon', text: 'The curation is impeccable. Every collection tells a compelling story about contemporary African art.' },
+  { name: 'Sarah Johnson', role: 'Art Collector, London', text: 'I Am An Artist connected me with incredible African artists I would never have discovered otherwise. The platform is world-class.', rating: 5 },
+  { name: 'James Ochieng', role: 'Artist, Nairobi', text: 'This platform transformed my career. I now sell my artwork internationally and connect with collectors globally.', rating: 5 },
+  { name: 'Maria Fernandez', role: 'Gallery Owner, Barcelona', text: 'The quality of art on this platform is exceptional. We\'ve acquired over 50 pieces for our gallery.', rating: 5 },
+  { name: 'David Kimani', role: 'Art Collector, New York', text: 'The verification process gives me confidence that every piece I purchase is authentic and fairly priced.', rating: 5 },
+  { name: 'Aisha Mohammed', role: 'Artist, Lagos', text: 'I love the community aspect. I\'ve collaborated with other artists and participated in amazing virtual exhibitions.', rating: 5 },
+  { name: 'Lucia Pereira', role: 'Curator, Lisbon', text: 'The curation is impeccable. Every collection tells a compelling story about contemporary African art.', rating: 5 },
 ];
+
+export const artistStory = {
+  name: 'Amara Eze',
+  location: 'Lagos, Nigeria',
+  image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80',
+  journey: [
+    { year: '2018', event: 'Began painting professionally' },
+    { year: '2020', event: 'Joined I Am An Artist platform' },
+    { year: '2021', event: 'First international sale' },
+    { year: '2022', event: 'Featured in Lagos Biennial' },
+    { year: '2023', event: 'Solo exhibition in London' },
+    { year: '2024', event: '100+ artworks sold worldwide' },
+  ],
+  quote: 'Art is not what you see, but what you make others see. This platform gave my work a home.',
+};
 
 export const howItWorks = [
   { step: 1, title: 'Create Your Profile', description: 'Sign up and build your artist portfolio in minutes. Showcase your unique style and artistic journey.' },
@@ -63,6 +75,6 @@ export const howItWorks = [
 export const footerLinks = {
   marketplace: ['Explore', 'Artists', 'Auctions', 'Collections', 'Categories', 'Rankings'],
   forArtists: ['Become an Artist', 'Sell Artwork', 'Artist Guide', 'Success Stories', 'Resources'],
-  company: ['About Us', 'Careers', 'Press', 'Blog', 'Contact'],
-  support: ['Help Center', 'Terms of Service', 'Privacy Policy', 'Cookie Policy', 'FAQ'],
+  company: ['About Us', 'Careers', 'Press', 'Contact'],
+  support: ['Help Center', 'Terms of Service', 'Privacy Policy', 'Cookie Policy'],
 };

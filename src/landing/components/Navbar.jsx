@@ -24,15 +24,15 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1], delay: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1], delay: 0.3 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-[#0D0D0D]/80 backdrop-blur-xl border-b border-white/5' : 'bg-transparent'
+        scrolled ? 'glass-nav shadow-sm' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/">
-            <img src="/logo.png" alt="I Am An Artist" className="w-14 h-14" />
+            <img src="/logo.png" alt="I Am An Artist" className="h-12 w-auto" />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
@@ -40,21 +40,21 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 to={link.href}
-                className="text-sm text-white/60 hover:text-white transition-colors tracking-wide"
+                className="text-sm text-text-muted hover:text-text-dark transition-colors font-inter tracking-wide"
               >
                 {link.label}
               </Link>
             ))}
             <Link
               to="/login"
-              className="px-5 py-2.5 text-sm rounded-full bg-gold text-black font-medium hover:bg-gold-light transition-all"
+              className="px-6 py-2.5 text-sm rounded-full green-gradient text-white font-medium hover:opacity-90 transition-all green-glow"
             >
               Join Gallery
             </Link>
           </div>
 
           <button
-            className="md:hidden text-white"
+            className="md:hidden text-text-dark"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menu"
           >
@@ -69,15 +69,15 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#0D0D0D]/95 backdrop-blur-xl border-t border-white/5"
+            className="md:hidden glass-nav border-t border-border-light"
           >
-            <div className="px-4 py-6 space-y-4">
+            <div className="px-6 py-6 space-y-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block text-white/60 hover:text-white transition-colors py-2"
+                  className="block text-text-muted hover:text-text-dark transition-colors py-2 font-inter"
                 >
                   {link.label}
                 </Link>
@@ -85,7 +85,7 @@ export default function Navbar() {
               <Link
                 to="/login"
                 onClick={() => setMobileOpen(false)}
-                className="block text-center px-5 py-3 rounded-full bg-gold text-black font-medium"
+                className="block text-center px-6 py-3 rounded-full green-gradient text-white font-medium"
               >
                 Join Gallery
               </Link>

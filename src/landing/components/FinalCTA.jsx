@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 
 export default function FinalCTA() {
   return (
-    <section className="relative h-[80vh] min-h-[500px] overflow-hidden bg-[#0D0D0D]">
+    <section className="relative min-h-[70vh] overflow-hidden bg-cream">
       <div className="absolute inset-0">
         <video
           autoPlay
@@ -12,25 +12,25 @@ export default function FinalCTA() {
           loop
           playsInline
           poster="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=1920&q=80"
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-40"
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-black/20 to-[#0D0D0D]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-cream via-cream/60 to-cream/80" />
       </div>
 
-      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
+      <div className="relative z-10 h-full min-h-[70vh] flex flex-col justify-center items-center text-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
         >
-          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-playfair font-bold text-white leading-[0.9] tracking-tight mb-2">
-            Every Masterpiece
+          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-playfair font-bold text-text-dark leading-[0.9] tracking-tight mb-2">
+            Your Next Masterpiece
           </h2>
-          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-playfair font-bold text-gradient-gold leading-[0.9] tracking-tight mb-8">
-            Begins With Courage.
+          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-playfair font-bold text-green-primary leading-[0.9] tracking-tight mb-8">
+            Could Inspire The World.
           </h2>
         </motion.div>
 
@@ -39,9 +39,9 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-white/40 text-lg sm:text-xl max-w-lg mx-auto mb-10 font-inter"
+          className="text-text-muted text-lg sm:text-xl max-w-lg mx-auto mb-10 font-inter"
         >
-          Your journey starts today. Join thousands of artists already sharing their work with the world.
+          Join thousands of artists already sharing their work with the world.
         </motion.p>
 
         <motion.div
@@ -53,16 +53,16 @@ export default function FinalCTA() {
         >
           <Link
             to="/explore"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gold text-black font-medium rounded-full text-sm tracking-wide hover:bg-gold-light transition-all gold-glow"
+            className="group inline-flex items-center gap-2 px-8 py-4 green-gradient text-white font-medium rounded-full text-sm tracking-wide hover:opacity-90 transition-all green-glow"
           >
             Explore Marketplace
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 px-8 py-4 border border-white/10 text-white/80 font-medium rounded-full text-sm tracking-wide hover:border-white/20 hover:text-white transition-all glass"
+            className="inline-flex items-center gap-2 px-8 py-4 border border-border-light text-text-dark font-medium rounded-full text-sm tracking-wide hover:border-green-primary/30 hover:text-green-primary transition-all bg-card-white"
           >
-            Become an Artist
+            Join As Artist
           </Link>
         </motion.div>
       </div>

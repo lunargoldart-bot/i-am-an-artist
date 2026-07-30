@@ -18,16 +18,14 @@ const linkSections = [
 
 export default function LandingFooter() {
   return (
-    <footer className="relative bg-[#0D0D0D] border-t border-white/5">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-
+    <footer className="relative bg-card-white border-t border-border-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="block mb-5">
-              <img src="/logo.png" alt="I Am An Artist" className="w-16 h-16" />
+              <img src="/logo.png" alt="I Am An Artist" className="h-10 w-auto" />
             </Link>
-            <p className="text-white/40 text-sm font-inter leading-relaxed mb-6">
+            <p className="text-text-muted text-sm font-inter leading-relaxed mb-6">
               Empowering artists worldwide to showcase, connect, and sell their creative work.
             </p>
             <div className="flex items-center gap-3">
@@ -35,7 +33,7 @@ export default function LandingFooter() {
                 <a
                   key={href}
                   href={href}
-                  className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold/20 transition-all text-white/40 hover:text-gold"
+                  className="w-9 h-9 rounded-full bg-cream flex items-center justify-center hover:bg-green-primary/10 transition-all text-text-muted hover:text-green-primary"
                   aria-label="Social link"
                 >
                   <Icon className="w-4 h-4" />
@@ -46,13 +44,13 @@ export default function LandingFooter() {
 
           {linkSections.map(({ title, key }) => (
             <div key={key}>
-              <h4 className="text-white text-sm font-semibold font-inter mb-4">{title}</h4>
+              <h4 className="text-text-dark text-sm font-semibold font-inter mb-4">{title}</h4>
               <ul className="space-y-2.5">
                 {footerLinks[key].map((link) => (
                   <li key={link}>
                     <Link
-                      to={link === 'Become an Artist' ? '/login' : `/explore`}
-                      className="text-white/40 text-sm font-inter hover:text-gold transition-colors"
+                      to={link === 'Become an Artist' ? '/login' : '/explore'}
+                      className="text-text-muted text-sm font-inter hover:text-green-primary transition-colors"
                     >
                       {link}
                     </Link>
@@ -64,14 +62,13 @@ export default function LandingFooter() {
         </div>
       </div>
 
-      <div className="border-t border-white/5 py-6">
+      <div className="border-t border-border-light py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/30 text-xs font-inter">
+          <p className="text-text-muted/50 text-xs font-inter">
             &copy; {new Date().getFullYear()} I Am An Artist. All rights reserved.
           </p>
-          <p className="text-white/20 text-xs font-inter">
-            Crafted with{' '}
-            <span className="text-gold">&hearts;</span> for artists everywhere
+          <p className="text-text-muted/40 text-xs font-inter">
+            Crafted with <span className="text-green-primary">&hearts;</span> for artists everywhere
           </p>
         </div>
       </div>

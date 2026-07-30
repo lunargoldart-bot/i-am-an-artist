@@ -24,15 +24,11 @@ function Countdown({ endDate }) {
   }, [endDate]);
 
   return (
-    <div className="flex gap-3 text-center">
+    <div className="flex gap-2.5">
       {Object.entries(time).map(([key, val]) => (
-        <div key={key} className="flex flex-col">
-          <span className="text-lg font-bold text-white font-inter tabular-nums">
-            {String(val).padStart(2, '0')}
-          </span>
-          <span className="text-[10px] uppercase text-white/30 tracking-wider font-inter">
-            {key}
-          </span>
+        <div key={key} className="countdown-item">
+          <span className="value">{String(val).padStart(2, '0')}</span>
+          <span className="label">{key}</span>
         </div>
       ))}
     </div>
@@ -41,7 +37,7 @@ function Countdown({ endDate }) {
 
 export default function LiveAuctions() {
   return (
-    <section className="relative py-24 bg-[#0D0D0D]">
+    <section className="relative py-24 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -52,17 +48,19 @@ export default function LiveAuctions() {
         >
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-primary opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-primary pulse-dot" />
             </span>
-            <span className="text-xs tracking-[0.2em] uppercase text-gold font-inter">
+            <span className="text-xs tracking-[0.2em] uppercase text-green-primary font-inter font-medium">
               Live Now
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold text-white">
-            Live{' '}
-            <span className="text-gradient-gold">Auctions</span>
+          <h2 className="text-4xl sm:text-5xl font-playfair font-bold text-text-dark">
+            Live Auctions
           </h2>
+          <p className="font-cormorant text-xl text-text-muted italic mt-2">
+            Bid on exclusive original artworks
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -73,10 +71,8 @@ export default function LiveAuctions() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group glass rounded-2xl overflow-hidden card-hover relative"
+              className="auction-card bg-card-white rounded-2xl overflow-hidden shadow-sm border border-border-light"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
               <div className="relative overflow-hidden aspect-[4/3]">
                 <img
                   src={auction.image}
@@ -84,40 +80,34 @@ export default function LiveAuctions() {
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-inter">
-                  <Clock className="w-3 h-3 text-gold" />
-                  <span className="text-white/80">
-                    {auction.bids} bids
-                  </span>
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-primary text-white text-xs font-inter shadow-sm">
+                  <Users className="w-3 h-3" />
+                  <span>{auction.bids} bids</span>
                 </div>
               </div>
 
               <div className="p-6">
-                <h3 className="text-lg font-playfair font-bold text-white mb-1">
+                <h3 className="text-xl font-playfair font-bold text-text-dark mb-1">
                   {auction.title}
                 </h3>
-                <p className="text-white/40 text-sm font-inter mb-4">
+                <p className="text-text-muted text-sm font-inter mb-5">
                   by {auction.artist}
                 </p>
 
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-5">
                   <div>
-                    <p className="text-[10px] uppercase text-white/30 tracking-wider font-inter mb-1">
+                    <p className="text-[10px] uppercase text-text-muted tracking-wider font-inter mb-1">
                       Current Bid
                     </p>
-                    <p className="text-xl font-bold text-gold font-inter">
+                    <p className="text-2xl font-bold font-dmsans text-green-primary">
                       {auction.currentBid}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1 text-white/40 text-sm font-inter">
-                    <Users className="w-4 h-4" />
-                    {auction.bids}
-                  </div>
                 </div>
 
-                <div className="border-t border-white/5 pt-4 mb-5">
+                <div className="border-t border-border-light pt-4 mb-5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase text-white/30 tracking-wider font-inter">
+                    <span className="text-[10px] uppercase text-text-muted tracking-wider font-inter">
                       Ends in
                     </span>
                     <Countdown endDate={auction.endDate} />
@@ -126,10 +116,10 @@ export default function LiveAuctions() {
 
                 <Link
                   to="/explore"
-                  className="group/btn w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold/10 text-gold border border-gold/20 text-sm font-medium hover:bg-gold hover:text-black transition-all"
+                  className="group inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-full border border-green-primary text-green-primary text-sm font-medium hover:bg-green-primary hover:text-white transition-all"
                 >
                   Place Bid
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </motion.div>

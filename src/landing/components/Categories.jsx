@@ -1,74 +1,80 @@
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import { categories } from '../data/data';
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] },
-  },
-};
-
 export default function Categories() {
+  const scrollRef = useRef(null);
+
   return (
-    <section className="relative py-24 bg-[#0D0D0D]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section className="relative py-24 bg-cream overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="flex items-end justify-between"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold text-white mb-4">
-            Explore{' '}
-            <span className="text-gradient-gold">Categories</span>
-          </h2>
-          <p className="text-white/40 text-lg max-w-xl mx-auto font-inter">
-            Discover art across every medium and style
-          </p>
+          <div>
+            <h2 className="text-4xl sm:text-5xl font-playfair font-bold text-text-dark">
+              Featured Collections
+            </h2>
+            <p className="font-cormorant text-xl text-text-muted italic mt-2">
+              Curated categories for the discerning collector
+            </p>
+          </div>
+          <Link
+            to="/explore"
+            className="hidden sm:inline-flex items-center gap-2 text-sm font-inter text-green-primary font-medium hover:text-green-secondary transition-colors"
+          >
+            View All <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.div>
+      </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      <div
+        ref={scrollRef}
+        className="flex gap-5 overflow-x-auto px-4 sm:px-6 pb-4 scrollbar-hide"
+        style={{ scrollSnapType: 'x mandatory' }}
+      >
+        {categories.map((cat, i) => (
+          <motion.div
+            key={cat.title}
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: i * 0.08 }}
+            className="collection-slide relative overflow-hidden rounded-2xl min-w-[280px] aspect-[3/4] flex-shrink-0 group cursor-pointer"
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            <img
+              src={cat.image}
+              alt={cat.title}
+              loading="lazy"
+              className="collection-image w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+              <h3 className="text-2xl font-playfair font-bold text-white">
+                {cat.title}
+              </h3>
+              <p className="text-white/70 text-sm font-inter mt-1">
+                {cat.count.toLocaleString()} artworks
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="text-center mt-8 sm:hidden">
+        <Link
+          to="/explore"
+          className="inline-flex items-center gap-2 text-sm font-inter text-green-primary font-medium"
         >
-          {categories.map((cat) => (
-            <motion.div
-              key={cat.title}
-              variants={cardVariants}
-              className="category-card group aspect-[4/3]"
-            >
-              <img
-                src={cat.image}
-                alt={cat.title}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-              <div className="border-glow" />
-              <div className="absolute inset-0 z-10 p-6 flex flex-col justify-end">
-                <h3 className="text-xl font-playfair font-bold text-white group-hover:text-gold transition-colors duration-500">
-                  {cat.title}
-                </h3>
-                <p className="text-white/50 text-sm font-inter mt-1">
-                  {cat.count.toLocaleString()} artworks
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+          View All Collections <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );
