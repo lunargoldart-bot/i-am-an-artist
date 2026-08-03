@@ -91,7 +91,7 @@ export default function MaintenancePage() {
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:dev@iamanartistapp.com"
+              href="mailto:seantinashenyakutira@gmail.com"
               className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-[#D9B95C] to-[#C4A24E] text-[#0B0B09] font-inter font-semibold text-sm tracking-wide hover:opacity-90 hover:-translate-y-0.5 transition-all duration-300 shadow-lg shadow-[#D9B95C]/20"
             >
               Email Developer
