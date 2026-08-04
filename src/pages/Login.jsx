@@ -8,7 +8,8 @@ import { Palette, Loader2 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { registerWithEmail, signInWithEmail, signInWithGoogle } from '@/lib/firebaseAuth';
 
-const redirectAfterLogin = () => {
+const redirectAfterLogin = (user) => {
+  if (user?.role === 'admin') return '/admin';
   const saved = sessionStorage.getItem('artist_login_redirect');
   sessionStorage.removeItem('artist_login_redirect');
   if (saved) {
@@ -23,24 +24,25 @@ const redirectAfterLogin = () => {
 };
 
 export default function Login() {
-  const { isAuthenticated, isLoadingAuth } = useAuth();
+  const { user, isAuthenticated, isLoadingAuth } = useAuth();
   const [mode, setMode] = useState('login');
   const [form, setForm] = useState({ fullName: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  if (!isLoadingAuth && isAuthenticated) return <Navigate to={redirectAfterLogin()} replace />;
+  if (!isLoadingAuth && isAuthenticated) return <Navigate to={redirectAfterLogin(user)} replace />;
 
-  const finish = () => window.location.assign(redirectAfterLogin());
+  const finish = (user) => window.location.assign(redirectAfterLogin(user));
 
   const submit = async (event) => {
     event.preventDefault();
     setError('');
     setLoading(true);
     try {
-      if (mode === 'register') await registerWithEmail(form.email, form.password, form.fullName);
-      else await signInWithEmail(form.email, form.password);
-      finish();
+      let user;
+      if (mode === 'register') user = await registerWithEmail(form.email, form.password, form.fullName);
+      else user = await signInWithEmail(form.email, form.password);
+      finish(user);
     } catch (err) {
       setError(err.message || 'Authentication failed');
     } finally {
@@ -52,8 +54,8 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      await signInWithGoogle();
-      finish();
+      const user = await signInWithGoogle();
+      finish(user);
     } catch (err) {
       if (err.code !== 'auth/popup-closed-by-user') setError(err.message || 'Google sign-in failed');
     } finally {
