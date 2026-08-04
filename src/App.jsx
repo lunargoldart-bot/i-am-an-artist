@@ -38,6 +38,35 @@ import OrderSuccess from './pages/OrderSuccess';
 import OrderFailure from './pages/OrderFailure';
 import { ProtectedRoute, AdminRoute } from './components/auth/RouteGuards';
 
+// Admin Dashboard
+import AdminLayout from './components/admin/layout/AdminLayout';
+import AdminHome from './components/admin/home/AdminHome';
+import UsersPage from './components/admin/users/UsersPage';
+import ArtistsPage from './components/admin/artists/ArtistsPage';
+import CollectorsPage from './components/admin/collectors/CollectorsPage';
+import AdminsPage from './components/admin/admins/AdminsPage';
+import ArtworkPage from './components/admin/artwork/ArtworkPage';
+import CollectionsPage from './components/admin/collections/CollectionsPage';
+import CategoriesPage from './components/admin/categories/CategoriesPage';
+import AuctionsPage from './components/admin/auctions/AuctionsPage';
+import OrdersPage from './components/admin/orders/OrdersPage';
+import PaymentsPage from './components/admin/payments/PaymentsPage';
+import SubscriptionsPage from './components/admin/subscriptions/SubscriptionsPage';
+import MessagesPage from './components/admin/messages/MessagesPage';
+import ReviewsPage from './components/admin/reviews/ReviewsPage';
+import ModerationPage from './components/admin/moderation/ModerationPage';
+import SupportPage from './components/admin/support/SupportPage';
+import AnalyticsPage from './components/admin/analytics/AnalyticsPage';
+import ReportsPage from './components/admin/reports/ReportsPage';
+import MarketingPage from './components/admin/marketing/MarketingPage';
+import NotificationsPage from './components/admin/notifications/NotificationsPage';
+import SystemPage from './components/admin/system/SystemPage';
+import SettingsPage from './components/admin/settings/SettingsPage';
+import AuditLogsPage from './components/admin/audit/AuditLogsPage';
+import ApiPage from './components/admin/api/ApiPage';
+import SecurityPage from './components/admin/security/SecurityPage';
+import BackupsPage from './components/admin/backups/BackupsPage';
+
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
@@ -96,6 +125,34 @@ const AuthenticatedApp = () => {
           <Route path="/admin/artist-verifications" element={<ArtistVerifications />} />
           <Route path="/admin/artist-registry" element={<ArtistRegistry />} />
           <Route path="/admin/monetization" element={<Monetization />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminHome />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="artists" element={<ArtistsPage />} />
+            <Route path="collectors" element={<CollectorsPage />} />
+            <Route path="admins" element={<AdminsPage />} />
+            <Route path="artwork" element={<ArtworkPage />} />
+            <Route path="collections" element={<CollectionsPage />} />
+            <Route path="categories" element={<CategoriesPage />} />
+            <Route path="auctions" element={<AuctionsPage />} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="payments" element={<PaymentsPage />} />
+            <Route path="subscriptions" element={<SubscriptionsPage />} />
+            <Route path="messages" element={<MessagesPage />} />
+            <Route path="reviews" element={<ReviewsPage />} />
+            <Route path="moderation" element={<ModerationPage />} />
+            <Route path="support" element={<SupportPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="reports" element={<ReportsPage />} />
+            <Route path="marketing" element={<MarketingPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="system" element={<SystemPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="audit-logs" element={<AuditLogsPage />} />
+            <Route path="api" element={<ApiPage />} />
+            <Route path="security" element={<SecurityPage />} />
+            <Route path="backups" element={<BackupsPage />} />
+          </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Route>

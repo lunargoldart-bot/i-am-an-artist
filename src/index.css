@@ -45,6 +45,44 @@
   }
 }
 
+.light {
+  --background: 40 30% 98%;
+  --foreground: 28 15% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 28 15% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 28 15% 12%;
+  --primary: 42 78% 45%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 20% 94%;
+  --secondary-foreground: 28 15% 12%;
+  --muted: 40 20% 94%;
+  --muted-foreground: 28 10% 40%;
+  --accent: 42 78% 90%;
+  --accent-foreground: 42 60% 20%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 40 15% 88%;
+  --input: 40 15% 88%;
+  --ring: 42 78% 45%;
+  --chart-1: 42 78% 45%;
+  --chart-2: 173 58% 32%;
+  --chart-3: 214 60% 48%;
+  --chart-4: 43 74% 55%;
+  --chart-5: 27 87% 55%;
+  --sidebar-background: 40 30% 97%;
+  --sidebar-foreground: 28 15% 12%;
+  --sidebar-primary: 42 78% 45%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 40 20% 92%;
+  --sidebar-accent-foreground: 28 15% 12%;
+  --sidebar-border: 40 15% 88%;
+  --sidebar-ring: 42 78% 45%;
+  --gold: 42 78% 45%;
+  --gold-light: 42 78% 62%;
+  --charcoal: 28 15% 12%;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
