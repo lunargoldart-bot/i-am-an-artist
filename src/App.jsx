@@ -104,6 +104,7 @@ const AuthenticatedApp = () => {
         <Route path="/rankings" element={<Rankings />} />
         <Route path="/exhibitions" element={<Exhibitions />} />
         <Route path="/news" element={<NewsFeed />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order/success" element={<OrderSuccess />} />
