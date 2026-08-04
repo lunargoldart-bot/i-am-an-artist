@@ -8,7 +8,9 @@ const isMaintenanceMode = () => {
 const maintenanceEnabled = isMaintenanceMode();
 
 const MaintenanceProvider = ({ children }) => {
-  if (maintenanceEnabled) return <MaintenancePage />;
+  const path = window.location.pathname;
+  const adminBypass = path.startsWith('/admin') || path.startsWith('/login');
+  if (maintenanceEnabled && !adminBypass) return <MaintenancePage />;
   return children;
 };
 
