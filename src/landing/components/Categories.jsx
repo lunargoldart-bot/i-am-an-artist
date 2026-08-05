@@ -29,7 +29,7 @@ export default function Categories() {
             to="/explore"
             className="hidden sm:inline-flex items-center gap-2 text-sm font-inter text-green-primary font-medium hover:text-green-secondary transition-colors"
           >
-            View All <ArrowRight className="w-4 h-4" />
+            View All <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>
       </div>
@@ -73,7 +73,7 @@ export default function Categories() {
           to="/explore"
           className="inline-flex items-center gap-2 text-sm font-inter text-green-primary font-medium"
         >
-          View All Collections <ArrowRight className="w-4 h-4" />
+          View All Collections <ArrowRight className="w-5 h-5" />
         </Link>
       </div>
     </section>

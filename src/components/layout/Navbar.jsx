@@ -53,51 +53,51 @@ export default function Navbar({ user }) {
               )}
             </Link>
             {/* Elite badge */}
-            <div className="flex items-center gap-1.5 bg-gold/10 border border-gold/25 text-gold text-xs font-bold px-2.5 py-1 rounded-full cursor-pointer hover:bg-gold/20 transition-colors">
-              <Crown className="w-3 h-3 fill-gold/50" />
+            <div className="flex items-center gap-1.5 bg-gold/10 border border-gold/25 text-gold text-xs font-bold px-3 py-1.5 rounded-full cursor-pointer hover:bg-gold/20 transition-colors">
+              <Crown className="w-4 h-4 fill-gold/50" />
               <span>Elite</span>
             </div>
             {user ? (
               <>
                 {user.role === 'admin' && (
                   <Link to="/admin/artist-registry">
-                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold gap-1.5">
+            <Button variant="ghost" size="default" className="text-muted-foreground hover:text-gold">
                       Artist Registry
                     </Button>
                   </Link>
                 )}
                 <Link to="/messages">
-                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold gap-1.5">
-                    <Mail className="w-4 h-4" /> Messages
+                  <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+                    <Mail className="w-5 h-5" /> Messages
                   </Button>
                 </Link>
                 <Link to="/wishlist">
-                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold gap-1.5">
-                    <Bookmark className="w-4 h-4" /> Wishlist
-                  </Button>
+    <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+                  <Bookmark className="w-5 h-5" /> Wishlist
+                </Button>
                 </Link>
                 <Link to="/dashboard">
-                   <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold">
-                     Dashboard
-                   </Button>
+ <Button variant="ghost" className="text-muted-foreground hover:text-gold">
+                      Dashboard
+                    </Button>
                  </Link>
                  <Link to="/inventory">
-                   <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold gap-1.5">
-                     <Package className="w-4 h-4" /> Inventory
-                   </Button>
+ <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+                      <Package className="w-5 h-5" /> Inventory
+                    </Button>
                  </Link>
                  <Link to="/exhibitions/my-exhibitions">
-                   <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold gap-1.5">
-                     <Frame className="w-4 h-4" /> Galleries
-                   </Button>
+ <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+                      <Frame className="w-5 h-5" /> Galleries
+                    </Button>
                  </Link>
                  <Link to="/rewards">
-                   <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-gold gap-1.5">
-                     <Trophy className="w-4 h-4" /> Rewards
-                   </Button>
+<Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+                  <Trophy className="w-5 h-5" /> Rewards
+                </Button>
                  </Link>
                 <Button
-                  size="sm"
+                  size="default"
                   className="gold-gradient text-background font-semibold hover:opacity-90"
                   onClick={() => authService.logout().then(() => window.location.assign('/'))}
                 >
@@ -106,7 +106,6 @@ export default function Navbar({ user }) {
               </>
             ) : (
                 <Button
-                  size="sm"
                   className="gold-gradient text-background font-semibold hover:opacity-90"
                   onClick={() => authService.redirectToLogin()}
                 >
@@ -124,13 +123,13 @@ export default function Navbar({ user }) {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden bg-card border-t border-border px-4 py-4 space-y-3">
+          <div className="md:hidden bg-card border-t border-border px-4 py-5 space-y-3">
           {navLinks.map(link => (
             <Link
               key={link.path}
               to={link.path}
               onClick={() => setOpen(false)}
-              className={`block text-sm font-inter py-2 transition-colors hover:text-gold ${
+              className={`block text-base font-inter py-3 transition-colors hover:text-gold ${
                 location.pathname === link.path ? 'text-gold' : 'text-muted-foreground'
               }`}
             >
@@ -139,52 +138,52 @@ export default function Navbar({ user }) {
           ))}
           <div className="pt-2 border-t border-border space-y-2">
             <Link to="/cart" onClick={() => setOpen(false)}>
-              <Button variant="outline" size="sm" className="w-full gap-2 relative">
-                <ShoppingCart className="w-4 h-4" /> Cart {count > 0 && `(${count})`}
+              <Button variant="outline" className="w-full gap-2 relative">
+                <ShoppingCart className="w-5 h-5" /> Cart {count > 0 && `(${count})`}
               </Button>
             </Link>
             {user && (
               <>
                 {user.role === 'admin' && (
                   <Link to="/admin/artist-registry" onClick={() => setOpen(false)}>
-                    <Button variant="outline" size="sm" className="w-full gap-2">
+                    <Button variant="outline" className="w-full">
                       Artist Registry
                     </Button>
                   </Link>
                 )}
                 <Link to="/messages" onClick={() => setOpen(false)}>
-                  <Button variant="outline" size="sm" className="w-full gap-2">
-                    <Mail className="w-4 h-4" /> Messages
+                  <Button variant="outline" className="w-full gap-2">
+                    <Mail className="w-5 h-5" /> Messages
                   </Button>
                 </Link>
                 <Link to="/wishlist" onClick={() => setOpen(false)}>
-                   <Button variant="outline" size="sm" className="w-full gap-2">
-                     <Bookmark className="w-4 h-4" /> Wishlist
+                   <Button variant="outline" className="w-full gap-2">
+                     <Bookmark className="w-5 h-5" /> Wishlist
                    </Button>
                  </Link>
                  <Link to="/inventory" onClick={() => setOpen(false)}>
-                   <Button variant="outline" size="sm" className="w-full gap-2">
-                     <Package className="w-4 h-4" /> Inventory
+                   <Button variant="outline" className="w-full gap-2">
+                     <Package className="w-5 h-5" /> Inventory
                    </Button>
                  </Link>
                  <Link to="/exhibitions/my-exhibitions" onClick={() => setOpen(false)}>
-                   <Button variant="outline" size="sm" className="w-full gap-2">
-                     <Frame className="w-4 h-4" /> Galleries
+                   <Button variant="outline" className="w-full gap-2">
+                     <Frame className="w-5 h-5" /> Galleries
                    </Button>
                  </Link>
                  <Link to="/rewards" onClick={() => setOpen(false)}>
-                   <Button variant="outline" size="sm" className="w-full gap-2">
-                     <Trophy className="w-4 h-4" /> Rewards
+                   <Button variant="outline" className="w-full gap-2">
+                     <Trophy className="w-5 h-5" /> Rewards
                    </Button>
                  </Link>
               </>
             )}
             {user ? (
-                  <Button size="sm" className="gold-gradient text-background w-full" onClick={() => authService.logout().then(() => window.location.assign('/'))}>
+                  <Button className="gold-gradient text-background w-full" onClick={() => authService.logout().then(() => window.location.assign('/'))}>
                     Sign Out
                   </Button>
                 ) : (
-                  <Button size="sm" className="gold-gradient text-background w-full" onClick={() => authService.redirectToLogin()}>
+                  <Button className="gold-gradient text-background w-full" onClick={() => authService.redirectToLogin()}>
                     Join Gallery
                   </Button>
                 )}

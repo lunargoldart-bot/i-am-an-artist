@@ -82,25 +82,25 @@ export default function GrievanceSubmitForm({ orderId, onSuccess }) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-sm font-semibold text-foreground mb-2 block">
-          What's the issue?
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {grievanceTypes.map(type => (
-            <button
-              key={type.value}
-              onClick={() => setGrievanceType(type.value)}
-              className={`p-3 rounded-lg border text-left text-sm transition-all ${
-                grievanceType === type.value 
-                  ? 'border-primary bg-primary/10' 
-                  : 'border-border hover:border-primary/50'
-              }`}
-            >
-              {type.label}
-            </button>
-          ))}
-        </div>
-      </div>
+    <label className="text-sm font-semibold text-foreground mb-2 block">
+      What's the issue?
+    </label>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {grievanceTypes.map(type => (
+        <button
+          key={type.value}
+          onClick={() => setGrievanceType(type.value)}
+          className={`p-4 rounded-lg border text-left text-sm transition-all ${
+            grievanceType === type.value 
+              ? 'border-primary bg-primary/10' 
+              : 'border-border hover:border-primary/50'
+          }`}
+        >
+          {type.label}
+        </button>
+      ))}
+    </div>
+  </div>
 
       <div>
         <label className="text-sm font-semibold text-foreground mb-2 block">
@@ -115,18 +115,18 @@ export default function GrievanceSubmitForm({ orderId, onSuccess }) {
       </div>
 
       <Button 
-        className="w-full gold-gradient text-background font-semibold"
+        className="w-full gold-gradient text-background font-semibold h-11"
         onClick={handleSubmit}
         disabled={loading || !grievanceType || !description.trim()}
       >
         {loading ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            <Loader2 className="w-5 h-5 animate-spin mr-2" />
             Processing...
           </>
         ) : (
           <>
-            <AlertCircle className="w-4 h-4 mr-2" />
+            <AlertCircle className="w-5 h-5 mr-2" />
             Submit Grievance
           </>
         )}

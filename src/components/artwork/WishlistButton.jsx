@@ -82,7 +82,7 @@ export default function WishlistButton({ artwork, variant = "icon", className })
       onClick={handleClick}
       disabled={isPending}
       className={cn(
-        "p-2 rounded-full transition-all",
+        "p-3 rounded-full transition-all",
         saved
           ? "bg-primary text-primary-foreground"
           : "bg-black/50 text-white hover:bg-primary hover:text-primary-foreground",
@@ -90,7 +90,7 @@ export default function WishlistButton({ artwork, variant = "icon", className })
       )}
       title={saved ? "Remove from wishlist" : "Save to wishlist"}
     >
-      {saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+      {saved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
     </button>
   );
 }

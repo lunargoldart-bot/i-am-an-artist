@@ -197,7 +197,7 @@ export default function Profile() {
             </div>
             <div className="space-y-2">
               <Label className="font-body">Phone</Label>
-              <Input value={profileForm.phone} onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})} placeholder="+260..." className="font-body" />
+               <Input value={profileForm.phone} onChange={(e) => setProfileForm({...profileForm, phone: e.target.value})} placeholder="+260..." type="tel" inputMode="telephone" className="font-body" />
             </div>
           </div>
           <h4 className="font-display font-semibold text-sm mt-4">Social Links</h4>

@@ -93,7 +93,7 @@ export default function Hero() {
             className="group inline-flex items-center gap-2 px-8 py-4 green-gradient text-white font-medium rounded-full text-sm tracking-wide hover:opacity-90 transition-all green-glow"
           >
             Explore Artwork
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             to="/login"
@@ -116,7 +116,7 @@ export default function Hero() {
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <ChevronDown className="w-4 h-4 text-text-muted" />
+            <ChevronDown className="w-5 h-5 text-text-muted" />
           </motion.div>
         </motion.div>
       </div>

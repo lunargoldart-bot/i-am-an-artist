@@ -35,7 +35,7 @@ export default function FeaturedArtwork() {
             to="/gallery"
             className="hidden sm:inline-flex items-center gap-2 text-sm font-inter text-green-primary font-medium hover:text-green-secondary transition-colors"
           >
-            View Gallery <ArrowRight className="w-4 h-4" />
+            View Gallery <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>
 
@@ -57,16 +57,16 @@ export default function FeaturedArtwork() {
                   className="artwork-image w-full h-full object-cover"
                 />
                 <div className="artwork-overlay absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <button className="px-5 py-2 rounded-full bg-white text-text-dark text-sm font-inter font-medium hover:bg-green-primary hover:text-white transition-all">
+                  <button className="px-6 py-3 rounded-full bg-white text-text-dark text-sm font-inter font-medium hover:bg-green-primary hover:text-white transition-all h-11">
                     View
                   </button>
                 </div>
                 <button
                   onClick={() => handleLike(art.id)}
-                  className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-green-primary hover:text-white transition-all z-10 shadow-sm"
+                  className="absolute top-3 right-3 w-11 h-11 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-green-primary hover:text-white transition-all z-10 shadow-sm"
                   aria-label="Like"
                 >
-                  <Heart className="w-4 h-4" />
+                  <Heart className="w-5 h-5" />
                 </button>
               </div>
 
@@ -81,8 +81,8 @@ export default function FeaturedArtwork() {
                   <span className="text-lg font-dmsans font-bold text-green-primary">
                     {art.price}
                   </span>
-                  <span className="text-text-muted text-xs font-inter flex items-center gap-1">
-                    <Heart className="w-3 h-3" /> {art.likes}
+                  <span className="text-text-muted text-sm font-inter flex items-center gap-1">
+                    <Heart className="w-4 h-4 text-muted-foreground" /> {art.likes}
                   </span>
                 </div>
               </div>
@@ -95,7 +95,7 @@ export default function FeaturedArtwork() {
             to="/gallery"
             className="inline-flex items-center gap-2 text-sm font-inter text-green-primary font-medium"
           >
-            View Gallery <ArrowRight className="w-4 h-4" />
+            View Gallery <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </div>

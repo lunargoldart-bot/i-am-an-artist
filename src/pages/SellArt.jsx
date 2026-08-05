@@ -152,7 +152,7 @@ export default function SellArt() {
 
           <div className="space-y-2 sm:col-span-2">
             <Label className="font-body">Price (ZMW) *</Label>
-            <Input type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm({...form, price: e.target.value})} placeholder="0.00" className="font-body" required />
+            <Input type="number" min="0" step="0.01" inputMode="numeric" value={form.price} onChange={(e) => setForm({...form, price: e.target.value})} placeholder="0.00" className="font-body" required />
             <PriceSuggestion category={form.category} currentPrice={parseFloat(form.price) || 0} />
           </div>
 
@@ -168,7 +168,7 @@ export default function SellArt() {
 
           <div className="space-y-2">
             <Label className="font-body">Year Created</Label>
-            <Input value={form.year_created} onChange={(e) => setForm({...form, year_created: e.target.value})} placeholder="2024" className="font-body" />
+            <Input value={form.year_created} onChange={(e) => setForm({...form, year_created: e.target.value})} placeholder="2024" type="number" inputMode="numeric" className="font-body" />
           </div>
         </div>
 

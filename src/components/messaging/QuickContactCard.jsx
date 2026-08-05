@@ -57,38 +57,38 @@ export default function QuickContactCard({ artworkId, artworkTitle, artistEmail,
       <Button
         onClick={() => setOpen(!open)}
         variant="outline"
-        className="w-full rounded-full gap-2 font-body"
+        className="w-full rounded-full gap-2 font-body h-11"
       >
-        <MessageCircle className="w-4 h-4" />
+        <MessageCircle className="w-5 h-5" />
         Contact Artist
       </Button>
 
       {open && (
-        <div className="mt-3 p-4 rounded-xl border border-border bg-secondary/30 space-y-3">
+        <div className="mt-3 p-4 rounded-xl border border-border bg-secondary/30 space-y-4">
           <Textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={`Message ${artistName} about ${artworkTitle}...`}
             rows={3}
-            className="font-body text-sm"
+            className="font-body text-base"
           />
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <Button
               onClick={handleSendMessage}
               disabled={loading || !message.trim()}
-              className="flex-1 rounded-full gap-2"
+              className="flex-1 rounded-full gap-2 h-11"
             >
               {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
               )}
               Send Message
             </Button>
             <Button
               onClick={() => setOpen(false)}
               variant="outline"
-              className="rounded-full"
+              className="rounded-full h-11"
             >
               Cancel
             </Button>

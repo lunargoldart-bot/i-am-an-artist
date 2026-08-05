@@ -109,8 +109,8 @@ export default function Wishlist() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all">
                     <Link to={`/artwork/${item.artwork_id}`}>
-                      <Button size="sm" className="w-full rounded-full gap-1 text-xs">
-                        <ShoppingBag className="w-3 h-3" /> View Artwork
+                      <Button className="w-full rounded-full gap-2 text-sm h-10">
+                        <ShoppingBag className="w-4 h-4" /> View Artwork
                       </Button>
                     </Link>
                   </div>
@@ -120,10 +120,10 @@ export default function Wishlist() {
               {/* Remove button */}
               <button
                 onClick={() => removeMutation.mutate(item.id)}
-                className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white hover:bg-destructive transition-colors"
+                className="absolute top-2 right-2 p-2 rounded-full bg-black/60 text-white hover:bg-destructive transition-colors"
                 title="Remove from wishlist"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="w-4 h-4" />
               </button>
 
               <div className="mt-2 px-1">

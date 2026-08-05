@@ -70,12 +70,12 @@ export default function Explore() {
       {/* Search */}
       <div className="mb-6">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
             placeholder="Search artworks, artists..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
+            className="pl-10"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@ export default function Explore() {
           <button
             key={cat.value}
             onClick={() => setCategory(cat.value)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
+            className={`flex-shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold transition-all border ${
               category === cat.value
                 ? "bg-primary text-primary-foreground border-primary"
                 : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"

@@ -21,8 +21,8 @@ export default function Cart() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-      <Link to="/explore" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 font-body">
-        <ArrowLeft className="w-4 h-4" /> Continue Browsing
+      <Link to="/explore" className="inline-flex items-center gap-2 text-base text-muted-foreground hover:text-foreground mb-6 font-body">
+        <ArrowLeft className="w-5 h-5" /> Continue Browsing
       </Link>
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -55,8 +55,8 @@ export default function Cart() {
           <span className="font-display text-2xl font-bold text-primary">ZMW {total.toLocaleString()}</span>
         </div>
         <Link to="/checkout">
-          <Button size="lg" className="w-full rounded-full text-base gap-2">
-            Proceed to Checkout <ArrowRight className="w-4 h-4" />
+          <Button size="lg" className="w-full rounded-full text-base gap-3">
+            Proceed to Checkout <ArrowRight className="w-5 h-5" />
           </Button>
         </Link>
       </div>

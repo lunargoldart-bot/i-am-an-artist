@@ -26,26 +26,26 @@ export default function AdminHeader() {
       <SidebarTrigger />
       <button
         onClick={() => setSearchOpen(true)}
-        className="flex w-full max-w-md items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-gold/40 hover:text-foreground"
+        className="flex flex-1 items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-gold/40 hover:text-foreground sm:max-w-md"
       >
-        <Search className="h-4 w-4" />
-        <span className="flex-1 text-left">Search anything…</span>
-        <kbd className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px]">Ctrl K</kbd>
+        <Search className="h-5 w-5" />
+        <span className="text-left">Search anything…</span>
+        <kbd className="ml-auto rounded border border-border bg-card px-2 py-1 text-[10px]">Ctrl K</kbd>
       </button>
 
-      <div className="ml-auto flex items-center gap-1">
+      <div className="ml-auto flex items-center gap-2">
         <NotificationsPanel />
-        <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme">
-          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle theme" className="h-11 w-11">
+          {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-10 w-10">
           <AvatarImage src={user?.profile_image} alt={user?.full_name} />
           <AvatarFallback className="text-xs">
             {(user?.full_name || user?.email || 'A').slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Log out">
-          <LogOut className="h-4 w-4" />
+        <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Log out" className="h-11 w-11">
+          <LogOut className="h-5 w-5" />
         </Button>
       </div>
 

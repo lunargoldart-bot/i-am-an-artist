@@ -61,7 +61,7 @@ export default function CourierRatingModal({ order, onClose }) {
           <button
             key={star}
             onClick={() => onChange(star)}
-            className="transition-transform hover:scale-110"
+            className="p-1 transition-transform hover:scale-110"
           >
             <Star 
               className={`w-6 h-6 ${star <= value ? 'fill-gold text-gold' : 'text-muted-foreground'}`}
@@ -73,20 +73,22 @@ export default function CourierRatingModal({ order, onClose }) {
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-card border border-border rounded-xl max-w-md w-full p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-playfair font-bold text-lg text-foreground">Rate Your Delivery</h2>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
-            <X className="w-5 h-5" />
-          </button>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm md:items-center md:p-4">
+      <div className="bg-card border-t border-border rounded-t-2xl md:rounded-xl max-w-md w-full max-h-[85vh] overflow-y-auto">
+        <div className="p-6 border-b border-border">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-playfair font-bold text-lg text-foreground">Rate Your Delivery</h2>
+            <button onClick={onClose} className="text-muted-foreground hover:text-foreground p-1">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <p className="text-sm text-muted-foreground mb-4">
+            Help us improve service quality by rating {order.courier_name}
+          </p>
         </div>
 
-        <p className="text-sm text-muted-foreground mb-4">
-          Help us improve service quality by rating {order.courier_name}
-        </p>
-
-        <div className="space-y-4 max-h-96 overflow-y-auto">
+        <div className="p-6 space-y-4">
           <StarRating 
             value={rating} 
             onChange={setRating}
@@ -119,26 +121,26 @@ export default function CourierRatingModal({ order, onClose }) {
               value={feedback}
               onChange={e => setFeedback(e.target.value)}
               placeholder="Share your experience..."
-              className="h-20 bg-background border-border text-sm"
+              className="h-20 bg-background border-border text-base"
             />
           </div>
         </div>
 
-        <div className="flex gap-2 mt-6">
+        <div className="flex gap-3 p-6 border-t border-border">
           <Button 
             variant="outline" 
-            className="flex-1 border-border" 
+            className="flex-1 border-border h-11" 
             onClick={onClose}
           >
             Cancel
           </Button>
           <Button 
-            className="flex-1 gold-gradient text-background font-semibold"
+            className="flex-1 gold-gradient text-background font-semibold h-11"
             onClick={handleSubmit}
             disabled={loading || rating === 0}
           >
             {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               'Submit Review'
             )}

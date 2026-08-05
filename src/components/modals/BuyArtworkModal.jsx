@@ -72,8 +72,8 @@ export default function BuyArtworkModal({ artwork, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-card border border-border rounded-xl max-w-md w-full overflow-hidden">
-        {/* Header */}
+           <div className="bg-card border border-border rounded-xl max-w-md w-full overflow-y-auto max-h-[90vh]">
+         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="font-playfair font-bold text-lg text-foreground">
             {step === 3 ? 'Complete Payment' : 'Purchase Artwork'}
@@ -175,12 +175,14 @@ export default function BuyArtworkModal({ artwork, onClose }) {
                 </div>
                 <div>
                   <label className="text-xs text-muted-foreground mb-2 block">Mobile Money Number</label>
-                  <Input 
-                    value={phone} 
-                    onChange={e => setPhone(e.target.value)} 
-                    placeholder="+260..." 
-                    className="bg-background border-border" 
-                  />
+                   <Input 
+                     value={phone} 
+                     onChange={e => setPhone(e.target.value)} 
+                     placeholder="+260..." 
+                     type="tel"
+                     inputMode="telephone"
+                     className="bg-background border-border" 
+                   />
                   <p className="text-xs text-muted-foreground mt-1">
                     We'll send payment request to this number
                   </p>
@@ -192,7 +194,7 @@ export default function BuyArtworkModal({ artwork, onClose }) {
                       <button
                         key={opt.value}
                         onClick={() => setDeliveryOption(opt.value)}
-                        className={`w-full flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${
+                        className={`w-full flex items-center gap-3 p-4 rounded-lg border text-left transition-all ${
                           deliveryOption === opt.value ? 'border-gold bg-gold/10' : 'border-border hover:border-gold/50'
                         }`}
                       >
@@ -243,10 +245,10 @@ export default function BuyArtworkModal({ artwork, onClose }) {
                    </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="flex-1 border-border" 
+                <div className="flex gap-3 mt-4">
+                  <Button
+                    variant="outline"
+                    className="flex-1 border-border"
                     onClick={() => setStep(1)}
                   >
                     Back

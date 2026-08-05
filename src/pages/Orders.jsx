@@ -194,15 +194,14 @@ export default function Orders() {
                   {canConfirmDelivery && (
                     <Button
                       onClick={() => handleConfirmDelivery(order.id)}
-                      size="sm"
-                      className="mt-2 w-full rounded-full"
+                      className="mt-2 w-full rounded-full h-11"
                       disabled={confirmDeliveryMutation.isPending}
                     >
                       {confirmDeliveryMutation.isPending ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
                         <>
-                          <CheckCircle className="w-4 h-4 mr-2" />
+                          <CheckCircle className="w-5 h-5 mr-2" />
                           Confirm Delivery
                         </>
                       )}
@@ -210,23 +209,21 @@ export default function Orders() {
                   )}
 
                   {canRateCourier && (
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-3 mt-2">
                       <Button
                         onClick={() => setRatingModalOrder(order)}
-                        size="sm"
                         variant="outline"
-                        className="flex-1 border-border text-xs"
+                        className="flex-1 border-border"
                       >
-                        <Star className="w-3 h-3 mr-1" />
+                        <Star className="w-5 h-5 mr-2" />
                         Rate Courier
                       </Button>
                       <Button
                         onClick={() => setGrievanceModalOrder(order)}
-                        size="sm"
                         variant="outline"
-                        className="flex-1 border-border text-xs"
+                        className="flex-1 border-border"
                       >
-                        <MessageCircle className="w-3 h-3 mr-1" />
+                        <MessageCircle className="w-5 h-5 mr-2" />
                         Issue?
                       </Button>
                     </div>
@@ -249,15 +246,19 @@ export default function Orders() {
       )}
 
       {grievanceModalOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-card border border-border rounded-xl max-w-md w-full p-6">
-            <h2 className="font-playfair font-bold text-lg text-foreground mb-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center p-0 bg-black/70 backdrop-blur-sm sm:items-center sm:p-4">
+          <div className="bg-card border-t border-border rounded-t-2xl sm:rounded-xl max-w-md w-full max-h-[85vh] overflow-y-auto">
+          <div className="p-6 border-b border-border">
+            <h2 className="font-playfair font-bold text-lg text-foreground">
               Report an Issue
             </h2>
+          </div>
+          <div className="p-6">
             <GrievanceSubmitForm 
               orderId={grievanceModalOrder.id}
               onSuccess={() => setGrievanceModalOrder(null)}
             />
+          </div>
           </div>
         </div>
       )}

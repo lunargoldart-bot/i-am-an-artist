@@ -84,6 +84,7 @@ export default function PlaceBidDialog({ open, onClose, artwork, currentHighBid,
                 <label className="text-xs text-muted-foreground">Your Bid (ZMW) — minimum ZMW {minBid.toLocaleString()}</label>
                 <Input
                   type="number"
+                  inputMode="numeric"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder={`e.g. ${minBid.toLocaleString()}`}
@@ -94,10 +95,10 @@ export default function PlaceBidDialog({ open, onClose, artwork, currentHighBid,
               <p className="text-xs text-muted-foreground">
                 By bidding you agree to purchase this artwork if you win. Payment on delivery.
               </p>
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <Button variant="outline" className="flex-1" onClick={handleClose}>Cancel</Button>
                 <Button className="flex-1 gold-gradient text-background font-semibold" onClick={handleBid} disabled={loading}>
-                  <Gavel className="w-4 h-4 mr-1" />
+                  <Gavel className="w-4 h-4 mr-2" />
                   {loading ? "Placing..." : "Place Bid"}
                 </Button>
               </div>

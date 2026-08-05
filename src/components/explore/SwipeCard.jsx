@@ -63,9 +63,9 @@ export default function SwipeCard({ artwork, onLike, onPass, isTop }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
         {/* Info overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 pb-24">
+        <div className="absolute bottom-0 left-0 right-0 p-6 pb-36">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
+            <span className="px-2.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
               {artwork.category?.replace('_', ' ')}
             </span>
           </div>
@@ -76,12 +76,12 @@ export default function SwipeCard({ artwork, onLike, onPass, isTop }) {
           <div className="flex items-center justify-between">
             <span className="text-gold font-bold text-2xl">ZMW {artwork.price?.toLocaleString()}</span>
             <Button
-              size="sm"
+              size="default"
               variant="secondary"
               className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-0 gap-2"
               onClick={(e) => { e.stopPropagation(); navigate(`/artwork/${artwork.id}`); }}
             >
-              <Eye className="w-4 h-4" /> View Details
+              <Eye className="w-5 h-5" /> View Details
             </Button>
           </div>
         </div>

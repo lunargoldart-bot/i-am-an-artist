@@ -97,23 +97,23 @@ export default function Checkout() {
                 <Label className="font-body text-sm">Full Name</Label>
                 <Input value={form.buyer_name} onChange={(e) => setForm({ ...form, buyer_name: e.target.value })} placeholder="Your full name" className="font-body" required />
               </div>
-              <div>
-                <Label className="font-body text-sm">Phone Number</Label>
-                <Input value={form.delivery_phone} onChange={(e) => setForm({ ...form, delivery_phone: e.target.value })} placeholder="+260..." className="font-body" required />
-              </div>
+               <div>
+                 <Label className="font-body text-sm">Phone Number</Label>
+                 <Input value={form.delivery_phone} onChange={(e) => setForm({ ...form, delivery_phone: e.target.value })} placeholder="+260..." type="tel" inputMode="telephone" className="font-body" required />
+               </div>
               <div>
                 <Label className="font-body text-sm">Delivery Method</Label>
-                <RadioGroup value={deliveryMethod} onValueChange={setDeliveryMethod} className="grid grid-cols-1 gap-2 mt-1">
-                  {['courier', 'yango', 'pickup'].map((method) => (
-                    <label key={method} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${deliveryMethod === method ? 'border-primary bg-primary/5' : 'border-border'}`}>
-                      <RadioGroupItem value={method} />
-                      <div className="font-body text-sm">
-                        <p className="font-medium capitalize">{method === 'yango' ? 'Yango Delivery' : method === 'courier' ? 'Contact a Courier' : 'Pickup'}</p>
-                        <p className="text-xs text-muted-foreground">{method === 'yango' ? 'Fast delivery via Yango' : method === 'courier' ? 'We will connect you with a courier' : 'Collect from the artist'}</p>
-                      </div>
-                    </label>
-                  ))}
-                </RadioGroup>
+                 <RadioGroup value={deliveryMethod} onValueChange={setDeliveryMethod} className="grid grid-cols-1 gap-4 mt-2">
+                   {['courier', 'yango', 'pickup'].map((method) => (
+                     <label key={method} className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${deliveryMethod === method ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                       <RadioGroupItem value={method} className="w-6 h-6" />
+                       <div className="font-body text-sm">
+                         <p className="font-medium capitalize">{method === 'yango' ? 'Yango Delivery' : method === 'courier' ? 'Contact a Courier' : 'Pickup'}</p>
+                         <p className="text-xs text-muted-foreground">{method === 'yango' ? 'Fast delivery via Yango' : method === 'courier' ? 'We will connect you with a courier' : 'Collect from the artist'}</p>
+                       </div>
+                     </label>
+                   ))}
+                 </RadioGroup>
               </div>
               <div>
                 <Label className="font-body text-sm">Delivery Address</Label>
@@ -132,35 +132,35 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="lg:col-span-2">
-          <div className="rounded-xl border border-border bg-card p-6 sticky top-24">
-            <h2 className="font-display text-lg font-semibold mb-4">Order Summary</h2>
-            <div className="space-y-3 mb-4">
-              {items.map((item) => (
-                <div key={item.id} className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-body font-medium truncate">{item.title}</p>
-                    <p className="text-xs text-muted-foreground font-body">ZMW {(item.price || 0).toLocaleString()}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="border-t border-border pt-4 space-y-2 text-sm font-body">
-              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>ZMW {total.toLocaleString()}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Delivery</span><span>Calculated later</span></div>
-              <div className="flex justify-between font-bold text-base border-t border-border pt-2 mt-2">
-                <span>Total</span><span className="text-primary">ZMW {total.toLocaleString()}</span>
-              </div>
-            </div>
-            <Button onClick={handleCheckout} disabled={loading} size="lg" className="w-full rounded-full mt-6 text-base gap-2">
-              {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</> : <>Pay with DPO <Truck className="w-4 h-4" /></>}
-            </Button>
-            <p className="text-xs text-muted-foreground text-center mt-3 font-body">You will be redirected to DPO Pay to complete your payment securely.</p>
-          </div>
-        </div>
+           <div className="lg:col-span-2 lg:sticky lg:top-24">
+             <div className="rounded-xl border border-border bg-card p-6">
+             <h2 className="font-display text-lg font-semibold mb-4">Order Summary</h2>
+             <div className="space-y-3 mb-4">
+               {items.map((item) => (
+                 <div key={item.id} className="flex items-center gap-3">
+                   <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
+                   </div>
+                   <div className="flex-1 min-w-0">
+                     <p className="text-sm font-body font-medium truncate">{item.title}</p>
+                     <p className="text-xs text-muted-foreground font-body">ZMW {(item.price || 0).toLocaleString()}</p>
+                   </div>
+                 </div>
+               ))}
+             </div>
+             <div className="border-t border-border pt-4 space-y-2 text-sm font-body">
+               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>ZMW {total.toLocaleString()}</span></div>
+               <div className="flex justify-between"><span className="text-muted-foreground">Delivery</span><span>Calculated later</span></div>
+               <div className="flex justify-between font-bold text-base border-t border-border pt-2 mt-2">
+                 <span>Total</span><span className="text-primary">ZMW {total.toLocaleString()}</span>
+               </div>
+             </div>
+             <Button onClick={handleCheckout} disabled={loading} className="w-full rounded-full mt-6 text-base gap-2">
+               {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</> : <>Pay with DPO <Truck className="w-4 h-4" /></>}
+             </Button>
+             <p className="text-xs text-muted-foreground text-center mt-3 font-body">You will be redirected to DPO Pay to complete your payment securely.</p>
+           </div>
+           </div>
       </div>
     </div>
   );

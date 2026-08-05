@@ -61,7 +61,7 @@ export default function SellYourArt() {
                   className="flex items-center gap-3"
                 >
                   <span className="w-6 h-6 rounded-full bg-green-primary flex items-center justify-center flex-shrink-0">
-                    <Check className="w-3.5 h-3.5 text-white" />
+                    <Check className="w-4 h-4 text-white" />
                   </span>
                   <span className="text-text-dark font-inter text-sm">{item}</span>
                 </motion.div>
@@ -73,7 +73,7 @@ export default function SellYourArt() {
               className="group inline-flex items-center gap-2 px-7 py-3.5 bg-green-primary text-white font-medium rounded-full text-sm tracking-wide hover:bg-green-secondary transition-all green-glow"
             >
               Become an Artist
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
         </div>

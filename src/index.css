@@ -135,3 +135,19 @@
 
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Mobile Safe Area Support (iPhone X+ notches) */
+.sat-bottom { padding-bottom: max(env(safe-area-inset-bottom), 1rem); }
+.sat-top { padding-top: max(env(safe-area-inset-top), 1rem); }
+.sat-left { padding-left: max(env(safe-area-inset-left), 1rem); }
+.sat-right { padding-right: max(env(safe-area-inset-right), 1rem); }
+.sat-x { padding-left: max(env(safe-area-inset-left), 1rem); padding-right: max(env(safe-area-inset-right), 1rem); }
+.sat-y { padding-top: max(env(safe-area-inset-top), 1rem); padding-bottom: max(env(safe-area-inset-bottom), 1rem); }
+
+/* Prevent iOS zoom on input focus (inputs already use text-base, this is a backup) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select { font-size: 16px; }

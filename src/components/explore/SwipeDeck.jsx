@@ -29,14 +29,14 @@ export default function SwipeDeck({ artworks }) {
 
   if (stack.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] gap-6">
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6 px-6">
         <div className="text-7xl">🎨</div>
         <h3 className="font-playfair text-3xl font-bold text-foreground">You've seen it all!</h3>
         <p className="text-muted-foreground text-base">
           {liked.length} artwork{liked.length !== 1 ? "s" : ""} liked
         </p>
-        <Button onClick={handleReset} variant="outline" className="gap-2 border-gold/50 text-gold hover:bg-gold/10">
-          <RotateCcw className="w-4 h-4" /> Start Over
+        <Button onClick={handleReset} variant="outline" className="gap-2 border-gold/50 text-gold hover:bg-gold/10 h-11">
+          <RotateCcw className="w-5 h-5" /> Start Over
         </Button>
       </div>
     );
@@ -54,7 +54,7 @@ export default function SwipeDeck({ artworks }) {
       </div>
 
       {/* Card stack */}
-      <div className="relative w-full" style={{ height: 'calc(100vh - 280px)', minHeight: '500px' }}>
+      <div className="relative w-full" style={{ height: 'min(500px, 70vh)', minHeight: '300px' }}>
         {stack.slice(-3).map((artwork, i) => {
           const isTop = i === Math.min(stack.length - 1, 2);
           const offset = (2 - i) * 6;
