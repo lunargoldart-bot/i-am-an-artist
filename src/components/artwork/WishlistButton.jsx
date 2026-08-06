@@ -5,6 +5,7 @@ import { firebaseClient } from "@/api/firebaseClient";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { hapticLight } from "@/utils/native";
 
 export default function WishlistButton({ artwork, variant = "icon", className }) {
   const queryClient = useQueryClient();
@@ -55,8 +56,10 @@ export default function WishlistButton({ artwork, variant = "icon", className })
       return;
     }
     if (saved) {
+      hapticLight();
       removeMutation.mutate();
     } else {
+      hapticLight();
       addMutation.mutate();
     }
   };

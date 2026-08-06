@@ -3,6 +3,8 @@ import { motion, useMotionValue, useTransform, useAnimation } from "framer-motio
 import { Heart, X, ShoppingBag, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import SmartImage from "@/components/ui/SmartImage";
+import { hapticLight, hapticMedium } from "@/utils/native";
 
 const SWIPE_THRESHOLD = 120;
 
@@ -17,18 +19,24 @@ export default function SwipeCard({ artwork, onLike, onPass, isTop }) {
   const handleDragEnd = (_, info) => {
     const offset = info.offset.x;
     if (offset > SWIPE_THRESHOLD) {
+      hapticMedium();
       controls.start({ x: 600, opacity: 0, transition: { duration: 0.3 } }).then(onLike);
     } else if (offset < -SWIPE_THRESHOLD) {
+      hapticMedium();
       controls.start({ x: -600, opacity: 0, transition: { duration: 0.3 } }).then(onPass);
     } else {
       controls.start({ x: 0, transition: { type: "spring", stiffness: 300 } });
     }
   };
 
-  const swipeRight = () =>
+  const swipeRight = () => {
+    hapticLight();
     controls.start({ x: 600, opacity: 0, transition: { duration: 0.3 } }).then(onLike);
-  const swipeLeft = () =>
+  };
+  const swipeLeft = () => {
+    hapticLight();
     controls.start({ x: -600, opacity: 0, transition: { duration: 0.3 } }).then(onPass);
+  };
 
   const imageUrl =
     artwork.image_urls?.[0] ||
@@ -59,7 +67,7 @@ export default function SwipeCard({ artwork, onLike, onPass, isTop }) {
 
       {/* Card */}
       <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-card">
-        <img src={imageUrl} alt={artwork.title} className="w-full h-full object-cover" draggable={false} />
+        <SmartImage src={imageUrl} alt={artwork.title} wrapperClassName="absolute inset-0" eager />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
         {/* Info overlay */}

@@ -3,11 +3,16 @@ import { firebaseClient } from '@/api/firebaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, ShoppingCart, Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
 import BuyArtworkModal from '@/components/modals/BuyArtworkModal';
+import SmartImage from '@/components/ui/SmartImage';
+import ArtworkLightbox from '@/components/ui/ArtworkLightbox';
+import { hapticLight } from '@/utils/native';
 
 export default function VirtualGalleryViewer({ exhibitionId }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedArtwork, setSelectedArtwork] = useState(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [perspective, setPerspective] = useState({ x: 0, y: 0 });
 
   const { data: exhibition = {} } = useQuery({
@@ -41,10 +46,12 @@ export default function VirtualGalleryViewer({ exhibitionId }) {
   };
 
   const handleNext = () => {
+    hapticLight();
     setCurrentIndex((i) => (i + 1) % artworks.length);
   };
 
   const handlePrev = () => {
+    hapticLight();
     setCurrentIndex((i) => (i - 1 + artworks.length) % artworks.length);
   };
 
@@ -80,14 +87,27 @@ export default function VirtualGalleryViewer({ exhibitionId }) {
             }}
           >
             <div className="relative max-w-2xl w-full aspect-square rounded-xl overflow-hidden shadow-2xl border-4 border-gold/20 bg-card">
-              <img
-                src={currentArtwork.image_urls?.[0]}
-                alt={currentArtwork.title}
-                className="w-full h-full object-cover"
-              />
-              
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentArtwork.id}
+                  initial={{ opacity: 0, scale: 0.94, rotateY: 8 }}
+                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                  exit={{ opacity: 0, scale: 1.04, rotateY: -8 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="absolute inset-0 cursor-pointer"
+                  onClick={() => setLightboxOpen(true)}
+                >
+                  <SmartImage
+                    src={currentArtwork.image_urls?.[0]}
+                    alt={currentArtwork.title}
+                    wrapperClassName="absolute inset-0"
+                    eager
+                  />
+                </motion.div>
+              </AnimatePresence>
+
               {/* Shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-10" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-10 pointer-events-none" />
             </div>
 
             {/* Info overlay */}
@@ -143,6 +163,7 @@ export default function VirtualGalleryViewer({ exhibitionId }) {
           <Button
             variant="outline"
             className="border-gold/50 text-gold hover:bg-gold/10 gap-2"
+            onClick={() => setLightboxOpen(true)}
           >
             <Maximize2 className="w-4 h-4" />
             Fullscreen
@@ -174,6 +195,15 @@ export default function VirtualGalleryViewer({ exhibitionId }) {
         <BuyArtworkModal
           artwork={selectedArtwork}
           onClose={() => setSelectedArtwork(null)}
+        />
+      )}
+
+      {currentArtwork && (
+        <ArtworkLightbox
+          open={lightboxOpen}
+          src={currentArtwork.image_urls?.[0]}
+          alt={currentArtwork.title}
+          onClose={() => setLightboxOpen(false)}
         />
       )}
     </div>

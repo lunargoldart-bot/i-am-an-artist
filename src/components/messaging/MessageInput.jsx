@@ -51,12 +51,13 @@ export default function MessageInput({ artworkId, recipientEmail, artworkTitle, 
   };
 
   return (
-    <div className="border-t border-border p-4 bg-card">
+    <div className="border-t border-border p-4 bg-card sat-bottom">
       {showOfferInput && (
         <div className="mb-3 p-3 bg-muted rounded-lg">
           <label className="text-xs text-muted-foreground mb-1 block">Offer Amount (ZMW)</label>
           <Input
             type="number"
+            inputMode="numeric"
             value={offerAmount}
             onChange={(e) => setOfferAmount(e.target.value)}
             placeholder="Enter your offer"

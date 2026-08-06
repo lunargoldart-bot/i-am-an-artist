@@ -5,11 +5,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { MessageCircle, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function QuickContactCard({ artworkId, artworkTitle, artistEmail, artistName, onSuccess }) {
-  const [open, setOpen] = useState(false);
+export default function QuickContactCard({ artworkId, artworkTitle, artistEmail, artistName, onSuccess, open: controlledOpen, onOpenChange }) {
+  const [internalOpen, setInternalOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [user, setUser] = React.useState(null);
+
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = (v) => {
+    if (controlledOpen === undefined) setInternalOpen(v);
+    onOpenChange?.(v);
+  };
 
   React.useEffect(() => {
     firebaseClient.auth.isAuthenticated().then(async (authed) => {

@@ -187,8 +187,8 @@ export default function ConversationThread({ conversationId, otherUserEmail, oth
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="p-4 border-t border-border space-y-3">
+      {/* Input Area — sticky composer */}
+      <div className="sticky bottom-0 bg-card border-t border-border p-4 space-y-3 sat-bottom">
         {showOfferForm ? (
           <form onSubmit={handleSendOffer} className="space-y-3">
             <div className="space-y-2">

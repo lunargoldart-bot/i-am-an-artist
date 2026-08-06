@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ShoppingBag, Trash2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import StickyActionBar from '@/components/ui/StickyActionBar';
 import { useCart } from '@/lib/CartContext';
+import { hapticLight } from '@/utils/native';
 
 export default function Cart() {
   const { items, removeItem, total, count } = useCart();
@@ -42,24 +44,27 @@ export default function Cart() {
               <p className="text-sm text-muted-foreground font-body">{item.artist_name}</p>
               <p className="font-display font-bold text-primary mt-1">ZMW {(item.price || 0).toLocaleString()}</p>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => removeItem(item.id)} className="text-muted-foreground hover:text-destructive flex-shrink-0">
+            <Button variant="ghost" size="icon" onClick={() => { hapticLight(); removeItem(item.id); }} className="text-muted-foreground hover:text-destructive flex-shrink-0">
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
         ))}
       </div>
 
-      <div className="border-t border-border pt-6">
-        <div className="flex items-center justify-between mb-6">
-          <span className="font-display text-xl font-bold">Total</span>
-          <span className="font-display text-2xl font-bold text-primary">ZMW {total.toLocaleString()}</span>
+      {/* Mobile + desktop sticky checkout bar */}
+      <StickyActionBar>
+        <div className="max-w-4xl mx-auto p-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="font-display text-lg font-bold">Total</span>
+            <span className="font-display text-xl font-bold text-primary">ZMW {total.toLocaleString()}</span>
+          </div>
+          <Link to="/checkout">
+            <Button size="lg" className="w-full rounded-full text-base gap-3">
+              Proceed to Checkout <ArrowRight className="w-5 h-5" />
+            </Button>
+          </Link>
         </div>
-        <Link to="/checkout">
-          <Button size="lg" className="w-full rounded-full text-base gap-3">
-            Proceed to Checkout <ArrowRight className="w-5 h-5" />
-          </Button>
-        </Link>
-      </div>
+      </StickyActionBar>
     </div>
   );
 }

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { ArtworkService, authService } from "@/services";
 import { functions } from "@/lib/firebase";
 import { httpsCallable } from "firebase/functions";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useParams, Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Heart, Eye, Shield, Truck, ShoppingBag, ShoppingCart, Gavel, TrendingUp, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,11 @@ import SocialShareButtons from "@/components/artwork/SocialShareButtons";
 import WishlistButton from "@/components/artwork/WishlistButton";
 import BidHistory from "@/components/auction/BidHistory";
 import PlaceBidDialog from "@/components/auction/PlaceBidDialog";
+import StickyActionBar from "@/components/ui/StickyActionBar";
+import SmartImage from "@/components/ui/SmartImage";
+import ArtworkLightbox from "@/components/ui/ArtworkLightbox";
 import { useCart } from "@/lib/CartContext";
+import { hapticMedium } from "@/utils/native";
 
 const categoryLabels = {
   painting: "Painting", sculpture: "Sculpture", photography: "Photography",
@@ -30,17 +34,15 @@ const placeholderImages = [
 
 export default function ArtworkDetail() {
   const { id } = useParams();
-  const queryClient = useQueryClient();
-  const [buyDialogOpen, setBuyDialogOpen] = useState(false);
+  const [searchParams] = useSearchParams();
   const [bidDialogOpen, setBidDialogOpen] = useState(false);
-  const [messageDialogOpen, setMessageDialogOpen] = useState(false);
   const [currentHighBid, setCurrentHighBid] = useState(null);
-  const [deliveryMethod, setDeliveryMethod] = useState("courier");
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const { addItem, items: cartItems } = useCart();
   const inCart = cartItems.some((i) => i.id === id);
-  const [orderForm, setOrderForm] = useState({
-    delivery_address: "", delivery_phone: "", delivery_notes: "", buyer_name: "",
-  });
+
+  const shouldOpenMessage = searchParams.get("open_messages") === "true";
+  const [contactOpen, setContactOpen] = useState(shouldOpenMessage);
 
   const { data: artwork, isLoading } = useQuery({
     queryKey: ["artwork", id],
@@ -59,35 +61,6 @@ export default function ArtworkDetail() {
       if (authed) {
         httpsCallable(functions, 'trackBuyerInterest')({ artwork_id: artwork.id, action }).catch(() => {});
       }
-    });
-  };
-
-  const orderMutation = useMutation({
-    mutationFn: async (orderData) => {
-      const callable = httpsCallable(functions, 'createOrder');
-      const response = await callable(orderData);
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["artwork", id] });
-      setBuyDialogOpen(false);
-      toast.success("Order placed! The artist will be notified. You pay on delivery.");
-    },
-  });
-
-  const handleOrder = async () => {
-    const user = await authService.getCurrentUser();
-    if (!user) {
-      authService.redirectToLogin();
-      return;
-    }
-    orderMutation.mutate({
-      artworkId: id,
-      buyerName: orderForm.buyer_name || user.full_name,
-      deliveryMethod,
-      deliveryAddress: orderForm.delivery_address,
-      deliveryPhone: orderForm.delivery_phone,
-      deliveryNotes: orderForm.delivery_notes,
     });
   };
 
@@ -117,6 +90,45 @@ export default function ArtworkDetail() {
   }
 
   const imageUrl = artwork.image_urls?.[0] || placeholderImages[0];
+  const isAuction = artwork.status === "auction";
+  const isAvailable = artwork.status === "available";
+  const highBid = currentHighBid ?? artwork.current_bid ?? artwork.price ?? 0;
+
+  const handleAddToCart = () => {
+    hapticMedium();
+    addItem(artwork);
+    toast.success('Added to cart');
+  };
+
+  const renderAvailableActions = (barStyle) => {
+    if (inCart) {
+      return (
+        <Link to="/cart" className={barStyle}>
+          <Button size="lg" className="w-full rounded-full font-body gap-2 text-base bg-green-primary hover:bg-green-secondary">
+            <Check className="w-5 h-5" /> View in Cart
+          </Button>
+        </Link>
+      );
+    }
+    return (
+      <div className={`${barStyle ? "flex gap-3" : "flex flex-col sm:flex-row gap-3"}`}>
+        <Button size="lg" onClick={handleAddToCart} className="flex-1 rounded-full font-body gap-2 text-base">
+          <ShoppingCart className="w-5 h-5" /> Add to Cart
+        </Button>
+        <Link to={`/checkout?quickBuy=${artwork.id}`} className="flex-1">
+          <Button size="lg" variant="outline" className="w-full rounded-full font-body gap-2 text-base border-primary text-primary hover:bg-primary/5">
+            <ShoppingBag className="w-5 h-5" /> Buy Now
+          </Button>
+        </Link>
+      </div>
+    );
+  };
+
+  const renderUnavailable = (barStyle) => (
+    <Button size="lg" disabled className={`${barStyle} w-full rounded-full font-body text-base`}>
+      {artwork.status === "sold" ? "Sold" : artwork.status === "reserved" ? "Reserved" : "Unavailable"}
+    </Button>
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
@@ -126,9 +138,13 @@ export default function ArtworkDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          <div className="relative overflow-hidden rounded-xl bg-muted aspect-[3/4]">
-            <img src={imageUrl} alt={artwork.title} className="w-full h-full object-cover" />
-          </div>
+          <SmartImage
+            src={imageUrl}
+            alt={artwork.title}
+            wrapperClassName="rounded-xl aspect-[3/4] w-full"
+            eager
+            onClick={() => setLightboxOpen(true)}
+          />
         </motion.div>
 
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="space-y-6">
@@ -179,13 +195,13 @@ export default function ArtworkDetail() {
           </div>
 
           {/* Auction panel */}
-          {artwork.status === "auction" && (
+          {isAuction && (
             <div className="space-y-4 border border-gold/30 rounded-xl p-4 bg-gold/5">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground mb-0.5">Current Bid</p>
                   <p className="text-2xl font-playfair font-bold text-gold">
-                    ZMW {(currentHighBid ?? artwork.current_bid ?? artwork.price ?? 0).toLocaleString()}
+                    ZMW {highBid.toLocaleString()}
                   </p>
                 </div>
                 <Badge className="bg-gold/15 text-gold border-gold/30 flex items-center gap-1">
@@ -198,9 +214,9 @@ export default function ArtworkDetail() {
               )}
 
               <Button
-              size="lg"
-              className="w-full gold-gradient text-background font-semibold gap-2 text-base"
-              onClick={() => { setBidDialogOpen(true); trackInterest('bid'); }}
+                size="lg"
+                className="w-full gold-gradient text-background font-semibold gap-2 text-base"
+                onClick={() => { setBidDialogOpen(true); trackInterest('bid'); }}
               >
                 <Gavel className="w-5 h-5" /> Place Bid
               </Button>
@@ -215,52 +231,68 @@ export default function ArtworkDetail() {
           )}
 
           {/* Contact Artist - Quick Card */}
-          <QuickContactCard 
+          <QuickContactCard
             artworkId={artwork.id}
             artworkTitle={artwork.title}
             artistEmail={artwork.artist_email}
             artistName={artwork.artist_name}
             onSuccess={() => trackInterest('message')}
+            open={contactOpen}
+            onOpenChange={setContactOpen}
           />
 
-          {artwork.status === "available" ? (
-            <div className="flex flex-col sm:flex-row gap-3">
-              {inCart ? (
-                <Link to="/cart" className="flex-1">
-                  <Button size="lg" className="w-full rounded-full font-body gap-2 text-base bg-green-primary hover:bg-green-secondary">
-                    <Check className="w-5 h-5" /> View in Cart
-                  </Button>
-                </Link>
-              ) : (
-                <Button size="lg" onClick={() => { addItem(artwork); toast.success('Added to cart'); }} className="flex-1 rounded-full font-body gap-2 text-base">
-                  <ShoppingCart className="w-5 h-5" /> Add to Cart
-                </Button>
-              )}
-              {!inCart && (
-                <Link to={`/checkout?quickBuy=${artwork.id}`} className="flex-1">
-                  <Button size="lg" variant="outline" className="w-full rounded-full font-body gap-2 text-base border-primary text-primary hover:bg-primary/5">
-                    <ShoppingBag className="w-5 h-5" /> Buy Now
-                  </Button>
-                </Link>
-              )}
-            </div>
-          ) : (
-            <Button size="lg" disabled className="w-full rounded-full font-body text-base">
-              {artwork.status === "sold" ? "Sold" : artwork.status === "reserved" ? "Reserved" : "Unavailable"}
-            </Button>
-          )}
+          {/* Desktop (in-flow) actions */}
+          <div className="hidden lg:block">
+            {isAvailable ? renderAvailableActions() : isAuction ? null : renderUnavailable()}
+          </div>
         </motion.div>
       </div>
+
+      {/* Mobile sticky action bar */}
+      <StickyActionBar className="lg:hidden">
+        <div className="flex items-center gap-3 p-4 max-w-7xl mx-auto">
+          <div className="min-w-0 flex-shrink-0 mr-1">
+            <p className="text-[11px] text-muted-foreground font-body leading-tight">
+              {isAuction ? "Current Bid" : isAvailable ? "Price" : "Status"}
+            </p>
+            <p className={`font-display font-bold truncate ${isAuction ? "text-gold" : "text-primary"}`}>
+              {isAuction ? `ZMW ${highBid.toLocaleString()}` : isAvailable ? `ZMW ${artwork.price?.toLocaleString()}` : artwork.status === "sold" ? "Sold" : artwork.status === "reserved" ? "Reserved" : "Unavailable"}
+            </p>
+          </div>
+          <div className="flex-1">
+            {isAvailable ? (
+              renderAvailableActions(true)
+            ) : isAuction ? (
+              <Button
+                size="lg"
+                className="w-full gold-gradient text-background font-semibold gap-2 text-base rounded-full"
+                onClick={() => { setBidDialogOpen(true); trackInterest('bid'); }}
+              >
+                <Gavel className="w-5 h-5" /> Place Bid
+              </Button>
+            ) : (
+              renderUnavailable()
+            )}
+          </div>
+        </div>
+      </StickyActionBar>
 
       {artwork && (
         <PlaceBidDialog
           open={bidDialogOpen}
           onClose={() => setBidDialogOpen(false)}
           artwork={artwork}
-          currentHighBid={currentHighBid ?? artwork.current_bid}
+          currentHighBid={highBid}
           onBidPlaced={(val) => setCurrentHighBid(val)}
         />
       )}
+
+      <ArtworkLightbox
+        open={lightboxOpen}
+        src={imageUrl}
+        alt={artwork.title}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   );
 }

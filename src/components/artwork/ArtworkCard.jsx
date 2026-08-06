@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import WishlistButton from "@/components/artwork/WishlistButton";
+import SmartImage from "@/components/ui/SmartImage";
 
 const categoryLabels = {
   painting: "Painting",
@@ -36,10 +37,11 @@ export default function ArtworkCard({ artwork, index = 0 }) {
     >
       <Link to={`/artwork/${artwork.id}`} className="group block">
         <div className="relative overflow-hidden rounded-lg bg-muted aspect-[3/4]">
-          <img
+          <SmartImage
             src={imageUrl}
             alt={artwork.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            wrapperClassName="absolute inset-0"
+            className="transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           

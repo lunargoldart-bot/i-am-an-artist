@@ -1,6 +1,7 @@
 import { Heart, Eye, Gavel, ShoppingBag, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import SmartImage from '@/components/ui/SmartImage';
 import { Link } from 'react-router-dom';
 
 const categoryColors = {
@@ -20,10 +21,11 @@ export default function ArtworkCard({ artwork, onBuy, onBid }) {
     <div className="gallery-card-hover bg-card border border-border rounded-lg overflow-hidden group">
       {/* Image */}
       <div className="relative overflow-hidden aspect-[3/4]">
-        <img
+        <SmartImage
           src={image}
           alt={artwork.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          wrapperClassName="absolute inset-0"
+          className="transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         

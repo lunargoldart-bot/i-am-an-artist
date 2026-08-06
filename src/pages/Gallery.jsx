@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ArtworkCard from '@/components/ui/ArtworkCard';
 import BuyArtworkModal from '@/components/modals/BuyArtworkModal';
 import BidModal from '@/components/modals/BidModal';
@@ -107,16 +108,31 @@ export default function Gallery() {
             <p className="text-sm text-muted-foreground">Try a different category or search term</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filtered.map(artwork => (
-              <ArtworkCard
-                key={artwork.id}
-                artwork={artwork}
-                onBuy={setBuyingArtwork}
-                onBid={setBiddingArtwork}
-              />
-            ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedCat + search + sortBy}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            >
+              {filtered.map((artwork, i) => (
+                <motion.div
+                  key={artwork.id}
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: Math.min(i * 0.04, 0.4), duration: 0.25 }}
+                >
+                  <ArtworkCard
+                    artwork={artwork}
+                    onBuy={setBuyingArtwork}
+                    onBid={setBiddingArtwork}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         )}
       </div>
 

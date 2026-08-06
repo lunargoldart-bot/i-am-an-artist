@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingBag, Shield, Truck, Loader2 } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, Shield, Truck, Loader2, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import StickyActionBar from '@/components/ui/StickyActionBar';
 import { useCart } from '@/lib/CartContext';
 import { useAuth } from '@/lib/AuthContext';
 import { functions } from '@/lib/firebase';
 import { httpsCallable } from 'firebase/functions';
 import { toast } from 'sonner';
+import { hapticHeavy, hapticSuccess } from '@/utils/native';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export default function Checkout() {
   const [itemsReady, setItemsReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState('courier');
+  const [errors, setErrors] = useState({});
   const [form, setForm] = useState({ buyer_name: '', delivery_address: '', delivery_phone: '', delivery_notes: '' });
 
   useEffect(() => {
@@ -55,11 +58,20 @@ export default function Checkout() {
     );
   }
 
-  const handleCheckout = async () => {
-    if (!form.buyer_name.trim() || !form.delivery_phone.trim()) {
-      toast.error('Please fill in your name and phone number');
+  const handleCheckout = async (e) => {
+    e?.preventDefault();
+    const nextErrors = {};
+    if (!form.buyer_name.trim()) nextErrors.buyer_name = 'Please enter your full name';
+    if (!form.delivery_phone.trim()) nextErrors.delivery_phone = 'Please enter your phone number';
+    else if (!/^\+?\d[\d\s-]{8,}$/.test(form.delivery_phone.trim())) nextErrors.delivery_phone = 'Enter a valid phone number';
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length) {
+      toast.error('Please fix the highlighted fields');
       return;
     }
+
+    hapticHeavy();
     setLoading(true);
     try {
       const callable = httpsCallable(functions, 'createCheckoutSession');
@@ -72,6 +84,7 @@ export default function Checkout() {
         deliveryNotes: form.delivery_notes.trim(),
       });
       const { redirectUrl, sessionId } = result.data;
+      hapticSuccess();
       clearCart();
       window.location.href = redirectUrl;
     } catch (err) {
@@ -95,11 +108,13 @@ export default function Checkout() {
             <div className="space-y-4">
               <div>
                 <Label className="font-body text-sm">Full Name</Label>
-                <Input value={form.buyer_name} onChange={(e) => setForm({ ...form, buyer_name: e.target.value })} placeholder="Your full name" className="font-body" required />
+                <Input value={form.buyer_name} onChange={(e) => setForm({ ...form, buyer_name: e.target.value })} placeholder="Your full name" className={`font-body ${errors.buyer_name ? 'border-destructive' : ''}`} required aria-invalid={!!errors.buyer_name} />
+                {errors.buyer_name && <p className="text-xs text-destructive mt-1 font-body">{errors.buyer_name}</p>}
               </div>
                <div>
                  <Label className="font-body text-sm">Phone Number</Label>
-                 <Input value={form.delivery_phone} onChange={(e) => setForm({ ...form, delivery_phone: e.target.value })} placeholder="+260..." type="tel" inputMode="telephone" className="font-body" required />
+                 <Input value={form.delivery_phone} onChange={(e) => setForm({ ...form, delivery_phone: e.target.value })} placeholder="+260..." type="tel" inputMode="telephone" className={`font-body ${errors.delivery_phone ? 'border-destructive' : ''}`} required aria-invalid={!!errors.delivery_phone} />
+                 {errors.delivery_phone && <p className="text-xs text-destructive mt-1 font-body">{errors.delivery_phone}</p>}
                </div>
               <div>
                 <Label className="font-body text-sm">Delivery Method</Label>
@@ -134,7 +149,9 @@ export default function Checkout() {
 
            <div className="lg:col-span-2 lg:sticky lg:top-24">
              <div className="rounded-xl border border-border bg-card p-6">
-             <h2 className="font-display text-lg font-semibold mb-4">Order Summary</h2>
+             <h2 className="font-display text-lg font-semibold mb-4 flex items-center gap-2">
+               <Lock className="w-4 h-4 text-primary" /> Order Summary
+             </h2>
              <div className="space-y-3 mb-4">
                {items.map((item) => (
                  <div key={item.id} className="flex items-center gap-3">
@@ -155,13 +172,28 @@ export default function Checkout() {
                  <span>Total</span><span className="text-primary">ZMW {total.toLocaleString()}</span>
                </div>
              </div>
-             <Button onClick={handleCheckout} disabled={loading} className="w-full rounded-full mt-6 text-base gap-2">
-               {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</> : <>Pay with DPO <Truck className="w-4 h-4" /></>}
-             </Button>
-             <p className="text-xs text-muted-foreground text-center mt-3 font-body">You will be redirected to DPO Pay to complete your payment securely.</p>
+             <p className="text-xs text-muted-foreground text-center mt-4 font-body">You will be redirected to the DPO Pay portal to complete payment securely. We never store your card details.</p>
            </div>
            </div>
       </div>
+
+      {/* Mobile + desktop sticky pay bar */}
+      <StickyActionBar>
+        <div className="max-w-4xl mx-auto p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-[11px] text-muted-foreground font-body">Total due</p>
+              <p className="font-display text-xl font-bold text-primary">ZMW {total.toLocaleString()}</p>
+            </div>
+            <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-body">
+              <Shield className="w-4 h-4 text-green-primary" /> Secure checkout
+            </span>
+          </div>
+          <Button onClick={handleCheckout} disabled={loading} className="w-full rounded-full text-base gap-2">
+            {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</> : <>Pay with DPO <Truck className="w-4 h-4" /></>}
+          </Button>
+        </div>
+      </StickyActionBar>
     </div>
   );
 }

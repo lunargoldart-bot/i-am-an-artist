@@ -4,9 +4,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import StickyActionBar from "@/components/ui/StickyActionBar";
 import { Bookmark, Trash2, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { hapticLight } from "@/utils/native";
 
 const categoryLabels = {
   painting: "Painting", sculpture: "Sculpture", photography: "Photography",
@@ -119,7 +121,7 @@ export default function Wishlist() {
 
               {/* Remove button */}
               <button
-                onClick={() => removeMutation.mutate(item.id)}
+                onClick={() => { hapticLight(); removeMutation.mutate(item.id); }}
                 className="absolute top-2 right-2 p-2 rounded-full bg-black/60 text-white hover:bg-destructive transition-colors"
                 title="Remove from wishlist"
               >
@@ -142,6 +144,20 @@ export default function Wishlist() {
           ))}
         </div>
       )}
+
+      <StickyActionBar>
+        <div className="max-w-7xl mx-auto p-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="font-display font-bold text-lg">{wishlistItems.length} saved artwork{wishlistItems.length !== 1 ? "s" : ""}</p>
+            <p className="text-xs text-muted-foreground font-body">Tap a piece to view or buy</p>
+          </div>
+          <Link to="/explore">
+            <Button className="rounded-full gap-2 flex-shrink-0">
+              <ShoppingBag className="w-4 h-4" /> Explore Gallery
+            </Button>
+          </Link>
+        </div>
+      </StickyActionBar>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import SwipeDeck from "@/components/explore/SwipeDeck";
 import { ArtworkService } from "@/services";
 
@@ -103,7 +104,17 @@ export default function Explore() {
           <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <SwipeDeck artworks={filtered} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={category}
+            initial={{ opacity: 0, y: 16, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <SwipeDeck key={`${category}-${search}`} artworks={filtered} />
+          </motion.div>
+        </AnimatePresence>
       )}
     </div>
   );

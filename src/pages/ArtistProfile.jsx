@@ -2,9 +2,16 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { User, MapPin, Instagram, Twitter, Facebook, Youtube, Globe, Music2, ArrowLeft, Eye, Heart } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import StickyActionBar from "@/components/ui/StickyActionBar";
+import { User, MapPin, Instagram, Twitter, Facebook, Youtube, Globe, Music2, ArrowLeft, Eye, Heart, MessageCircle, Send, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import ArtworkCard from "../components/artwork/ArtworkCard";
 import { UserService, ArtworkService } from "@/services";
+import { firebaseClient } from "@/api/firebaseClient";
+import { hapticMedium } from "@/utils/native";
 
 const categoryEmoji = {
   painting: "🎨", sculpture: "🗿", photography: "📷", music: "🎵",
@@ -21,6 +28,9 @@ const socialIcons = {
 
 export default function ArtistProfile() {
   const { id } = useParams();
+  const [contactOpen, setContactOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
 
   const { data: artist, isLoading: loadingArtist } = useQuery({
     queryKey: ["artist", id],
@@ -34,6 +44,41 @@ export default function ArtistProfile() {
     enabled: !!artist?.email,
     initialData: [],
   });
+
+  const handleContact = async () => {
+    if (!message.trim()) return;
+    const authed = await firebaseClient.auth.isAuthenticated();
+    if (!authed) {
+      firebaseClient.auth.redirectToLogin();
+      return;
+    }
+    const me = await firebaseClient.auth.me();
+    if (!me) {
+      firebaseClient.auth.redirectToLogin();
+      return;
+    }
+    const sample = artworks[0];
+    setSending(true);
+    try {
+      await firebaseClient.entities.Message.create({
+        conversation_id: `${sample?.id || 'artist'}-${me.email}-${artist.email}`,
+        artwork_id: sample?.id || null,
+        artwork_title: sample?.title || `${artist.full_name}'s profile`,
+        sender_email: me.email,
+        sender_name: me.full_name,
+        recipient_email: artist.email,
+        content: message,
+        message_type: 'text',
+      });
+      toast.success('Message sent!');
+      setMessage('');
+      setContactOpen(false);
+    } catch {
+      toast.error('Failed to send message');
+    } finally {
+      setSending(false);
+    }
+  };
 
   if (loadingArtist) {
     return (
@@ -167,6 +212,55 @@ export default function ArtistProfile() {
           </div>
         )}
       </div>
+
+      {/* Mobile + desktop sticky contact bar */}
+      <StickyActionBar>
+        <div className="max-w-5xl mx-auto p-4 flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="font-display font-bold text-lg truncate">{artist.full_name}</p>
+            <p className="text-xs text-muted-foreground font-body">{artworks.length} works · {totalLikes} likes</p>
+          </div>
+          <Button
+            onClick={() => { hapticMedium(); setContactOpen(true); }}
+            className="rounded-full gap-2 flex-shrink-0"
+          >
+            <MessageCircle className="w-5 h-5" /> Contact Artist
+          </Button>
+        </div>
+      </StickyActionBar>
+
+      {/* Contact dialog */}
+      <Dialog open={contactOpen} onOpenChange={setContactOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display">Message {artist.full_name}</DialogTitle>
+            <DialogDescription className="font-body">
+              Start a conversation about their work.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder={`Hi ${artist.full_name.split(' ')[0]}, I'm interested in your work...`}
+            rows={4}
+            className="font-body text-base resize-none"
+            autoFocus
+          />
+          <div className="flex gap-3">
+            <Button
+              onClick={handleContact}
+              disabled={sending || !message.trim()}
+              className="flex-1 rounded-full gap-2"
+            >
+              {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+              Send Message
+            </Button>
+            <Button variant="outline" onClick={() => setContactOpen(false)} className="rounded-full">
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Share2, Check } from "lucide-react";
 import { toast } from "sonner";
+import { shareContent, hapticLight } from "@/utils/native";
 
 export default function SocialShareButtons({ artwork }) {
   const [copied, setCopied] = useState(false);
@@ -15,6 +16,16 @@ export default function SocialShareButtons({ artwork }) {
     instagram: null, // Instagram doesn't support web share links; we copy link instead
   };
 
+  const handleNativeShare = async () => {
+    hapticLight();
+    const res = await shareContent({ title: artwork.title, text, url: pageUrl });
+    if (res.method === "clipboard" && res.handled) {
+      setCopied(true);
+      toast.success("Link copied!");
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   const handleCopyForInstagram = () => {
     navigator.clipboard.writeText(pageUrl).then(() => {
       setCopied(true);
@@ -24,10 +35,15 @@ export default function SocialShareButtons({ artwork }) {
   };
 
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm text-muted-foreground font-body flex items-center gap-1">
-        <Share2 className="w-5 h-5" /> Share
-      </span>
+    <div className="flex items-center gap-2">
+      <button
+        onClick={handleNativeShare}
+        className="inline-flex items-center gap-1.5 h-11 px-3 rounded-full border border-border text-sm text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors font-body"
+        title="Share"
+      >
+        {copied ? <Check className="w-5 h-5 text-green-500" /> : <Share2 className="w-5 h-5" />}
+        <span className="hidden sm:inline">Share</span>
+      </button>
 
       {/* WhatsApp */}
       <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer">
@@ -48,7 +64,7 @@ export default function SocialShareButtons({ artwork }) {
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 border-border hover:border-blue-500 hover:bg-blue-500/10"
+          className="h-11 w-11 border-border hover:border-blue-500 hover:bg-blue-500/10"
           title="Share on Facebook"
         >
           <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blue-500">
