@@ -11,7 +11,7 @@ export default function BidModal({ artwork, onClose }) {
   const [loading, setLoading] = useState(false);
   const [placed, setPlaced] = useState(false);
 
-  const minBid = (artwork.current_bid_zmw || artwork.price_zmw || 0) + 50;
+  const minBid = (artwork.current_bid_zmw || artwork.price_zmw || artwork.price || 0) + 50;
 
   const handleBid = async () => {
     const amount = parseFloat(bidAmount);
@@ -63,7 +63,7 @@ export default function BidModal({ artwork, onClose }) {
               <div className="flex items-center gap-3 mt-1">
                 <span className="text-xs text-muted-foreground flex items-center gap-0.5">
                   <TrendingUp className="w-3 h-3 text-gold" />
-                  Current: <span className="text-gold font-semibold ml-0.5">ZMW {(artwork.current_bid_zmw || artwork.price_zmw || 0).toLocaleString()}</span>
+                  Current: <span className="text-gold font-semibold ml-0.5">ZMW {(artwork.current_bid_zmw || artwork.price_zmw || artwork.price || 0).toLocaleString()}</span>
                 </span>
               </div>
               {artwork.auction_end_date && (

@@ -10,6 +10,11 @@ const categories = ['painting', 'photography', 'sculpture', 'music', 'digital_ar
 
 const emptyForm = { title: '', description: '', category: 'painting', price_zmw: '', is_auction: false, auction_end_date: '', medium: '', dimensions: '', year_created: '' };
 
+// Normalize artworks created with either the legacy (price_zmw/images) or
+// canonical (price/image_urls) schema so both edit and display work.
+const getPrice = (a) => (a?.price_zmw ?? a?.price) || '';
+const getImage = (a) => a?.images?.[0] || a?.image_urls?.[0] || '';
+
 export default function ManageArtworks({ user }) {
   const [artworks, setArtworks] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -31,10 +36,12 @@ export default function ManageArtworks({ user }) {
     const data = {
       ...form,
       price_zmw: parseFloat(form.price_zmw) || 0,
+      price: parseFloat(form.price_zmw) || 0,
       year_created: parseInt(form.year_created) || new Date().getFullYear(),
       artist_name: user.full_name,
       artist_email: user.email,
       images: imageUrl ? [imageUrl] : [],
+      image_urls: imageUrl ? [imageUrl] : [],
       status: form.is_auction ? 'auction' : 'available',
     };
     if (editing) {
@@ -54,8 +61,8 @@ export default function ManageArtworks({ user }) {
 
   const handleEdit = (artwork) => {
     setEditing(artwork);
-    setForm({ ...emptyForm, ...artwork, price_zmw: artwork.price_zmw?.toString() || '' });
-    setImageUrl(artwork.images?.[0] || '');
+    setForm({ ...emptyForm, ...artwork, price_zmw: getPrice(artwork).toString() });
+    setImageUrl(getImage(artwork));
     setShowForm(true);
   };
 
@@ -163,13 +170,13 @@ export default function ManageArtworks({ user }) {
           {artworks.map(artwork => (
             <div key={artwork.id} className="bg-card border border-border rounded-lg overflow-hidden">
               <img
-                src={artwork.images?.[0] || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop'}
+                src={getImage(artwork) || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop'}
                 alt={artwork.title}
                 className="w-full h-36 object-cover"
               />
               <div className="p-3">
                 <h4 className="font-playfair font-semibold text-foreground text-sm mb-0.5">{artwork.title}</h4>
-                <p className="text-gold text-sm font-bold">ZMW {artwork.price_zmw?.toLocaleString()}</p>
+                <p className="text-gold text-sm font-bold">ZMW {Number(getPrice(artwork)).toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground capitalize">{artwork.status}</p>
                 <div className="flex gap-2 mt-2">
                   <Button size="sm" variant="outline" className="flex-1 border-border text-xs" onClick={() => handleEdit(artwork)}>

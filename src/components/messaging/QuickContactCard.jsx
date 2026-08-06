@@ -32,8 +32,11 @@ export default function QuickContactCard({ artworkId, artworkTitle, artistEmail,
 
     setLoading(true);
     try {
-      const conversationId = `${artworkId}-${user.email}-${artistEmail}`;
-      
+      // Match the conversation_id scheme used by sendMessage/MessageThread:
+      // `${artwork_id || 'general'}_${participantA}_${participantB}` with emails sorted.
+      const participants = [user.email, artistEmail].sort();
+      const conversationId = `${artworkId || 'general'}_${participants[0]}_${participants[1]}`;
+
       await firebaseClient.entities.Message.create({
         conversation_id: conversationId,
         artwork_id: artworkId,

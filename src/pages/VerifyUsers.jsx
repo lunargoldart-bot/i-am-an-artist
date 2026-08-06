@@ -3,19 +3,28 @@ import { UserVerificationService } from "@/services";
 import { functions } from "@/lib/firebase";
 import { httpsCallable } from "firebase/functions";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Shield, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Shield, Clock, CheckCircle, XCircle, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { firebaseClient } from "@/api/firebaseClient";
 
 export default function VerifyUsers() {
+  const { data: currentUser, isLoading: authLoading } = useQuery({
+    queryKey: ["current-user-admin-gate"],
+    queryFn: () => firebaseClient.auth.me(),
+  });
+
+  const isAdmin = currentUser?.role === "admin";
+
   const { data: verifications, isLoading, refetch } = useQuery({
     queryKey: ["pending-verifications"],
     queryFn: async () => {
       return UserVerificationService.filter({}, '-created_date', 100);
     },
+    enabled: isAdmin,
   });
 
   const approveVerificationMutation = useMutation({
@@ -63,6 +72,34 @@ export default function VerifyUsers() {
       notes: reason,
     });
   };
+
+  if (authLoading) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-card rounded-xl p-4 animate-pulse">
+              <div className="h-4 bg-muted rounded w-3/4" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+        <div className="text-center bg-card rounded-2xl border border-border p-10">
+          <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <h1 className="font-display text-2xl font-bold mb-2">Administrator Access Required</h1>
+          <p className="text-muted-foreground font-body max-w-md mx-auto">
+            You do not have permission to view identity verifications. Only platform administrators can access this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

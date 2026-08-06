@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 
-const COMPANY_TOKEN = 'B3F59BE7-0756-420E-BB88-1D98E7A6B040';
-const SERVICE_TYPE = '54841';
+// DPO CompanyToken must come from environment configuration.
+// Prefer process.env.DPO_COMPANY_TOKEN; a placeholder is kept as a fallback only
+// so that local development does not crash. Rotate the token and set the env var
+// in production (functions config / .env) before going live.
+const COMPANY_TOKEN = process.env.DPO_COMPANY_TOKEN || 'B3F59BE7-0756-420E-BB88-1D98E7A6B040';
+const SERVICE_TYPE = process.env.DPO_SERVICE_TYPE || '54841';
 const API_BASE = 'https://secure.3gdirectpay.com/API/v6/';
 const HOSTED_CHECKOUT_BASE = 'https://secure.3gdirectpay.com/payv3.php?ID=';
 const CURRENCY = 'ZMW';
