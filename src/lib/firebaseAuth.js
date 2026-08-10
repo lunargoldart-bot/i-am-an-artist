@@ -2,6 +2,7 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -45,7 +46,33 @@ export const hydrateUser = async (firebaseUser) => {
 export const getCurrentUser = async () => hydrateUser(auth.currentUser);
 export const isUserAuthenticated = () => Boolean(auth.currentUser);
 
+let nativeGoogleReady = false;
+
+async function ensureNativeGoogle() {
+  const { Capacitor } = await import('@capacitor/core');
+  if (!Capacitor.isNative()) return null;
+  const { SocialLogin } = await import('@capgo/capacitor-social-login');
+  if (!nativeGoogleReady) {
+    await SocialLogin.initialize({
+      google: {
+        webClientId: import.meta.env.VITE_FIREBASE_WEB_CLIENT_ID,
+        mode: 'online',
+      },
+    });
+    nativeGoogleReady = true;
+  }
+  return SocialLogin;
+}
+
 export const signInWithGoogle = async () => {
+  const SocialLogin = await ensureNativeGoogle();
+  if (SocialLogin) {
+    const { result } = await SocialLogin.login({ provider: 'google', options: { scopes: ['email', 'profile'] } });
+    if (!result?.idToken) throw new Error('Google Sign-In did not return an ID token');
+    const credential = GoogleAuthProvider.credential(result.idToken);
+    const firebaseUser = (await signInWithCredential(auth, credential)).user;
+    return hydrateUser(firebaseUser);
+  }
   const result = await signInWithPopup(auth, googleProvider);
   return hydrateUser(result.user);
 };

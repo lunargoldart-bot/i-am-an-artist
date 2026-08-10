@@ -46,6 +46,9 @@ functions/.env.*
 android/keystores/
 android/app/release-keys.properties
 android/app/google-services.json
+# Keystore / credential files (defense in depth)
+*.keystore
+*.jks
 # CocoaPods / iOS build artifacts
 ios/App/App/Pods/
 ios/App/App.xcworkspace/

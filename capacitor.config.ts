@@ -18,6 +18,14 @@ const config: CapacitorConfig = {
     backgroundColor: '#0b0b0f',
   },
   plugins: {
+    SocialLogin: {
+      providers: {
+        google: true,
+        apple: false,
+        facebook: false,
+        twitter: false,
+      },
+    },
     SplashScreen: {
       launchShowDuration: 0,
       launchAutoHide: true,
