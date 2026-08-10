@@ -77,15 +77,17 @@ export default function ProfileMonetization() {
   const handleUpgrade = async (tierId) => {
     const tier = TIERS.find((item) => item.id === tierId);
     if (!tier || tier.price <= 0) return;
-    const phone = window.prompt('Enter the mobile money number to receive the payment prompt (for example, 260971234567):');
-    if (!phone) return;
+    
     setUpgrading(tierId);
     try {
       const response = await firebaseClient.functions.invoke('initiateMembershipPayment', {
         tier_id: tierId,
-        phone: phone.replace(/\D/g, ''),
       });
-      toast.success(response.data?.message || 'Payment initiated. Membership activates after confirmation.');
+      if (response.data.redirectUrl) {
+        window.location.href = response.data.redirectUrl;
+      } else {
+        toast.success(response.data?.message || 'Payment initiated. Membership activates after confirmation.');
+      }
     } catch (error) {
       toast.error(error.message || 'Upgrade payment could not be initiated.');
     } finally {

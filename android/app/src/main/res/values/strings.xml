@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">I Am An Artist</string>
+    <string name="title_activity_main">I Am An Artist</string>
+    <string name="package_name">com.iamanartist.app</string>
+    <string name="custom_url_scheme">com.iamanartist.app</string>
+</resources>

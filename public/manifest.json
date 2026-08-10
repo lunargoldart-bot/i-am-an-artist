@@ -1,21 +1,93 @@
 {
-  "name": "I Am An Artist — Premium African Art Marketplace",
-  "short_name": "I Am An Artist",
+  "name": "I Am An Artist",
+  "short_name": "IAA",
   "description": "Discover original African artwork, connect with talented artists, and collect extraordinary pieces.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": ["maskable", "any"]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-1.png",
+      "sizes": "1080x2400",
+      "form_factor": "wide",
       "type": "image/png"
     },
     {
-      "src": "/iamanartistlogo.png",
-      "sizes": "512x512",
+      "src": "/screenshots/screenshot-2.png",
+      "sizes": "1080x2400",
+      "form_factor": "wide",
       "type": "image/png"
     }
-  ]
+  ],
+  "categories": ["shopping", "art", "marketplace"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "protocol_handlers": [
+    {
+      "protocol": "web+artist",
+      "target": "/explore"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "params": {
+      "title": "Share artwork",
+      "text": "Check out this artwork",
+      "url": "https://www.iamanartistapp.com/artwork/:id"
+    }
+  }
 }

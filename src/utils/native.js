@@ -1,12 +1,18 @@
-// Native-feel web utilities: haptics (structure only), share API, clipboard.
+// Native-feel web utilities: haptics, share API, clipboard.
 // All functions degrade gracefully on unsupported browsers.
+// Note: the Capacitor native plugins (@capacitor/share, @capacitor/clipboard,
+// @capacitor/splash-screen, @capacitor/status-bar) are installed and wired into
+// the native projects (see capacitor.config.ts + native asset catalogs). They
+// are invoked from the native bridge / platform-specific code paths rather than
+// imported into this shared web module, which keeps the PWA/web build lean and
+// avoids bundling native-only code into the web graph.
 
 /* ------------------------------------------------------------------ */
-/* Haptics pipeline (structural only).
- * In a Capacitor build these would map to ImpactFeedback/SuccessFails.
- * Until then we map to the standardised Vibration API and pass through.
+/* Haptics pipeline.
+ * On web we map to the standardised Vibration API and pass through.
+ * In a native build the native container handles haptics via the plugin.
  * ------------------------------------------------------------------ */
-const canVibrate = () => typeof navigator !== "undefined" && "vibrate" in navigator;
+const canVibrate = () => typeof navigator !== 'undefined' && 'vibrate' in navigator;
 
 const vibrationPattern = {
   light: 5,
@@ -22,16 +28,16 @@ function fire(pattern) {
   try { navigator.vibrate(pattern); } catch { /* no-op */ }
 }
 
-export function haptic(type = "light") {
+export function haptic(type = 'light') {
   fire(vibrationPattern[type] || vibrationPattern.medium);
 }
 
-export const hapticLight = () => haptic("light");
-export const hapticMedium = () => haptic("medium");
-export const hapticHeavy = () => haptic("heavy");
-export const hapticSelection = () => haptic("selection");
-export const hapticSuccess = () => haptic("success");
-export const hapticError = () => haptic("error");
+export const hapticLight = () => haptic('light');
+export const hapticMedium = () => haptic('medium');
+export const hapticHeavy = () => haptic('heavy');
+export const hapticSelection = () => haptic('selection');
+export const hapticSuccess = () => haptic('success');
+export const hapticError = () => haptic('error');
 
 /* ------------------------------------------------------------------ */
 /* Clipboard */
@@ -40,13 +46,13 @@ export async function copyToClipboard(text) {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);
     } else {
-      const ta = document.createElement("textarea");
+      const ta = document.createElement('textarea');
       ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand("copy");
+      document.execCommand('copy');
       document.body.removeChild(ta);
     }
     return true;
@@ -58,22 +64,22 @@ export async function copyToClipboard(text) {
 /* ------------------------------------------------------------------ */
 /* Web Share API with clipboard fallback.
  * Resolves { method: 'share' | 'clipboard', ok: boolean | undefined } */
-export async function shareContent({ title = "", text = "", url = window.location.href } = {}) {
-  const nav = typeof navigator !== "undefined" ? navigator : null;
+export async function shareContent({ title = '', text = '', url = window.location.href } = {}) {
+  const nav = typeof navigator !== 'undefined' ? navigator : null;
 
   if (nav?.share) {
     try {
       await nav.share({ title, text, url });
-      return { method: "share", ok: true };
+      return { method: 'share', ok: true };
     } catch (err) {
       // User cancelled — not an error.
-      if (err?.name === "AbortError" || err?.name === "NotAllowedError") {
-        return { method: "share", ok: false };
+      if (err?.name === 'AbortError' || err?.name === 'NotAllowedError') {
+        return { method: 'share', ok: false };
       }
       // Fall through to copy.
     }
   }
 
   const copied = await copyToClipboard(url || text);
-  return { method: "clipboard", handled: copied };
+  return { method: 'clipboard', handled: copied };
 }
