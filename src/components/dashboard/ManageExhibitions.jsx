@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -78,7 +78,7 @@ export default function ManageExhibitions({ user }) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="font-playfair font-bold text-xl text-foreground">My Exhibitions</h2>
-        <Button className="gold-gradient text-background font-semibold" size="sm" onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm); }}>
+        <Button className="green-gradient text-primary-foreground font-semibold" size="sm" onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm); }}>
           <Plus className="w-4 h-4 mr-1" /> Create Exhibition
         </Button>
       </div>
@@ -113,7 +113,7 @@ export default function ManageExhibitions({ user }) {
               <Input value={form.venue} onChange={e => setForm({ ...form, venue: e.target.value })} placeholder="Gallery, Theatre, Online..." className="bg-background border-border" />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Ticket Price (ZMW) — 0 for free</label>
+              <label className="text-xs text-muted-foreground mb-1 block">Ticket Price (ZMW) â€” 0 for free</label>
               <Input type="number" value={form.ticket_price_zmw} onChange={e => setForm({ ...form, ticket_price_zmw: e.target.value })} className="bg-background border-border" />
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function ManageExhibitions({ user }) {
             <Textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="bg-background border-border h-20" />
           </div>
           <div className="flex items-center gap-3">
-            <input type="checkbox" id="virtual" checked={form.is_virtual} onChange={e => setForm({ ...form, is_virtual: e.target.checked })} className="accent-gold" />
+            <input type="checkbox" id="virtual" checked={form.is_virtual} onChange={e => setForm({ ...form, is_virtual: e.target.checked })} className="accent-primary" />
             <label htmlFor="virtual" className="text-sm text-foreground">Virtual Event</label>
             {form.is_virtual && (
               <Input value={form.stream_url} onChange={e => setForm({ ...form, stream_url: e.target.value })} placeholder="Stream URL" className="bg-background border-border ml-2 text-sm flex-1" />
@@ -132,13 +132,13 @@ export default function ManageExhibitions({ user }) {
             <label className="text-xs text-muted-foreground mb-1 block">Cover Image</label>
             <div className="flex gap-3 items-center">
               {coverUrl && <img src={coverUrl} alt="cover" className="w-16 h-16 rounded-md object-cover border border-border" />}
-              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-gold hover:text-gold transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors">
                 <Upload className="w-4 h-4" /> Upload Cover
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               </label>
             </div>
           </div>
-          <Button type="submit" className="gold-gradient text-background font-semibold w-full" disabled={loading}>
+          <Button type="submit" className="green-gradient text-primary-foreground font-semibold w-full" disabled={loading}>
             {loading ? 'Saving...' : editing ? 'Update' : 'Create Exhibition'}
           </Button>
         </form>
@@ -157,7 +157,7 @@ export default function ManageExhibitions({ user }) {
               <img src={ex.cover_image || 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=100&h=100&fit=crop'} alt={ex.title} className="w-16 h-16 rounded-md object-cover shrink-0" />
               <div className="flex-1 min-w-0">
                 <h4 className="font-playfair font-semibold text-foreground">{ex.title}</h4>
-                <p className="text-xs text-muted-foreground capitalize">{ex.type?.replace('_', ' ')} · {ex.status}</p>
+                <p className="text-xs text-muted-foreground capitalize">{ex.type?.replace('_', ' ')} Â· {ex.status}</p>
                 <p className="text-xs text-muted-foreground">{ex.start_date ? format(new Date(ex.start_date), 'MMM d, yyyy') : 'TBD'}</p>
               </div>
               <div className="flex gap-2 shrink-0">

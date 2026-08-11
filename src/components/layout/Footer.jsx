@@ -1,4 +1,4 @@
-import { Instagram, Twitter, Facebook, Youtube } from 'lucide-react';
+﻿import { Instagram, Twitter, Facebook, Youtube } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -16,7 +16,7 @@ export default function Footer() {
             </p>
             <div className="flex gap-5 mt-4">
               {[Instagram, Twitter, Facebook, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="flex items-center justify-center w-10 h-10 text-muted-foreground hover:text-gold transition-colors">
+                <a key={i} href="#" className="flex items-center justify-center w-10 h-10 text-muted-foreground hover:text-primary transition-colors">
                   <Icon className="w-5 h-5" />
                 </a>
               ))}
@@ -29,7 +29,7 @@ export default function Footer() {
             <div className="space-y-2">
               {['Explore', 'Sell Art', 'Host Exhibition', 'Exhibitions', 'Rankings', 'News Feed'].map(item => (
                 <div key={item}>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">{item}</a>
+                  <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">{item}</a>
                 </div>
               ))}
             </div>
@@ -40,7 +40,7 @@ export default function Footer() {
             <div className="space-y-2">
               {['Exhibitions', 'Rankings', 'Monetize', 'Courier Partners'].map(item => (
                 <div key={item}>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">{item}</a>
+                  <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">{item}</a>
                 </div>
               ))}
             </div>
@@ -51,7 +51,7 @@ export default function Footer() {
             <div className="space-y-2">
               {['Monetize', 'Courier Partners'].map(item => (
                 <div key={item}>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">{item}</a>
+                  <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">{item}</a>
                 </div>
               ))}
             </div>
@@ -62,7 +62,7 @@ export default function Footer() {
             <div className="space-y-2">
               {['Terms', 'Contact'].map(item => (
                 <div key={item}>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">{item}</a>
+                  <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">{item}</a>
                 </div>
               ))}
             </div>
@@ -70,11 +70,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground text-center sm:text-left">© 2026 I Am An Artist. All rights reserved. Prices in Zambian Kwacha (ZMW).</p>
+          <p className="text-xs text-muted-foreground text-center sm:text-left">Â© 2026 I Am An Artist. All rights reserved. Prices in Zambian Kwacha (ZMW).</p>
           <div className="flex flex-wrap gap-5 justify-center">
-            <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">Privacy</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">Terms</a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-gold transition-colors">Contact</a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy</a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Terms</a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Contact</a>
           </div>
         </div>
       </div>

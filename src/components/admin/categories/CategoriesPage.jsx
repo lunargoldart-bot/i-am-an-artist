@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { Tags } from 'lucide-react';
 import { PageHeader, ChartCard } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -50,18 +50,18 @@ export default function CategoriesPage() {
         <div className="rounded-xl border border-border bg-card p-5">
           <p className="mb-3 text-sm font-semibold text-foreground">Category Selection</p>
           <div className="flex flex-wrap gap-2">
-            <button onClick={() => setSelected('all')} className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${selected === 'all' ? 'border-gold bg-gold/10 text-gold' : 'border-border text-muted-foreground hover:text-foreground'}`}>
+            <button onClick={() => setSelected('all')} className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${selected === 'all' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:text-foreground'}`}>
               All ({formatNumber(artworks.length)})
             </button>
             {byCategory.map((c) => (
-              <button key={c.name} onClick={() => setSelected(c.name)} className={`rounded-full border px-3 py-1.5 text-xs font-medium capitalize transition-colors ${selected === c.name ? 'border-gold bg-gold/10 text-gold' : 'border-border text-muted-foreground hover:text-foreground'}`}>
+              <button key={c.name} onClick={() => setSelected(c.name)} className={`rounded-full border px-3 py-1.5 text-xs font-medium capitalize transition-colors ${selected === c.name ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:text-foreground'}`}>
                 {c.name} ({formatNumber(c.value)})
               </button>
             ))}
           </div>
           <div className="mt-6">
             <p className="text-xs text-muted-foreground">Selected category artworks</p>
-            <p className="font-playfair text-4xl font-bold text-gold">{formatNumber(selectedCount)}</p>
+            <p className="font-playfair text-4xl font-bold text-primary">{formatNumber(selectedCount)}</p>
           </div>
         </div>
       </div>

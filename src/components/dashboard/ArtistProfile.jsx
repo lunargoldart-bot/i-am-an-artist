@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,7 +59,7 @@ export default function ArtistProfile({ user }) {
   return (
     <div className="max-w-2xl">
       <div className="flex items-center gap-2 mb-6">
-        <User className="w-5 h-5 text-gold" />
+        <User className="w-5 h-5 text-primary" />
         <h2 className="font-playfair font-bold text-xl text-foreground">Artist Profile</h2>
       </div>
 
@@ -72,7 +72,7 @@ export default function ArtistProfile({ user }) {
               <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-border bg-secondary">
                 {profileImg ? <img src={profileImg} alt="profile" className="w-full h-full object-cover" /> : <User className="w-10 h-10 text-muted-foreground m-5" />}
               </div>
-              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-gold hover:text-gold transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors">
                 <Upload className="w-4 h-4" /> Upload Photo
                 <input type="file" accept="image/*" className="hidden" onChange={e => handleUpload(e, 'profile')} />
               </label>
@@ -82,7 +82,7 @@ export default function ArtistProfile({ user }) {
             <label className="text-xs text-muted-foreground mb-2 block">Cover Image</label>
             <div className="flex items-center gap-3">
               {coverImg && <img src={coverImg} alt="cover" className="w-32 h-16 rounded-md object-cover border border-border" />}
-              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-gold hover:text-gold transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors">
                 <Upload className="w-4 h-4" /> Upload Cover
                 <input type="file" accept="image/*" className="hidden" onChange={e => handleUpload(e, 'cover')} />
               </label>
@@ -128,7 +128,7 @@ export default function ArtistProfile({ user }) {
           </div>
         </div>
 
-        <Button type="submit" className="gold-gradient text-background font-semibold" disabled={loading}>
+        <Button type="submit" className="green-gradient text-primary-foreground font-semibold" disabled={loading}>
           <Save className="w-4 h-4 mr-2" />
           {loading ? 'Saving...' : artist ? 'Update Profile' : 'Create Artist Profile'}
         </Button>

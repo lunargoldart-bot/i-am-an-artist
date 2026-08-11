@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Search, Trophy } from 'lucide-react';
 import ArtistCard from '@/components/ui/ArtistCard';
@@ -6,7 +6,7 @@ import { ArtistService } from '@/services';
 
 const categories = ['all', 'painting', 'photography', 'sculpture', 'music', 'digital_art', 'crafts', 'performance'];
 
-const categoryEmojis = { painting: '🎨', photography: '📸', sculpture: '🗿', music: '🎵', digital_art: '💻', crafts: '🧶', performance: '🎭' };
+const categoryEmojis = { painting: 'ðŸŽ¨', photography: 'ðŸ“¸', sculpture: 'ðŸ—¿', music: 'ðŸŽµ', digital_art: 'ðŸ’»', crafts: 'ðŸ§¶', performance: 'ðŸŽ­' };
 
 export default function Artists() {
   const [artists, setArtists] = useState([]);
@@ -38,7 +38,7 @@ export default function Artists() {
       <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <div className="flex items-center gap-3 mb-2">
-            <Trophy className="w-6 h-6 text-gold" />
+            <Trophy className="w-6 h-6 text-primary" />
             <h1 className="font-playfair font-bold text-4xl text-foreground">Artist Rankings</h1>
           </div>
           <p className="text-muted-foreground">Zambia's top artists ranked by sales, views, and community engagement</p>
@@ -58,7 +58,7 @@ export default function Artists() {
                   key={cat}
                   onClick={() => setSelectedCat(cat)}
                   className={`shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all ${
-                    selectedCat === cat ? 'bg-gold text-background border-gold' : 'border-border text-muted-foreground hover:border-gold hover:text-gold'
+                    selectedCat === cat ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
                   }`}
                 >
                   {cat === 'all' ? 'All' : `${categoryEmojis[cat] || ''} ${cat.replace('_', ' ')}`}

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import { Repeat, Crown, UserCheck, UserX, ArrowRight } from 'lucide-react';
 import { PageHeader, DataTable, StatCard, ChartCard } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -52,7 +52,7 @@ export default function SubscriptionsPage() {
       />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label="Active Subscribers" value={subscribers} icon={Crown} accent="text-gold" />
+        <StatCard label="Active Subscribers" value={subscribers} icon={Crown} accent="text-primary" />
         <StatCard label="Membership Revenue" value={Math.round(membershipRevenue)} prefix="ZMW" icon={UserCheck} accent="text-emerald-400" />
         <StatCard label="Churned" value={churned} icon={UserX} accent="text-rose-400" />
         <StatCard label="Free Accounts" value={tiers.find((t) => t.name === 'free')?.value || 0} icon={ArrowRight} accent="text-sky-400" />
@@ -83,7 +83,7 @@ export default function SubscriptionsPage() {
         </ChartCard>
       </div>
 
-      <DataTable columns={columns} data={subscribersOnly} searchKeys={[(r) => r.email, (r) => r.full_name]} searchPlaceholder="Search subscribers…" exportName="subscriptions" pageSize={12} />
+      <DataTable columns={columns} data={subscribersOnly} searchKeys={[(r) => r.email, (r) => r.full_name]} searchPlaceholder="Search subscribersâ€¦" exportName="subscriptions" pageSize={12} />
     </div>
   );
 }

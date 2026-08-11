@@ -1,10 +1,10 @@
-import { Heart, Eye, MessageCircle, Zap } from 'lucide-react';
+﻿import { Heart, Eye, MessageCircle, Zap } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 const categoryColors = {
   breaking: 'bg-red-500/20 text-red-400',
   exhibition: 'bg-amber-500/20 text-amber-400',
-  artist_spotlight: 'bg-gold/20 text-gold',
+  artist_spotlight: 'bg-primary/20 text-primary',
   auction: 'bg-purple-500/20 text-purple-400',
   community: 'bg-green-500/20 text-green-400',
   achievement: 'bg-blue-500/20 text-blue-400',
@@ -37,7 +37,7 @@ export default function NewsCard({ item, featured }) {
               {item.author_image ? <img src={item.author_image} alt="" className="w-full h-full object-cover" /> : null}
             </div>
             <span className="text-xs text-muted-foreground">{item.author_name}</span>
-            <span className="text-xs text-muted-foreground">·</span>
+            <span className="text-xs text-muted-foreground">Â·</span>
             <span className="text-xs text-muted-foreground">{item.created_date ? formatDistanceToNow(new Date(item.created_date), { addSuffix: true }) : 'Recently'}</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">

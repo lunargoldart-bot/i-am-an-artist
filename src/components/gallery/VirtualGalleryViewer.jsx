@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, ShoppingCart, Maximize2 } from 'lucide-react';
@@ -155,7 +155,7 @@ export default function VirtualGalleryViewer({ exhibitionId }) {
         <div className="grid grid-cols-2 gap-3">
           <Button
             onClick={() => setSelectedArtwork(currentArtwork)}
-            className="gold-gradient text-background font-semibold gap-2"
+            className="green-gradient text-primary-foreground font-semibold gap-2"
           >
             <ShoppingCart className="w-4 h-4" />
             Purchase

@@ -17,7 +17,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20 text-center">
-        <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-4 text-white">
+        <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-4 text-foreground">
           Ready to join?
         </h2>
         <p className="text-primary/60 font-inter max-w-xl mx-auto mb-8">

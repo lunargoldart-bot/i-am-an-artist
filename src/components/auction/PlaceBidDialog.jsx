@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { firebaseClient } from "@/api/firebaseClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,12 +76,12 @@ export default function PlaceBidDialog({ open, onClose, artwork, currentHighBid,
                 Your bid of <span className="text-gold font-bold">ZMW {parseFloat(amount).toLocaleString()}</span> is now active.
               </p>
               <p className="text-xs text-muted-foreground">You'll be notified if you're outbid or win.</p>
-              <Button className="gold-gradient text-background w-full mt-4" onClick={handleClose}>Done</Button>
+              <Button className="gold-gradient text-[#1F1F1F] w-full mt-4" onClick={handleClose}>Done</Button>
             </div>
           ) : (
             <>
               <div className="space-y-1">
-                <label className="text-xs text-muted-foreground">Your Bid (ZMW) — minimum ZMW {minBid.toLocaleString()}</label>
+                <label className="text-xs text-muted-foreground">Your Bid (ZMW) â€” minimum ZMW {minBid.toLocaleString()}</label>
                 <Input
                   type="number"
                   inputMode="numeric"
@@ -97,7 +97,7 @@ export default function PlaceBidDialog({ open, onClose, artwork, currentHighBid,
               </p>
               <div className="flex gap-3">
                 <Button variant="outline" className="flex-1" onClick={handleClose}>Cancel</Button>
-                <Button className="flex-1 gold-gradient text-background font-semibold" onClick={handleBid} disabled={loading}>
+                <Button className="flex-1 gold-gradient text-[#1F1F1F] font-semibold" onClick={handleBid} disabled={loading}>
                   <Gavel className="w-4 h-4 mr-2" />
                   {loading ? "Placing..." : "Place Bid"}
                 </Button>

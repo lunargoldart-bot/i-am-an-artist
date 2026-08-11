@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Sparkles, Zap, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { firebaseClient } from '@/api/firebaseClient';
@@ -46,14 +46,14 @@ export default function AIInsightWidget() {
           {/* Left */}
           <div className="md:w-1/3">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-gold" />
+              <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-primary" />
               </div>
-              <span className="text-gold text-sm font-bold uppercase tracking-widest">AI Art Advisor</span>
+              <span className="text-primary text-sm font-bold uppercase tracking-widest">AI Art Advisor</span>
             </div>
             <h3 className="font-playfair font-bold text-2xl text-foreground mb-2">Get Your<br />Free Strategy</h3>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-              Our AI analyses thousands of successful Zambian artists to give you personalised, actionable advice — free with every account.
+              Our AI analyses thousands of successful Zambian artists to give you personalised, actionable advice â€” free with every account.
             </p>
             <div className="flex flex-wrap gap-2">
               {prompts.map(p => (
@@ -62,8 +62,8 @@ export default function AIInsightWidget() {
                   onClick={() => getInsight(p.value)}
                   className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 font-medium ${
                     selected === p.value
-                      ? 'bg-gold/20 border-gold text-gold'
-                      : 'border-border text-muted-foreground hover:border-gold/40 hover:text-gold/70'
+                      ? 'bg-primary/20 border-primary text-primary'
+                      : 'border-border text-muted-foreground hover:border-primary/40 hover:text-primary/70'
                   }`}
                 >
                   {p.label}
@@ -76,7 +76,7 @@ export default function AIInsightWidget() {
           <div className="md:w-2/3 md:border-l md:border-border md:pl-8">
             {!selected && (
               <div className="flex flex-col items-center justify-center h-full min-h-[120px] text-center">
-                <Zap className="w-8 h-8 text-gold/20 mb-3" />
+                <Zap className="w-8 h-8 text-primary/20 mb-3" />
                 <p className="text-muted-foreground/50 text-sm">Pick a topic above to get your free AI strategy insight</p>
               </div>
             )}
@@ -84,21 +84,21 @@ export default function AIInsightWidget() {
               <div className="flex items-center gap-3 text-muted-foreground">
                 <div className="flex gap-1">
                   {[0,1,2].map(i => (
-                    <span key={i} className="w-1.5 h-1.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                    <span key={i} className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
                   ))}
                 </div>
-                <span className="text-sm">Your advisor is thinking…</span>
+                <span className="text-sm">Your advisor is thinkingâ€¦</span>
               </div>
             )}
             {selected && !loading && insight && (
               <div>
-                <p className="text-xs text-gold/60 uppercase tracking-widest mb-3 font-semibold">
-                  {prompts.find(p => p.value === selected)?.label} — Strategy
+                <p className="text-xs text-primary/60 uppercase tracking-widest mb-3 font-semibold">
+                  {prompts.find(p => p.value === selected)?.label} â€” Strategy
                 </p>
                 <p className="text-foreground/80 text-sm leading-7 whitespace-pre-line">{insight}</p>
                 <div className="mt-5 pt-4 border-t border-border flex items-center justify-between">
                   <p className="text-muted-foreground/50 text-xs">Want a full personalised growth plan?</p>
-                  <Button size="sm" className="gold-gradient text-background text-xs font-bold hover:opacity-90">
+                  <Button size="sm" className="green-gradient text-primary-foreground text-xs font-bold hover:opacity-90">
                     Upgrade to Elite <ArrowRight className="w-3 h-3 ml-1" />
                   </Button>
                 </div>

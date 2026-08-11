@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,12 +7,12 @@ import { AlertCircle, Loader2, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 const grievanceTypes = [
-  { value: 'delivery', label: '📦 Delivery Issue' },
-  { value: 'quality', label: '🎨 Quality Issue' },
-  { value: 'payment', label: '💳 Payment Issue' },
-  { value: 'courier', label: '🚚 Courier Problem' },
-  { value: 'artwork', label: '🖼️ Artwork Concern' },
-  { value: 'other', label: '❓ Other' },
+  { value: 'delivery', label: 'ðŸ“¦ Delivery Issue' },
+  { value: 'quality', label: 'ðŸŽ¨ Quality Issue' },
+  { value: 'payment', label: 'ðŸ’³ Payment Issue' },
+  { value: 'courier', label: 'ðŸšš Courier Problem' },
+  { value: 'artwork', label: 'ðŸ–¼ï¸ Artwork Concern' },
+  { value: 'other', label: 'â“ Other' },
 ];
 
 export default function GrievanceSubmitForm({ orderId, onSuccess }) {
@@ -115,7 +115,7 @@ export default function GrievanceSubmitForm({ orderId, onSuccess }) {
       </div>
 
       <Button 
-        className="w-full gold-gradient text-background font-semibold h-11"
+        className="w-full green-gradient text-primary-foreground font-semibold h-11"
         onClick={handleSubmit}
         disabled={loading || !grievanceType || !description.trim()}
       >

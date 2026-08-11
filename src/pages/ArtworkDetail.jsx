@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { ArtworkService, authService } from "@/services";
 import { functions } from "@/lib/firebase";
 import { httpsCallable } from "firebase/functions";
@@ -186,7 +186,7 @@ export default function ArtworkDetail() {
           <div className="border-t border-border pt-6 space-y-4">
             <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
               <Shield className="w-4 h-4 text-primary" />
-              <span>Pay on delivery — you only pay when the artwork arrives</span>
+              <span>Pay on delivery â€” you only pay when the artwork arrives</span>
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
               <Truck className="w-4 h-4 text-primary" />
@@ -196,15 +196,15 @@ export default function ArtworkDetail() {
 
           {/* Auction panel */}
           {isAuction && (
-            <div className="space-y-4 border border-gold/30 rounded-xl p-4 bg-gold/5">
+            <div className="space-y-4 border border-primary/30 rounded-xl p-4 bg-primary/5">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground mb-0.5">Current Bid</p>
-                  <p className="text-2xl font-playfair font-bold text-gold">
+                  <p className="text-2xl font-playfair font-bold text-primary">
                     ZMW {highBid.toLocaleString()}
                   </p>
                 </div>
-                <Badge className="bg-gold/15 text-gold border-gold/30 flex items-center gap-1">
+                <Badge className="bg-primary/15 text-primary border-primary/30 flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" /> Live Auction
                 </Badge>
               </div>
@@ -215,7 +215,7 @@ export default function ArtworkDetail() {
 
               <Button
                 size="lg"
-                className="w-full gold-gradient text-background font-semibold gap-2 text-base"
+                className="w-full green-gradient text-primary-foreground font-semibold gap-2 text-base"
                 onClick={() => { setBidDialogOpen(true); trackInterest('bid'); }}
               >
                 <Gavel className="w-5 h-5" /> Place Bid
@@ -223,7 +223,7 @@ export default function ArtworkDetail() {
 
               <div>
                 <h3 className="font-playfair font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
-                  <Gavel className="w-4 h-4 text-gold" /> Bid History
+                  <Gavel className="w-4 h-4 text-primary" /> Bid History
                 </h3>
                 <BidHistory artworkId={artwork.id} onTopBidChange={(val) => setCurrentHighBid(val)} />
               </div>
@@ -255,7 +255,7 @@ export default function ArtworkDetail() {
             <p className="text-[11px] text-muted-foreground font-body leading-tight">
               {isAuction ? "Current Bid" : isAvailable ? "Price" : "Status"}
             </p>
-            <p className={`font-display font-bold truncate ${isAuction ? "text-gold" : "text-primary"}`}>
+            <p className={`font-display font-bold truncate ${isAuction ? "text-primary" : "text-primary"}`}>
               {isAuction ? `ZMW ${highBid.toLocaleString()}` : isAvailable ? `ZMW ${artwork.price?.toLocaleString()}` : artwork.status === "sold" ? "Sold" : artwork.status === "reserved" ? "Reserved" : "Unavailable"}
             </p>
           </div>
@@ -265,7 +265,7 @@ export default function ArtworkDetail() {
             ) : isAuction ? (
               <Button
                 size="lg"
-                className="w-full gold-gradient text-background font-semibold gap-2 text-base rounded-full"
+                className="w-full green-gradient text-primary-foreground font-semibold gap-2 text-base rounded-full"
                 onClick={() => { setBidDialogOpen(true); trackInterest('bid'); }}
               >
                 <Gavel className="w-5 h-5" /> Place Bid

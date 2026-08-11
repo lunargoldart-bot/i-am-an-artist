@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { NewsFeedService } from '@/services';
 import { Zap, TrendingUp, Search } from 'lucide-react';
 import NewsCard from '@/components/ui/NewsCard';
@@ -69,7 +69,7 @@ export default function News() {
                 key={cat}
                 onClick={() => setSelectedCat(cat)}
                 className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                  selectedCat === cat ? 'bg-gold text-background border-gold' : 'border-border text-muted-foreground hover:border-gold hover:text-gold'
+                  selectedCat === cat ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
                 }`}
               >
                 {cat === 'all' ? 'All' : cat.replace('_', ' ')}
@@ -104,7 +104,7 @@ export default function News() {
             {/* Sidebar */}
             <div className="space-y-4">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-gold" />
+                <TrendingUp className="w-4 h-4 text-primary" />
                 <h3 className="font-playfair font-semibold text-foreground">Trending</h3>
               </div>
               {news.slice(0, 8).map(item => (

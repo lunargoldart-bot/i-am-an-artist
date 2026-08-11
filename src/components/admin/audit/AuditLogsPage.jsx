@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { ScrollText } from 'lucide-react';
 import { PageHeader, DataTable } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -42,7 +42,7 @@ export default function AuditLogsPage() {
   };
 
   const columns = [
-    { key: 'action', label: 'Action', render: (r) => <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs text-gold">{r.action}</code> },
+    { key: 'action', label: 'Action', render: (r) => <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs text-primary">{r.action}</code> },
     { key: 'entity', label: 'Entity', render: (r) => <span className="capitalize">{r.entity}</span> },
     { key: 'entity_id', label: 'Entity ID', render: (r) => <span className="font-mono text-xs text-muted-foreground">{r.entity_id}</span> },
     { key: 'actor', label: 'Actor', render: (r) => r.actor },
@@ -66,10 +66,10 @@ export default function AuditLogsPage() {
         )}
       />
 
-      <DataTable columns={columns} data={logs} searchKeys={[(r) => r.action, (r) => r.entity, (r) => r.actor, (r) => r.entity_id]} searchPlaceholder="Search audit logs…" exportName="audit-logs" pageSize={15} />
+      <DataTable columns={columns} data={logs} searchKeys={[(r) => r.action, (r) => r.entity, (r) => r.actor, (r) => r.entity_id]} searchPlaceholder="Search audit logsâ€¦" exportName="audit-logs" pageSize={15} />
 
       <p className="text-xs text-muted-foreground">
-        Events are recorded to the Firestore <code className="rounded bg-secondary px-1 font-mono">audit_logs</code> collection and mirrored locally for resilience. {loading ? 'Syncing…' : `${remoteLogs.length} remote events`}.
+        Events are recorded to the Firestore <code className="rounded bg-secondary px-1 font-mono">audit_logs</code> collection and mirrored locally for resilience. {loading ? 'Syncingâ€¦' : `${remoteLogs.length} remote events`}.
       </p>
     </div>
   );

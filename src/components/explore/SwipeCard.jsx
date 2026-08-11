@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { motion, useMotionValue, useTransform, useAnimation } from "framer-motion";
 import { Heart, X, ShoppingBag, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -82,7 +82,7 @@ export default function SwipeCard({ artwork, onLike, onPass, isTop }) {
           </h2>
           <p className="text-white/90 text-base mb-3">by {artwork.artist_name}</p>
           <div className="flex items-center justify-between">
-            <span className="text-gold font-bold text-2xl">ZMW {artwork.price?.toLocaleString()}</span>
+            <span className="text-primary font-bold text-2xl">ZMW {artwork.price?.toLocaleString()}</span>
             <Button
               size="default"
               variant="secondary"

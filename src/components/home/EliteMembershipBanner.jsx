@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Crown, Diamond, Gift, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -32,7 +32,7 @@ const tiers = [
     highlight: false,
     features: [
       'All Standard features',
-      'Sponsored ad campaigns — promote your art',
+      'Sponsored ad campaigns â€” promote your art',
       'Algorithmic daily feature eligibility',
       'Priority search ranking',
       'AI Collector\'s Insight on your artworks',
@@ -54,8 +54,8 @@ const tiers = [
     highlight: true,
     features: [
       'All Pro features',
-      'Priority sponsored ad placement — top of feed',
-      'Manual daily feature queue — choose your own spotlight date',
+      'Priority sponsored ad placement â€” top of feed',
+      'Manual daily feature queue â€” choose your own spotlight date',
       'Annual ZARTIA ELITE Gala invitation',
       'Welcome gift upon subscribing',
       'Private deals room for off-market transactions',
@@ -64,7 +64,7 @@ const tiers = [
     ],
     note: 'For artists building an empire.',
     cta: 'Upgrade to Elite',
-    ctaClass: 'gold-gradient text-background font-bold',
+    ctaClass: 'gold-gradient text-[#1F1F1F] font-bold',
     icon: Crown,
   },
 ];
@@ -100,7 +100,7 @@ export default function EliteMembershipBanner() {
             </span>
           </h2>
           <p className="text-white/40 text-base max-w-xl mx-auto leading-relaxed">
-            Sell, exhibit, and bid for free. Upgrade when you're ready to dominate — with sponsored ads, daily features, and exclusive elite privileges.
+            Sell, exhibit, and bid for free. Upgrade when you're ready to dominate â€” with sponsored ads, daily features, and exclusive elite privileges.
           </p>
         </motion.div>
 
@@ -167,11 +167,11 @@ export default function EliteMembershipBanner() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Megaphone className="w-4 h-4 text-gold" />
-              <span className="text-gold text-xs font-bold uppercase tracking-widest">Sponsored Ads — Pro & Elite</span>
+              <span className="text-gold text-xs font-bold uppercase tracking-widest">Sponsored Ads â€” Pro & Elite</span>
             </div>
             <h3 className="font-playfair font-bold text-2xl text-white mb-3">Put Your Art in Front of Every Collector</h3>
             <p className="text-white/45 text-sm leading-relaxed">
-              Pro and Elite members can run sponsored ad campaigns directly on the Zartia platform — appearing in the main feed, explore page, and between artworks. 
+              Pro and Elite members can run sponsored ad campaigns directly on the Zartia platform â€” appearing in the main feed, explore page, and between artworks. 
               Elite members get <span className="text-gold font-semibold">priority placement</span> at the very top of the feed.
             </p>
           </div>
@@ -201,17 +201,17 @@ export default function EliteMembershipBanner() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Gift className="w-4 h-4 text-gold" />
-              <span className="text-gold text-xs font-bold uppercase tracking-widest">Elite Exclusive — Only $170/mo</span>
+              <span className="text-gold text-xs font-bold uppercase tracking-widest">Elite Exclusive â€” Only $170/mo</span>
             </div>
             <h3 className="font-playfair font-bold text-2xl text-white mb-2">Annual Gala + Welcome Gift</h3>
             <p className="text-white/45 text-sm leading-relaxed max-w-lg">
-              Elite members receive a curated welcome gift upon subscribing and a personal invitation to the annual Zartia Elite Gala in Lusaka — an exclusive evening with collectors, gallery owners, and Zambia's cultural powerhouses.
+              Elite members receive a curated welcome gift upon subscribing and a personal invitation to the annual Zartia Elite Gala in Lusaka â€” an exclusive evening with collectors, gallery owners, and Zambia's cultural powerhouses.
             </p>
-            <p className="text-gold/70 text-xs mt-3 font-medium">Next Gala: December 2026 · Limited to 80 guests</p>
+            <p className="text-gold/70 text-xs mt-3 font-medium">Next Gala: December 2026 Â· Limited to 80 guests</p>
           </div>
           <div className="shrink-0">
-            <Button size="lg" className="gold-gradient text-background font-bold">
-              <Crown className="w-4 h-4 mr-2" /> Upgrade to Elite — $170/mo
+            <Button size="lg" className="gold-gradient text-[#1F1F1F] font-bold">
+              <Crown className="w-4 h-4 mr-2" /> Upgrade to Elite â€” $170/mo
             </Button>
           </div>
         </motion.div>

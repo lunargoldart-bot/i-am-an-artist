@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { motion } from 'framer-motion';
 import { Crown, Diamond, Megaphone, Heart, Zap, Check, ArrowRight } from 'lucide-react';
@@ -188,7 +188,7 @@ export default function ProfileMonetization() {
                     disabled={tier.disabled || upgrading === tier.id || isCurrent}
                     className={`w-full font-semibold ${
                       tier.premium 
-                        ? 'gold-gradient text-background hover:opacity-90' 
+                        ? 'gold-gradient text-[#1F1F1F] hover:opacity-90' 
                         : tier.id === 'pro'
                         ? 'bg-primary hover:bg-primary/90'
                         : 'bg-secondary hover:bg-secondary/80'

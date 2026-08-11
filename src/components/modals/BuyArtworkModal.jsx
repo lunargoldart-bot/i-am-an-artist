@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,9 +6,9 @@ import { X, CheckCircle, Loader2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 
 const deliveryOptions = [
-  { value: 'yango', label: 'Yango Delivery', desc: 'Fast delivery via Yango', icon: '🚗' },
-  { value: 'other_courier', label: 'Other Courier', desc: "We'll connect you with a local courier", icon: '📦' },
-  { value: 'self_collect', label: 'Self Collection', desc: 'Collect directly from the artist', icon: '🤝' },
+  { value: 'yango', label: 'Yango Delivery', desc: 'Fast delivery via Yango', icon: 'ðŸš—' },
+  { value: 'other_courier', label: 'Other Courier', desc: "We'll connect you with a local courier", icon: 'ðŸ“¦' },
+  { value: 'self_collect', label: 'Self Collection', desc: 'Collect directly from the artist', icon: 'ðŸ¤' },
 ];
 
 const getPrice = (artwork) => Number(artwork?.price ?? artwork?.price_zmw ?? 0) || 0;
@@ -149,7 +149,7 @@ export default function BuyArtworkModal({ artwork, onClose }) {
             </div>
 
             <Button 
-              className="gold-gradient text-background w-full font-semibold" 
+              className="green-gradient text-primary-foreground w-full font-semibold" 
               onClick={handleCheckout}
               disabled={!name || !phone || loading}
             >

@@ -34,7 +34,7 @@ export default function AppFeatures() {
     <section className="py-16 px-4 sm:px-6 bg-background relative">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-3 text-white">Why I Am An Artist?</h2>
+          <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-3 text-foreground">Why I Am An Artist?</h2>
           <p className="text-primary/60 font-inter">Everything you need to showcase, sell, and grow</p>
         </div>
 

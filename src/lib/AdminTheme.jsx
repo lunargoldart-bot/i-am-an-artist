@@ -4,10 +4,10 @@ const AdminThemeContext = createContext(null);
 const STORAGE_KEY = 'iamanartist_admin_theme';
 
 const getInitialTheme = () => {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
   const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === 'light' || stored === 'dark') return stored;
-  return 'dark';
+  return 'light';
 };
 
 export function AdminThemeProvider({ children }) {

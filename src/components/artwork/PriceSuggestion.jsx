@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
@@ -50,7 +50,7 @@ export default function PriceSuggestion({ category, currentPrice }) {
           </>
         ) : suggestion?.suggested_price ? (
           <>
-            <TrendingUp className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+            <TrendingUp className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-foreground font-semibold">
@@ -75,7 +75,7 @@ export default function PriceSuggestion({ category, currentPrice }) {
               <ul className="text-muted-foreground space-y-0.5 mt-2">
                 {suggestion.reasoning.map((reason, idx) => (
                   <li key={idx} className="flex gap-2">
-                    <span>•</span>
+                    <span>â€¢</span>
                     <span>{reason}</span>
                   </li>
                 ))}

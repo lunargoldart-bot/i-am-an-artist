@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search } from 'lucide-react';
@@ -45,7 +45,7 @@ export default function Gallery() {
       <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <h1 className="font-playfair font-bold text-4xl text-foreground mb-1">The Gallery</h1>
-          <p className="text-muted-foreground">Original Zambian art — available to purchase in Kwacha</p>
+          <p className="text-muted-foreground">Original Zambian art â€” available to purchase in Kwacha</p>
         </div>
       </div>
 
@@ -83,8 +83,8 @@ export default function Gallery() {
                 onClick={() => setSelectedCat(cat)}
                 className={`shrink-0 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all ${
                   selectedCat === cat
-                    ? 'bg-gold text-background border-gold'
-                    : 'border-border text-muted-foreground hover:border-gold hover:text-gold'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
                 }`}
               >
                 {cat === 'all' ? 'All Art' : cat.replace('_', ' ')}

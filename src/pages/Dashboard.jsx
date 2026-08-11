@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { authService } from '@/services';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -30,7 +30,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-border border-t-gold rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-border border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default function Dashboard() {
       <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex items-center gap-3">
-            <LayoutDashboard className="w-6 h-6 text-gold" />
+            <LayoutDashboard className="w-6 h-6 text-primary" />
             <div>
               <h1 className="font-playfair font-bold text-3xl text-foreground">Artist Dashboard</h1>
               <p className="text-muted-foreground text-sm">Welcome back, {currentUser?.full_name}</p>
@@ -53,7 +53,7 @@ export default function Dashboard() {
         <Tabs defaultValue="overview">
           <TabsList className="bg-card border border-border mb-6 flex flex-wrap h-auto gap-1 p-1">
             {['overview', 'artworks', 'exhibitions', 'news', 'orders', 'profile'].map(tab => (
-              <TabsTrigger key={tab} value={tab} className="capitalize data-[state=active]:bg-gold data-[state=active]:text-background">
+              <TabsTrigger key={tab} value={tab} className="capitalize data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 {tab}
               </TabsTrigger>
             ))}

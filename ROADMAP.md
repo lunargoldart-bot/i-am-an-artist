@@ -1,7 +1,8 @@
 # Roadmap
 
-## Current phase: Phase 4 — Capacitor + Firebase Native (host-run completed, config BLOCKED)
-Goal: package the PWA as native Android + iOS apps, wire Firebase native config, validate end-to-end.
+## Current phase: Phase 5 — Final production readiness (host-run completed)
+Goal: package the PWA as native Android + iOS apps, wire Firebase native config, validate end-to-end,
+and prepare store submission (without publishing).
 
 ### Phase 4 — Capacitor (host-run completed)
 - [x] Capacitor 8.5.0 + plugins (app, network, status-bar, splash-screen, share, clipboard).
@@ -13,16 +14,23 @@ Goal: package the PWA as native Android + iOS apps, wire Firebase native config,
 - [x] PWA manifest `theme_color` fixed; ESLint ignores added; `package.json` repaired.
 - [x] `FIREBASE_NATIVE_ANDROID_REPORT.md` generated.
 
-### Phase 4 — Firebase native config (BLOCKED — external credential required)
-- [ ] Place correct `google-services.json` (project `i-am-an-artist-f3b0d`, package `com.iamanartist.app`).
-  - The file supplied for this pass belongs to `we-gat-u` — **rejected**, not placed.
-  - **Stop condition:** correct file fetched from Firebase Console → Project Settings → Android app.
-- [ ] Register Android SHA-1 (debug + release) for native Google Sign-In, **or** switch native auth to `@capacitor/google-auth`.
-- [ ] App Check: not used — optional, not required.
-- [ ] Native push (FCM): not integrated — optional.
+### Phase 4 — Firebase native config (COMPLETED)
+- [x] `google-services.json` refreshed from `firebase apps:sdkconfig` (project `i-am-an-artist-f3b0d`,
+      package `com.iamanartist.app`) — now includes two `client_type: 1` Android OAuth clients.
+- [x] Register Android SHA-1 + SHA-256 (debug + release) for native Google Sign-In — done via
+      Firebase Management API (`projects.androidApps.sha.create`), all four verified.
+- [x] App Check: not used — optional, not required.
+- [x] Native push (FCM): not integrated — optional.
 
-### Phase 4 — gated / external
-- [ ] Android release AAB + signing keystore (production credentials required).
+### Phase 5 — Final production readiness (host-run completed)
+- [x] Global UI facelift: light ivory/green/charcoal brand app-wide; gold retained as
+      elite/premium/auction accent only.
+- [x] Production signing: dedicated keystore (`iamanartist-release.keystore`, outside repo),
+      env-driven `signingConfigs.release`; AAB + APK signed & verified.
+- [x] Firebase SHA-1/SHA-256 registration (release + debug) — verified via API + sdkconfig.
+- [x] Clean release build post-facelift: `clean :app:bundleRelease :app:assembleRelease` ✅.
+- [ ] Google Play internal-test track: upload signed AAB (DO NOT publish).
+- [ ] Play App Signing pairing check (register Play cert SHA-1 in Firebase if rotated).
 - [ ] iOS build/archive + App Store (macOS + Xcode + Apple Developer).
 
 ## References

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { motion } from 'framer-motion';
 import { Diamond, Calendar, Plus, Trash2, Crown } from 'lucide-react';
@@ -104,7 +104,7 @@ export default function EliteFeatureQueue() {
         <Diamond className="w-10 h-10 text-gold/30 mx-auto mb-3" />
         <h3 className="font-playfair font-bold text-lg text-foreground mb-2">Elite Feature Queue</h3>
         <p className="text-muted-foreground text-sm mb-4">Only Elite members can manually queue their artworks for daily features. Pro members are picked algorithmically.</p>
-        <Button size="sm" className="gold-gradient text-background font-semibold">
+        <Button size="sm" className="gold-gradient text-[#1F1F1F] font-semibold">
           <Crown className="w-3.5 h-3.5 mr-1" /> Upgrade to Elite
         </Button>
       </div>
@@ -160,8 +160,8 @@ export default function EliteFeatureQueue() {
           </div>
         </div>
 
-        <Button onClick={handleQueue} disabled={submitting} className="gold-gradient text-background font-semibold">
-          <Plus className="w-4 h-4 mr-1" /> {submitting ? 'Queuing…' : 'Queue Feature'}
+        <Button onClick={handleQueue} disabled={submitting} className="gold-gradient text-[#1F1F1F] font-semibold">
+          <Plus className="w-4 h-4 mr-1" /> {submitting ? 'Queuingâ€¦' : 'Queue Feature'}
         </Button>
       </div>
 
@@ -186,7 +186,7 @@ export default function EliteFeatureQueue() {
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm text-foreground truncate">{item.artwork_title}</p>
                   <p className="text-xs text-muted-foreground">
-                    {CATEGORIES.find(c => c.value === item.category)?.label} · {new Date(item.feature_date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+                    {CATEGORIES.find(c => c.value === item.category)?.label} Â· {new Date(item.feature_date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">

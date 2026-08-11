@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { ImageIcon, Check, X, Star, StarOff, Trash2 } from 'lucide-react';
 import { PageHeader, DataTable } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -56,7 +56,7 @@ export default function ArtworkPage() {
             <X className="h-3.5 w-3.5" />
           </Button>
           <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Feature" onClick={() => toggleFeature(r)}>
-            {r.featured ? <Star className="h-3.5 w-3.5 text-gold" /> : <StarOff className="h-3.5 w-3.5 text-muted-foreground" />}
+            {r.featured ? <Star className="h-3.5 w-3.5 text-primary" /> : <StarOff className="h-3.5 w-3.5 text-muted-foreground" />}
           </Button>
           <Button variant="ghost" size="icon" className="h-7 w-7 text-rose-500" aria-label="Delete" onClick={() => remove(r)}>
             <Trash2 className="h-3.5 w-3.5" />
@@ -93,7 +93,7 @@ export default function ArtworkPage() {
         columns={columns}
         data={filtered}
         searchKeys={[(r) => r.title, (r) => r.artist_email, (r) => r.category, (r) => r.medium]}
-        searchPlaceholder="Search artwork…"
+        searchPlaceholder="Search artworkâ€¦"
         exportName="artwork"
         pageSize={12}
       />

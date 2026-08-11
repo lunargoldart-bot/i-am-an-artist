@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -67,8 +67,8 @@ export default function Login() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md border-border">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-3 w-12 h-12 gold-gradient rounded-xl flex items-center justify-center">
-            <Palette className="w-6 h-6 text-background" />
+          <div className="mx-auto mb-3 w-12 h-12 green-gradient rounded-xl flex items-center justify-center">
+            <Palette className="w-6 h-6 text-primary-foreground" />
           </div>
           <CardTitle className="font-playfair text-2xl">{mode === 'register' ? 'Join I Am An Artist' : 'Welcome Back'}</CardTitle>
         </CardHeader>
@@ -95,12 +95,12 @@ export default function Login() {
               <Input type="password" minLength={6} value={form.password} onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))} required />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button className="w-full gold-gradient text-background" disabled={loading}>
+            <Button className="w-full green-gradient text-primary-foreground" disabled={loading}>
               {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {mode === 'register' ? 'Create Account' : 'Sign In'}
             </Button>
           </form>
-          <button className="w-full text-sm text-gold hover:underline" onClick={() => setMode(mode === 'register' ? 'login' : 'register')}>
+          <button className="w-full text-sm text-primary hover:underline" onClick={() => setMode(mode === 'register' ? 'login' : 'register')}>
             {mode === 'register' ? 'Already have an account? Sign in' : 'New here? Create an account'}
           </button>
         </CardContent>

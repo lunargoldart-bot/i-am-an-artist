@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { DatabaseBackup, DownloadCloud, Clock, HardDrive } from 'lucide-react';
 import { PageHeader, DataTable } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -69,7 +69,7 @@ export default function BackupsPage() {
   };
 
   const columns = [
-    { key: 'id', label: 'Backup', render: (r) => <span className="font-mono text-xs text-gold">BK-{r.id}</span> },
+    { key: 'id', label: 'Backup', render: (r) => <span className="font-mono text-xs text-primary">BK-{r.id}</span> },
     { key: 'status', label: 'Status', status: true },
     { key: 'collections', label: 'Collections', numeric: true },
     { key: 'records', label: 'Records', numeric: true, sortable: true },
@@ -87,7 +87,7 @@ export default function BackupsPage() {
         exportRows={snapshots}
         actions={(
           <Button onClick={runBackup} disabled={building}>
-            <DownloadCloud className="mr-2 h-4 w-4" /> {building ? 'Backing up…' : 'Run Backup'}
+            <DownloadCloud className="mr-2 h-4 w-4" /> {building ? 'Backing upâ€¦' : 'Run Backup'}
           </Button>
         )}
       />
@@ -100,7 +100,7 @@ export default function BackupsPage() {
         <CardHeader className="flex-row items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 font-playfair text-base text-foreground">
-              <Clock className="h-4 w-4 text-gold" /> Automatic Backups
+              <Clock className="h-4 w-4 text-primary" /> Automatic Backups
             </CardTitle>
             <CardDescription className="text-xs">Scheduled daily snapshots of core collections.</CardDescription>
           </div>
@@ -113,7 +113,7 @@ export default function BackupsPage() {
         </CardContent>
       </Card>
 
-      <DataTable columns={columns} data={snapshots} onExport={false} searchKeys={[(r) => r.id]} searchPlaceholder="Search backups…" pageSize={10} emptyMessage="No backups yet. Run your first backup above." />
+      <DataTable columns={columns} data={snapshots} onExport={false} searchKeys={[(r) => r.id]} searchPlaceholder="Search backupsâ€¦" pageSize={10} emptyMessage="No backups yet. Run your first backup above." />
     </div>
   );
 }

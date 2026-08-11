@@ -1,8 +1,10 @@
 # Firebase Android Release Report
 
 **Project:** I Am An Artist
-**Date:** 2026-08-10
-**Status:** Android production signing configured & verified (release AAB/APK built with dedicated key).
+**Date:** 2026-08-11
+**Status:** **COMPLETE** — Android production signing configured & verified; SHA fingerprints
+**registered in Firebase** and verified via the Management API and `apps:sdkconfig`;
+release AAB/APK rebuilt fresh after the global UI facelift.
 
 ## Identity (verified, no cross-project contamination)
 
@@ -72,7 +74,7 @@ signingConfig signingConfigs.release }`. No secrets live in the repo.
 ## Google authentication
 
 - **Web:** READY — `src/lib/firebaseAuth.js` uses `GoogleAuthProvider` + `signInWithPopup` (unchanged).
-- **Native Android:** code READY, runtime gated on fingerprint registration.
+- **Native Android:** **READY — fingerprints registered, runtime no longer gated.**
   - Installed **`@capgo/capacitor-social-login@8.3.40`** — the official, actively maintained
     Capacitor plugin (peer dep `@capacitor/core >= 8.0.0`, compatible with Capacitor 8.5.0;
     the old `@codetrix-studio/capacitor-google-auth` peers on Capacitor 6 and is **not** used).
@@ -85,10 +87,8 @@ signingConfig signingConfigs.release }`. No secrets live in the repo.
   - `VITE_FIREBASE_WEB_CLIENT_ID=62156877090-jo881bbvvpcetp522dgvptlb9um41m5g.apps.googleusercontent.com`
     (the project's web client ID from `google-services.json`, `oauth_client` `client_type: 3`)
     was added to `.env.example` and `.env.local`. It is passed to `SocialLogin.initialize()`.
-- **Blocker to a working native sign-in (external gate):** Google Sign-In for Android requires an
-  **Android OAuth client** whose `certificate_hash` matches the signing SHA-1. The Firebase
-  Management API / CLI exposes no command to register SHA fingerprints; this is a **Firebase
-  Console** operation. See "Remaining manual actions".
+  - **All four SHA fingerprints were registered in Firebase via the Management API**
+    (`projects.androidApps.sha.create`) on 2026-08-11 and verified — see "Firebase registration".
 
 ## Firebase configuration
 
@@ -101,17 +101,50 @@ signingConfig signingConfigs.release }`. No secrets live in the repo.
 - **App Check:** NOT implemented in the application (no `initializeAppCheck` /
   `AppCheckProviderFactory` usage). Documented as not required for this build.
 
+## Firebase registration (COMPLETED 2026-08-11)
+
+The Firebase Management API was used to register all four certificate fingerprints on the Android app
+`1:62156877090:android:928d8c83e2ebb47cf0c97b` (project `i-am-an-artist-f3b0d`).
+
+| certType | Hash (no colons) | Source | API resource id |
+|---|---|---|---|
+| SHA_1 | `b713f17c8cdb9e5d3d8e53654d518ca310c784e1` | Release keystore | `sha/d222933ebaf4355b` |
+| SHA_1 | `4af12fadd5248bfcc09a836e169310c8124235e1` | Debug keystore | `sha/c269386f200e26ea` |
+| SHA_256 | `6f44d94c4fbbe2468c28e0b835a360592525a4c987b0ed2c3380dde7ef4d4715` | Release keystore | `sha/cd70a5f3c06e8ecb` |
+| SHA_256 | `b9f2e310c6f4cb5a1c57690bb44b113d1b0a178a7885a5c01a7adbdcbe251a3b` | Debug keystore | `sha/4eb168b8a3229a2a` |
+
+**Verified two ways:**
+
+1. `GET /v1beta1/projects/i-am-an-artist-f3b0d/androidApps/{appId}/sha` returns all four certificates
+   (exact match above).
+2. A fresh `firebase apps:sdkconfig android ...` download now emits **two `client_type: 1`
+   (Android) OAuth clients** with the matching `certificate_hash` values (previously the config had
+   only the `client_type: 3` web client):
+   - `client_type: 1` + `certificate_hash: b713f17c8cdb9e5d3d8e53654d518ca310c784e1` →
+     client id `62156877090-4uhefao92m538gs19g2thvbe7bd3j7bv.apps.googleusercontent.com`
+   - `client_type: 1` + `certificate_hash: 4af12fadd5248bfcc09a836e169310c8124235e1` →
+     client id `62156877090-8jhf5a7qr0i4fnirgj19loc8hoe8id9a.apps.googleusercontent.com`
+
+The local (gitignored) `android/app/google-services.json` was refreshed from `apps:sdkconfig` so the
+Gradle google-services plugin merges the Android OAuth clients into the build. The merged
+release `values.xml` correctly contains `default_web_client_id`
+(`62156877090-jo881bbvvpcetp522dgvptlb9um41m5g.apps.googleusercontent.com`), `google_app_id`,
+`project_id`, `gcm_defaultSenderId`.
+
+> Note: registering SHA-1/256 fingerprints does **not** require the Firebase Console; the Management
+> API is the equivalent server-side operation and produces the identical Android OAuth clients.
+
 ## Build artifacts
 
 | Artifact | Path | Size |
 |---|---|---|
 | Debug APK | `android/app/build/outputs/apk/debug/app-debug.apk` | 8,367,611 bytes |
-| Release AAB | `android/app/build/outputs/bundle/release/app-release.aab` | 8,465,588 bytes |
-| Release APK | `android/app/build/outputs/apk/release/app-release.apk` | 8,785,363 bytes |
+| Release AAB | `android/app/build/outputs/bundle/release/app-release.aab` | 8,465,733 bytes |
+| Release APK | `android/app/build/outputs/apk/release/app-release.apk` | 8,785,535 bytes |
 
-Build chain: `npm run lint` ✅ · `npm run typecheck` ✅ · `npm run build` ✅ ·
-`npx cap sync android` ✅ (7 plugins) · `./gradlew clean assembleDebug` ✅ ·
-`./gradlew bundleRelease` ✅ · `./gradlew assembleRelease` ✅.
+Build chain (post-facelift, clean): `npm run lint` ✅ · `npm run typecheck` ✅ ·
+`npm run build` ✅ · `npx cap sync android` ✅ (7 plugins) · `./gradlew clean :app:bundleRelease
+:app:assembleRelease` ✅ (env vars loaded from `iamanartist-release.env`).
 
 ## Signature verification
 
@@ -135,39 +168,36 @@ Signer #1 key algorithm: RSA  Signer #1 key size (bits): 4096
 |------------------------|-----------------------------------------|-------------------------------------------|
 | Keystore (keytool)     | `B7:13:F1:7C:8C:DB:9E:5D:3D:8E:53:65:4D:51:8C:A3:10:C7:84:E1` | `6F:44:D9:4C:4F:BB:E2:46:8C:28:E0:B8:35:A3:60:59:25:25:A4:C9:87:B0:ED:2C:33:80:DD:E7:EF:4D:47:15` |
 | APK signer (apksigner) | `b713f17c8cdb9e5d3d8e53654d518ca310c784e1` (= keystore) | `6f44d94c4fbbe2468c28e0b835a360592525a4c987b0ed2c3380dde7ef4d4715` (= keystore) |
-| Firebase registered    | **NOT REGISTERED** (Console gate)       | **NOT REGISTERED** (Console gate)         |
+| Firebase registered    | **REGISTERED** `sha/d222933ebaf4355b` (API + sdkconfig verified) | **REGISTERED** `sha/cd70a5f3c06e8ecb` (API + sdkconfig verified) |
 
-**KEYS = APK SIGNER** ✅. Firebase registration is the only remaining step to declare
-`KEYSTORE = APK SIGNER = FIREBASE`.
+**KEYSTORE = APK SIGNER = FIREBASE** ✅ (all three now agree; two `client_type: 1` Android OAuth
+clients confirmed in a fresh `apps:sdkconfig`).
 
 ## Readiness verdict
 
 | Area | Verdict |
 |---|---|
 | FIREBASE ANDROID CONFIG | **READY** |
-| GOOGLE SIGN-IN | **PARTIALLY READY** (code wired; needs SHA registration in Firebase Console + Play App Signing SHA for the uploaded cert) |
+| GOOGLE SIGN-IN | **READY** (code wired + all 4 SHA fingerprints registered + Android OAuth clients present) |
 | DEBUG BUILD | **READY** (debug APK built & apksigner-verified, v2) |
 | PRODUCTION SIGNING | **READY** (dedicated keystore, env-driven signing, matches apksigner) |
-| PRODUCTION SHA-1 | **NOT READY** (computed, not yet registered in Firebase) |
-| PRODUCTION SHA-256 | **NOT READY** (computed, not yet registered in Firebase) |
-| SIGNED AAB | **READY** (8.47 MB, `jar verified`, signed with production key) |
-| SIGNATURE VERIFICATION | **READY** (v2 true; signer = keystore) |
-| GOOGLE PLAY READINESS | **PARTIALLY READY** (final gate: fingerprint registration + Play-to-Firebase SHA pairing) |
+| PRODUCTION SHA-1 | **READY** (registered & verified in Firebase) |
+| PRODUCTION SHA-256 | **READY** (registered & verified in Firebase) |
+| SIGNED AAB | **READY** (8.47 MB, `jar verified`, signed with production key, fresh post-facelift) |
+| SIGNATURE VERIFICATION | **READY** (v2 true; signer = keystore = Firebase) |
+| GOOGLE PLAY READINESS | **PARTIALLY READY** (final gate: Play-to-Firebase SHA pairing if Play App Signing rotates the upload cert) |
 
 ## Remaining manual actions (genuinely require you)
 
-1. **Register the SHA fingerprints in Firebase Console**
-   - Console → Project Settings (`https://console.firebase.google.com/project/i-am-an-artist-f3b0d/settings/general/android:com.iamanartist.app`)
-   - Under **SHA certificate fingerprints**, add BOTH for the package `com.iamanartist.app`:
-     - Debug SHA-1: `4A:F1:2F:AD:D5:24:8B:FC:C0:9A:83:6E:16:93:10:C8:12:42:35:E1`
-     - Production SHA-1: `B7:13:F1:7C:8C:DB:9E:5D:3D:8E:53:65:4D:51:8C:A3:10:C7:84:E1`
-   - Optionally register SHA-256 too (used by App Check / Play Integrity if enabled later).
-   - After saving, `firebase apps:sdkconfig` will start emitting an Android OAuth
-     `client_type: 1` entry with the matching `certificate_hash` — that is the confirmation.
-2. **Google Play App Signing:** in Play Console → Release → Setup → App integrity, check "App signing"
-   certificate SHA-1/256, and if Play's upload/signing keys differ from the keystore above, register
-   that Google Play SHA-1 in Firebase as well (the Capgo plugin requires the SHA of the cert that
-   actually signs the installed build).
+1. **Google Play App Signing pairing (only if Play rotates the signing key):** in Play Console →
+   Release → Setup → App integrity, check the "App signing" certificate SHA-1/256. If Play's
+   upload/signing keys differ from the keystore above, register that Google Play SHA-1 in Firebase
+   as well (the Capgo plugin requires the SHA of the cert that actually signs the installed build).
+   If you opt into Play App Signing with the *same* keystore cert, no extra step is needed.
+2. **Device smoke test of native Google sign-in** (`gradlew assembleDebug`, install, tap
+   "Continue with Google"): verify the native intent flow returns an idToken and the session
+   resolves. Automated verification was done at the config/API level; the interactive tap is the
+   final confirmation.
 3. **Optional App Check:** if you later enforce App Check, add a Play Integrity provider and register
    the SHA-256; you will need API key restrictions in Google Cloud Console.
 

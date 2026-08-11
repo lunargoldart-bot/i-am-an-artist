@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { authService, ArtworkService } from "@/services";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -242,7 +242,7 @@ export default function Profile() {
           )}
           {user?.subscription_tier === 'elite' && (
             <TabsTrigger value="feature_queue" className="font-body flex items-center gap-1">
-              <Diamond className="w-3 h-3 text-gold" /> Feature Queue
+              <Diamond className="w-3 h-3 text-primary" /> Feature Queue
             </TabsTrigger>
           )}
         </TabsList>

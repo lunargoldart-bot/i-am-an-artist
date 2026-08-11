@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import { TrendingUp, Users, Palette, ShoppingCart, Globe } from 'lucide-react';
 import { PageHeader, StatCard, ChartCard, DataTable } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -35,7 +35,7 @@ export default function AnalyticsPage() {
       <PageHeader title="Analytics" description="Attribution, traffic and top performers" icon={TrendingUp} />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <StatCard label="Total Revenue" value={Math.round(totalRevenue)} prefix="ZMW" icon={TrendingUp} accent="text-gold" />
+        <StatCard label="Total Revenue" value={Math.round(totalRevenue)} prefix="ZMW" icon={TrendingUp} accent="text-primary" />
         <StatCard label="Artists" value={artists.length} icon={Palette} accent="text-emerald-400" />
         <StatCard label="Collectors" value={users.filter((u) => u.role === 'buyer').length} icon={Users} accent="text-sky-400" />
         <StatCard label="Orders" value={orders.length} icon={ShoppingCart} accent="text-blue-400" />

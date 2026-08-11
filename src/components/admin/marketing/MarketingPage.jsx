@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Megaphone, Send, Users, BarChart3 } from 'lucide-react';
 import { PageHeader, StatCard } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -53,7 +53,7 @@ export default function MarketingPage() {
         <StatCard label="Total Audience" value={users.length} icon={Users} accent="text-sky-400" />
         <StatCard label="Artists" value={users.filter((u) => u.role === 'artist').length} icon={Users} accent="text-emerald-400" />
         <StatCard label="Collectors" value={users.filter((u) => u.role === 'buyer').length} icon={Users} accent="text-violet-400" />
-        <StatCard label="Subscribers" value={users.filter((u) => (u.subscription_tier || 'free') !== 'free').length} icon={BarChart3} accent="text-gold" />
+        <StatCard label="Subscribers" value={users.filter((u) => (u.subscription_tier || 'free') !== 'free').length} icon={BarChart3} accent="text-primary" />
       </div>
 
       <Card className="border-border bg-card">
@@ -78,11 +78,11 @@ export default function MarketingPage() {
           </div>
           <div className="space-y-1.5">
             <Label>Subject</Label>
-            <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Announcement subject…" />
+            <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Announcement subjectâ€¦" />
           </div>
           <div className="space-y-1.5">
             <Label>Message</Label>
-            <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={5} placeholder="Write your announcement…" />
+            <Textarea value={body} onChange={(e) => setBody(e.target.value)} rows={5} placeholder="Write your announcementâ€¦" />
           </div>
           <Button onClick={sendBroadcast}>
             <Send className="mr-2 h-4 w-4" /> Send Broadcast

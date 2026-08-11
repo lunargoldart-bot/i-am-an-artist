@@ -1,4 +1,4 @@
-import { Heart, Eye, Gavel, ShoppingBag, Star } from 'lucide-react';
+﻿import { Heart, Eye, Gavel, ShoppingBag, Star } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import SmartImage from '@/components/ui/SmartImage';
@@ -32,11 +32,11 @@ export default function ArtworkCard({ artwork, onBuy, onBid }) {
         {/* Overlay actions */}
         <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
           {artwork.is_auction ? (
-            <Button className="w-full gold-gradient text-background font-semibold h-10" onClick={() => onBid?.(artwork)}>
+            <Button className="w-full green-gradient text-primary-foreground font-semibold h-10" onClick={() => onBid?.(artwork)}>
               <Gavel className="w-4 h-4 mr-2" /> Place Bid
             </Button>
           ) : (
-            <Button className="w-full gold-gradient text-background font-semibold h-10" onClick={() => onBuy?.(artwork)}>
+            <Button className="w-full green-gradient text-primary-foreground font-semibold h-10" onClick={() => onBuy?.(artwork)}>
               <ShoppingBag className="w-4 h-4 mr-2" /> Purchase
             </Button>
           )}
@@ -47,7 +47,7 @@ export default function ArtworkCard({ artwork, onBuy, onBid }) {
           <div className="absolute top-2 right-2 bg-destructive/90 text-white text-xs font-semibold px-2 py-0.5 rounded">SOLD</div>
         )}
         {artwork.is_auction && artwork.status !== 'sold' && (
-          <div className="absolute top-2 right-2 bg-gold/90 text-background text-xs font-semibold px-2 py-0.5 rounded flex items-center gap-1">
+          <div className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs font-semibold px-2 py-0.5 rounded flex items-center gap-1">
             <Gavel className="w-2.5 h-2.5" /> AUCTION
           </div>
         )}
@@ -68,10 +68,10 @@ export default function ArtworkCard({ artwork, onBuy, onBid }) {
             {artwork.is_auction ? (
               <div>
                 <span className="text-xs text-muted-foreground">Current Bid</span>
-                <p className="text-gold font-semibold text-sm">ZMW {(artwork.current_bid_zmw || artwork.price_zmw || 0).toLocaleString()}</p>
+                <p className="text-primary font-semibold text-sm">ZMW {(artwork.current_bid_zmw || artwork.price_zmw || 0).toLocaleString()}</p>
               </div>
             ) : (
-              <p className="text-gold font-semibold text-sm">ZMW {(artwork.price_zmw || 0).toLocaleString()}</p>
+              <p className="text-primary font-semibold text-sm">ZMW {(artwork.price_zmw || 0).toLocaleString()}</p>
             )}
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Plug, Copy, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import { PageHeader } from '@/components/admin/ui';
 import { Button } from '@/components/ui/button';
@@ -38,7 +38,7 @@ export default function ApiPage() {
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-2">
           <code className="flex-1 rounded-lg bg-secondary px-3 py-2 font-mono text-sm text-foreground">
-            {showKey ? apiKey : `${apiKey.slice(0, 8)}…${apiKey.slice(-6)}`}
+            {showKey ? apiKey : `${apiKey.slice(0, 8)}â€¦${apiKey.slice(-6)}`}
           </code>
           <Button variant="outline" size="icon" onClick={() => setShowKey((v) => !v)} aria-label="Toggle key visibility">
             {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -60,7 +60,7 @@ export default function ApiPage() {
         <CardContent className="grid gap-2 sm:grid-cols-2">
           {ENDPOINTS.map((ep) => (
             <div key={ep.path} className="flex items-center gap-3 rounded-lg bg-secondary/50 p-3">
-              <Badge variant="outline" className="font-mono text-[10px] text-gold">{ep.method}</Badge>
+              <Badge variant="outline" className="font-mono text-[10px] text-primary">{ep.method}</Badge>
               <div className="min-w-0 flex-1">
                 <p className="truncate font-mono text-xs text-foreground">{ep.path}</p>
                 <p className="truncate text-[11px] text-muted-foreground">{ep.desc}</p>

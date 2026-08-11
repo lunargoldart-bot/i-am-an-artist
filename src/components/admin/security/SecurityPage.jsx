@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Lock, Fingerprint, ScrollText, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { PageHeader, DataTable } from '@/components/admin/ui';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -27,7 +27,7 @@ export default function SecurityPage() {
   const actionDist = countBy(actions, 'action').slice(0, 8);
 
   const columns = [
-    { key: 'action', label: 'Action', render: (r) => <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs text-gold">{r.action}</code> },
+    { key: 'action', label: 'Action', render: (r) => <code className="rounded bg-secondary px-1.5 py-0.5 font-mono text-xs text-primary">{r.action}</code> },
     { key: 'actor', label: 'Actor', render: (r) => r.actor },
     { key: 'entity', label: 'Entity', render: (r) => <span className="capitalize">{r.entity}</span> },
     { key: 'created_date', label: 'Timestamp', render: (r) => timeAgo(r.created_date) },
@@ -36,7 +36,7 @@ export default function SecurityPage() {
   const attemptColumns = [
     { key: 'email', label: 'Email', render: (r) => r.email || r.identifier },
     { key: 'success', label: 'Result', badge: (r) => (r.success ? 'success' : 'failed') },
-    { key: 'ip', label: 'IP Address', render: (r) => r.ip || r.ip_address || '—' },
+    { key: 'ip', label: 'IP Address', render: (r) => r.ip || r.ip_address || 'â€”' },
     { key: 'created_date', label: 'Time', render: (r) => timeAgo(r.created_date) },
   ];
 
@@ -66,11 +66,11 @@ export default function SecurityPage() {
         <Card className="border-border bg-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-playfair text-base text-foreground">
-              <ScrollText className="h-4 w-4 text-gold" /> Admin Action Log
+              <ScrollText className="h-4 w-4 text-primary" /> Admin Action Log
             </CardTitle>
           </CardHeader>
           <CardContent className="h-[420px]">
-            <DataTable columns={columns} data={actions} onExport={false} pageSize={8} emptyMessage="No admin actions yet." searchPlaceholder="Search actions…" />
+            <DataTable columns={columns} data={actions} onExport={false} pageSize={8} emptyMessage="No admin actions yet." searchPlaceholder="Search actionsâ€¦" />
           </CardContent>
         </Card>
 
@@ -97,7 +97,7 @@ export default function SecurityPage() {
           <CardTitle className="font-playfair text-base text-foreground">Login Attempts</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable columns={attemptColumns} data={loginAttempts} searchKeys={[(r) => r.email, (r) => r.ip]} searchPlaceholder="Search login attempts…" exportName="login-attempts" pageSize={10} emptyMessage="No login attempts recorded yet." />
+          <DataTable columns={attemptColumns} data={loginAttempts} searchKeys={[(r) => r.email, (r) => r.ip]} searchPlaceholder="Search login attemptsâ€¦" exportName="login-attempts" pageSize={10} emptyMessage="No login attempts recorded yet." />
         </CardContent>
       </Card>
     </div>

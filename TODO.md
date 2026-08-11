@@ -12,21 +12,24 @@
 - [x] PWA `theme_color`/installability fixed; ESLint ignores for android/ios/dist added; `android/.gitignore` corrected.
 - [x] Native docs regenerated; ROADMAP/TODO/CHANGELOG updated.
 
-## Phase 4 — Firebase Native Android [BLOCKED — external credential]
-- [ ] Obtain correct `google-services.json` for Firebase project `i-am-an-artist-f3b0d` + package `com.iamanartist.app`.
-  - The file present in Downloads belongs to `we-gat-u` / `com.wegatyou.app` → **rejected, not placed**.
-  - **Exact next step:** Download google-services.json from Firebase Console (Project Settings → Your apps → Android) and place at `android/app/google-services.json`, then `npx cap sync android`.
-- [ ] Register Android SHA-1 (debug + release signing cert) for native Google Sign-In (or migrate to `@capacitor/google-auth` + `signInWithCredential`).
+## Phase 4 — Firebase Native Android [COMPLETED — fingerprints registered]
+- [x] Obtain correct `google-services.json` for Firebase project `i-am-an-artist-f3b0d` + package `com.iamanartist.app`.
+  - Refreshed from `firebase apps:sdkconfig` on 2026-08-11 (now contains two `client_type: 1` Android OAuth clients).
+- [x] Register Android SHA-1 + SHA-256 (debug + release signing certs) for native Google Sign-In —
+  via Firebase Management API (`projects.androidApps.sha.create`), all four verified by `GET .../sha`
+  and `apps:sdkconfig`. Native path uses `@capgo/capacitor-social-login` + `signInWithCredential`.
 - [ ] (Optional) App Check not used; native FCM not integrated.
 
 ## Phase 4 — Gated / external
-- [ ] Android release AAB + signing keystore (production credentials required).
 - [ ] iOS build/archive + App Store (macOS + Xcode + Apple Developer).
 
-## Phase 5 — Store & Distribution [planned]
-- [ ] Google Play internal-test track (signed AAB).
-- [ ] App Store Connect app record + upload.
-- [ ] Production signing config + store metadata.
+## Phase 5 — Store & Distribution [in progress]
+- [x] Production signing config + keystore (dedicated key, env-driven, outside repo).
+- [x] Signed release AAB + APK built & verified (post-facelift clean build).
+- [x] Firebase SHA-1/SHA-256 registration (release + debug) verified.
+- [ ] Google Play internal-test track upload (signed AAB) — DO NOT publish to production.
+- [ ] Play App Signing pairing check (if Play rotates cert, register its SHA-1 in Firebase).
+- [ ] App Store Connect app record + upload (macOS/Xcode gate).
 
 ## Phase 6 — Post-launch [planned]
 - [ ] Native Crashlytics.

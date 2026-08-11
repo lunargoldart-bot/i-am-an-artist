@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { motion } from 'framer-motion';
 import { Megaphone, Plus, Trash2, PauseCircle, PlayCircle, Crown, Eye, MousePointerClick } from 'lucide-react';
@@ -95,8 +95,8 @@ export default function ManageAds() {
         <h3 className="font-playfair font-bold text-lg text-foreground mb-2">Sponsored Ads</h3>
         <p className="text-muted-foreground text-sm mb-4">Upgrade to Pro ($80/mo) or Elite ($170/mo) to run sponsored ad campaigns and put your art in front of every collector on Zartia.</p>
         <div className="flex gap-3 justify-center">
-          <Button size="sm" className="bg-sky-500 hover:bg-sky-400 text-white font-semibold">Upgrade to Pro — $80/mo</Button>
-          <Button size="sm" className="gold-gradient text-background font-semibold"><Crown className="w-3.5 h-3.5 mr-1" />Elite — $170/mo</Button>
+          <Button size="sm" className="bg-sky-500 hover:bg-sky-400 text-white font-semibold">Upgrade to Pro â€” $80/mo</Button>
+          <Button size="sm" className="green-gradient text-primary-foreground font-semibold"><Crown className="w-3.5 h-3.5 mr-1" />Elite â€” $170/mo</Button>
         </div>
       </div>
     );
@@ -116,14 +116,14 @@ export default function ManageAds() {
           <div>
             <h3 className="font-playfair font-bold text-xl text-foreground">Sponsored Ads</h3>
             <p className="text-xs text-muted-foreground">
-              {isElite ? 'Elite — Priority top-of-feed placement' : 'Pro — Standard feed placement'}
+              {isElite ? 'Elite â€” Priority top-of-feed placement' : 'Pro â€” Standard feed placement'}
               <span className={`ml-2 text-xs font-semibold px-2 py-0.5 rounded-full border ${TIER_COLOR[user.subscription_tier]}`}>
                 {TIER_LABEL[user.subscription_tier]}
               </span>
             </p>
           </div>
         </div>
-        <Button onClick={() => setShowForm(s => !s)} size="sm" className="gold-gradient text-background font-semibold">
+        <Button onClick={() => setShowForm(s => !s)} size="sm" className="green-gradient text-primary-foreground font-semibold">
           <Plus className="w-3.5 h-3.5 mr-1" /> New Ad
         </Button>
       </div>
@@ -156,7 +156,7 @@ export default function ManageAds() {
                 onChange={e => prefillFromArtwork(e.target.value)}
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
-                <option value="">Select artwork to pre-fill…</option>
+                <option value="">Select artwork to pre-fillâ€¦</option>
                 {artworks.map(a => <option key={a.id} value={a.id}>{a.title}</option>)}
               </select>
             </div>
@@ -165,15 +165,15 @@ export default function ManageAds() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Headline *</label>
-              <Input value={form.headline} onChange={e => setForm(f => ({ ...f, headline: e.target.value }))} placeholder="Captivating headline…" />
+              <Input value={form.headline} onChange={e => setForm(f => ({ ...f, headline: e.target.value }))} placeholder="Captivating headlineâ€¦" />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Image URL *</label>
-              <Input value={form.image_url} onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))} placeholder="https://…" />
+              <Input value={form.image_url} onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))} placeholder="https://â€¦" />
             </div>
             <div className="sm:col-span-2">
               <label className="text-xs text-muted-foreground mb-1.5 block">Tagline</label>
-              <Textarea value={form.tagline} onChange={e => setForm(f => ({ ...f, tagline: e.target.value }))} placeholder="Short supporting text…" rows={2} />
+              <Textarea value={form.tagline} onChange={e => setForm(f => ({ ...f, tagline: e.target.value }))} placeholder="Short supporting textâ€¦" rows={2} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">CTA Label</label>
@@ -181,7 +181,7 @@ export default function ManageAds() {
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">CTA Link</label>
-              <Input value={form.cta_link} onChange={e => setForm(f => ({ ...f, cta_link: e.target.value }))} placeholder="/artwork/…" />
+              <Input value={form.cta_link} onChange={e => setForm(f => ({ ...f, cta_link: e.target.value }))} placeholder="/artwork/â€¦" />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">Start Date</label>
@@ -196,8 +196,8 @@ export default function ManageAds() {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <Button onClick={handleCreate} disabled={submitting} className="gold-gradient text-background font-semibold">
-              {submitting ? 'Launching…' : 'Launch Ad'}
+            <Button onClick={handleCreate} disabled={submitting} className="green-gradient text-primary-foreground font-semibold">
+              {submitting ? 'Launchingâ€¦' : 'Launch Ad'}
             </Button>
             <Button variant="outline" onClick={() => setShowForm(false)}>Cancel</Button>
           </div>

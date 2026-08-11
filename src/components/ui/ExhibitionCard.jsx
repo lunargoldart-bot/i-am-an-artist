@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Ticket, Radio, Users } from 'lucide-react';
+﻿import { Calendar, MapPin, Ticket, Radio, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 const typeColors = {
   solo: 'bg-amber-500/20 text-amber-400',
   group: 'bg-blue-500/20 text-blue-400',
-  auction: 'bg-gold/20 text-gold',
+  auction: 'bg-primary/20 text-primary',
   live_performance: 'bg-pink-500/20 text-pink-400',
   virtual: 'bg-cyan-500/20 text-cyan-400',
 };
@@ -40,15 +40,15 @@ export default function ExhibitionCard({ exhibition, onRegister }) {
 
         <div className="space-y-1.5 mb-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Calendar className="w-3 h-3 text-gold shrink-0" />
-            {exhibition.start_date ? format(new Date(exhibition.start_date), 'MMM d, yyyy · h:mm a') : 'TBD'}
+            <Calendar className="w-3 h-3 text-primary shrink-0" />
+            {exhibition.start_date ? format(new Date(exhibition.start_date), 'MMM d, yyyy Â· h:mm a') : 'TBD'}
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <MapPin className="w-3 h-3 text-gold shrink-0" />
+            <MapPin className="w-3 h-3 text-primary shrink-0" />
             {exhibition.is_virtual ? 'Virtual Event' : (exhibition.venue || 'Venue TBD')}
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Users className="w-3 h-3 text-gold shrink-0" />
+            <Users className="w-3 h-3 text-primary shrink-0" />
             {exhibition.attendees_count || 0} registered
           </div>
         </div>
@@ -56,12 +56,12 @@ export default function ExhibitionCard({ exhibition, onRegister }) {
         <div className="flex items-center justify-between">
           <div>
             {exhibition.ticket_price_zmw > 0 ? (
-              <p className="text-gold font-semibold text-sm">ZMW {exhibition.ticket_price_zmw.toLocaleString()}</p>
+              <p className="text-primary font-semibold text-sm">ZMW {exhibition.ticket_price_zmw.toLocaleString()}</p>
             ) : (
               <p className="text-green-400 text-sm font-semibold">Free Entry</p>
             )}
           </div>
-          <Button size="sm" className="gold-gradient text-background font-semibold" onClick={() => onRegister?.(exhibition)}>
+          <Button size="sm" className="green-gradient text-primary-foreground font-semibold" onClick={() => onRegister?.(exhibition)}>
             <Ticket className="w-3 h-3 mr-1" />
             {isLive ? 'Watch Live' : 'Register'}
           </Button>

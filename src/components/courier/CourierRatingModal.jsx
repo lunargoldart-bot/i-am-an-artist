@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -135,7 +135,7 @@ export default function CourierRatingModal({ order, onClose }) {
             Cancel
           </Button>
           <Button 
-            className="flex-1 gold-gradient text-background font-semibold h-11"
+            className="flex-1 green-gradient text-primary-foreground font-semibold h-11"
             onClick={handleSubmit}
             disabled={loading || rating === 0}
           >

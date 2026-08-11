@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Truck, CheckCircle } from 'lucide-react';
@@ -31,12 +31,12 @@ export default function MyOrders({ user }) {
         <p className="text-xs text-muted-foreground">{order.delivery_option?.replace('_', ' ')}</p>
       </div>
       <div className="text-right shrink-0">
-        <p className="text-gold font-bold text-sm">ZMW {order.amount_zmw?.toLocaleString()}</p>
+        <p className="text-primary font-bold text-sm">ZMW {order.amount_zmw?.toLocaleString()}</p>
         <p className={`text-xs font-semibold ${statusColor[order.delivery_status] || 'text-muted-foreground'}`}>
           {order.delivery_status?.replace('_', ' ')}
         </p>
         {!isSeller && order.delivery_status === 'in_transit' && (
-          <Button size="sm" className="text-xs mt-1 gold-gradient text-background" onClick={() => markDelivered(order)}>
+          <Button size="sm" className="text-xs mt-1 green-gradient text-primary-foreground" onClick={() => markDelivered(order)}>
             <CheckCircle className="w-3 h-3 mr-0.5" /> Confirm Delivery
           </Button>
         )}
@@ -49,7 +49,7 @@ export default function MyOrders({ user }) {
       {/* My Purchases */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <ShoppingBag className="w-5 h-5 text-gold" />
+          <ShoppingBag className="w-5 h-5 text-primary" />
           <h2 className="font-playfair font-bold text-xl text-foreground">My Purchases</h2>
         </div>
         {purchases.length === 0 ? (
@@ -64,11 +64,11 @@ export default function MyOrders({ user }) {
       {/* My Sales */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Truck className="w-5 h-5 text-gold" />
+          <Truck className="w-5 h-5 text-primary" />
           <h2 className="font-playfair font-bold text-xl text-foreground">My Sales</h2>
         </div>
         {sales.length === 0 ? (
-          <p className="text-muted-foreground text-sm">No sales yet — list your artworks to start selling</p>
+          <p className="text-muted-foreground text-sm">No sales yet â€” list your artworks to start selling</p>
         ) : (
           <div className="space-y-3">
             {sales.map(order => <OrderRow key={order.id} order={order} isSeller={true} />)}

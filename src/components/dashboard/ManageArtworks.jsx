@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -87,7 +87,7 @@ export default function ManageArtworks({ user }) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="font-playfair font-bold text-xl text-foreground">My Artworks</h2>
-        <Button className="gold-gradient text-background font-semibold" size="sm" onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm); }}>
+        <Button className="green-gradient text-primary-foreground font-semibold" size="sm" onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm); }}>
           <Plus className="w-4 h-4 mr-1" /> List Artwork
         </Button>
       </div>
@@ -138,7 +138,7 @@ export default function ManageArtworks({ user }) {
             <label className="text-xs text-muted-foreground mb-1 block">Artwork Image</label>
             <div className="flex gap-3 items-center">
               {imageUrl && <img src={imageUrl} alt="preview" className="w-16 h-16 rounded-md object-cover border border-border" />}
-              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-gold hover:text-gold transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors">
                 <Upload className="w-4 h-4" /> Upload Image
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               </label>
@@ -147,14 +147,14 @@ export default function ManageArtworks({ user }) {
 
           {/* Auction toggle */}
           <div className="flex items-center gap-3">
-            <input type="checkbox" id="auction" checked={form.is_auction} onChange={e => setForm({ ...form, is_auction: e.target.checked })} className="accent-gold" />
+            <input type="checkbox" id="auction" checked={form.is_auction} onChange={e => setForm({ ...form, is_auction: e.target.checked })} className="accent-primary" />
             <label htmlFor="auction" className="text-sm text-foreground">List as Auction</label>
             {form.is_auction && (
               <Input type="datetime-local" value={form.auction_end_date} onChange={e => setForm({ ...form, auction_end_date: e.target.value })} className="bg-background border-border text-sm ml-2" />
             )}
           </div>
 
-          <Button type="submit" className="gold-gradient text-background font-semibold w-full" disabled={loading}>
+          <Button type="submit" className="green-gradient text-primary-foreground font-semibold w-full" disabled={loading}>
             {loading ? 'Saving...' : editing ? 'Update Artwork' : 'List Artwork'}
           </Button>
         </form>
@@ -176,7 +176,7 @@ export default function ManageArtworks({ user }) {
               />
               <div className="p-3">
                 <h4 className="font-playfair font-semibold text-foreground text-sm mb-0.5">{artwork.title}</h4>
-                <p className="text-gold text-sm font-bold">ZMW {Number(getPrice(artwork)).toLocaleString()}</p>
+                <p className="text-primary text-sm font-bold">ZMW {Number(getPrice(artwork)).toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground capitalize">{artwork.status}</p>
                 <div className="flex gap-2 mt-2">
                   <Button size="sm" variant="outline" className="flex-1 border-border text-xs" onClick={() => handleEdit(artwork)}>

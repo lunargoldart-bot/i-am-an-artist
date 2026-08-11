@@ -1,4 +1,4 @@
-import { Download, FileText } from 'lucide-react';
+﻿import { Download, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { exportCSV, exportPDF } from '@/utils/exporters';
 
@@ -7,7 +7,7 @@ export default function PageHeader({ title, description, icon: Icon, actions, on
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-3">
         {Icon && (
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold/10 text-gold">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <Icon className="h-5 w-5" />
           </div>
         )}

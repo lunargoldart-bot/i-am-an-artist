@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import {
   Users, UserPlus, Palette, UserRound, ImageIcon, Hourglass, BadgeCheck,
   ShoppingCart, CheckCircle2, DollarSign, CalendarDays, Gavel, Percent,
@@ -55,15 +55,15 @@ export default function AdminHome() {
   const stats = [
     { label: 'Total Users', value: users.data.length, icon: Users, accent: 'text-sky-400' },
     { label: 'New Users Today', value: users.data.filter((u) => isToday(u.created_date)).length, icon: UserPlus, accent: 'text-emerald-400' },
-    { label: 'Active Artists', value: activeArtists.length, icon: Palette, accent: 'text-gold' },
+    { label: 'Active Artists', value: activeArtists.length, icon: Palette, accent: 'text-primary' },
     { label: 'Collectors', value: collectors.length, icon: UserRound, accent: 'text-violet-400' },
     { label: 'Artworks', value: artworks.data.length, icon: ImageIcon, accent: 'text-pink-400' },
     { label: 'Pending Review', value: pendingArtworks.length, icon: Hourglass, accent: 'text-amber-400' },
     { label: 'Verified Artists', value: verifiedArtists.length, icon: BadgeCheck, accent: 'text-emerald-400' },
     { label: 'Orders', value: orders.data.length, icon: ShoppingCart, accent: 'text-blue-400' },
     { label: 'Completed Orders', value: completedOrders.length, icon: CheckCircle2, accent: 'text-green-400' },
-    { label: 'Total Revenue', value: Math.round(totalRevenue), icon: DollarSign, prefix: 'ZMW', accent: 'text-gold' },
-    { label: 'Monthly Revenue', value: Math.round(monthRevenue), icon: CalendarDays, prefix: 'ZMW', accent: 'text-gold' },
+    { label: 'Total Revenue', value: Math.round(totalRevenue), icon: DollarSign, prefix: 'ZMW', accent: 'text-primary' },
+    { label: 'Monthly Revenue', value: Math.round(monthRevenue), icon: CalendarDays, prefix: 'ZMW', accent: 'text-primary' },
     { label: 'Auction Revenue', value: Math.round(sumBy(bids.data, 'current_bid_zmw') || sumBy(liveAuctions, 'current_bid_zmw')), icon: Gavel, prefix: 'ZMW', accent: 'text-orange-400' },
     { label: 'Commission Earned', value: Math.round(commission), icon: Percent, prefix: 'ZMW', accent: 'text-emerald-400' },
     { label: 'Pending Payouts', value: Math.round(pendingPayouts), icon: Wallet, prefix: 'ZMW', accent: 'text-rose-400' },
@@ -82,7 +82,7 @@ export default function AdminHome() {
     <div className="space-y-6">
       <div>
         <h1 className="font-playfair text-2xl font-bold text-foreground">Platform Overview</h1>
-        <p className="text-sm text-muted-foreground">Live KPIs and marketplace activity — updated in real time.</p>
+        <p className="text-sm text-muted-foreground">Live KPIs and marketplace activity â€” updated in real time.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
@@ -147,7 +147,7 @@ export default function AdminHome() {
         <div className="flex flex-wrap items-center gap-4 p-5">
           <div>
             <p className="text-xs text-muted-foreground">Total Revenue</p>
-            <p className="font-playfair text-3xl font-bold text-gold">{formatCurrency(totalRevenue)}</p>
+            <p className="font-playfair text-3xl font-bold text-primary">{formatCurrency(totalRevenue)}</p>
           </div>
           <div className="h-10 w-px bg-border" />
           <div>

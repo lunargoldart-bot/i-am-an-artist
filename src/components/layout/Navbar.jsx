@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import authService from '@/services/auth';
 import { Button } from '@/components/ui/button';
@@ -33,8 +33,8 @@ export default function Navbar({ user }) {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-inter transition-colors hover:text-gold ${
-                  location.pathname === link.path ? 'text-gold' : 'text-muted-foreground'
+                className={`text-sm font-inter transition-colors hover:text-primary ${
+                  location.pathname === link.path ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
                 {link.label}
@@ -44,7 +44,7 @@ export default function Navbar({ user }) {
 
           {/* Actions */}
           <div className="hidden md:flex items-center gap-3">
-            <Link to="/cart" className="relative text-muted-foreground hover:text-gold transition-colors">
+            <Link to="/cart" className="relative text-muted-foreground hover:text-primary transition-colors">
               <ShoppingCart className="w-5 h-5" />
               {count > 0 && (
                 <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
@@ -61,44 +61,44 @@ export default function Navbar({ user }) {
               <>
                 {user.role === 'admin' && (
                   <Link to="/admin/artist-registry">
-            <Button variant="ghost" size="default" className="text-muted-foreground hover:text-gold">
+            <Button variant="ghost" size="default" className="text-muted-foreground hover:text-primary">
                       Artist Registry
                     </Button>
                   </Link>
                 )}
                 <Link to="/messages">
-                  <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+                  <Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2">
                     <Mail className="w-5 h-5" /> Messages
                   </Button>
                 </Link>
                 <Link to="/wishlist">
-    <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+    <Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2">
                   <Bookmark className="w-5 h-5" /> Wishlist
                 </Button>
                 </Link>
                 <Link to="/dashboard">
- <Button variant="ghost" className="text-muted-foreground hover:text-gold">
+ <Button variant="ghost" className="text-muted-foreground hover:text-primary">
                       Dashboard
                     </Button>
                  </Link>
                  <Link to="/inventory">
- <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+ <Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2">
                       <Package className="w-5 h-5" /> Inventory
                     </Button>
                  </Link>
                  <Link to="/exhibitions/my-exhibitions">
- <Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+ <Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2">
                       <Frame className="w-5 h-5" /> Galleries
                     </Button>
                  </Link>
                  <Link to="/rewards">
-<Button variant="ghost" className="text-muted-foreground hover:text-gold gap-2">
+<Button variant="ghost" className="text-muted-foreground hover:text-primary gap-2">
                   <Trophy className="w-5 h-5" /> Rewards
                 </Button>
                  </Link>
                 <Button
                   size="default"
-                  className="gold-gradient text-background font-semibold hover:opacity-90"
+                  className="green-gradient text-primary-foreground font-semibold hover:opacity-90"
                   onClick={() => authService.logout().then(() => window.location.assign('/'))}
                 >
                   Sign Out
@@ -106,7 +106,7 @@ export default function Navbar({ user }) {
               </>
             ) : (
                 <Button
-                  className="gold-gradient text-background font-semibold hover:opacity-90"
+                  className="green-gradient text-primary-foreground font-semibold hover:opacity-90"
                   onClick={() => authService.redirectToLogin()}
                 >
                   Join Gallery
@@ -129,8 +129,8 @@ export default function Navbar({ user }) {
               key={link.path}
               to={link.path}
               onClick={() => setOpen(false)}
-              className={`block text-base font-inter py-3 transition-colors hover:text-gold ${
-                location.pathname === link.path ? 'text-gold' : 'text-muted-foreground'
+              className={`block text-base font-inter py-3 transition-colors hover:text-primary ${
+                location.pathname === link.path ? 'text-primary' : 'text-muted-foreground'
               }`}
             >
               {link.label}
@@ -179,11 +179,11 @@ export default function Navbar({ user }) {
               </>
             )}
             {user ? (
-                  <Button className="gold-gradient text-background w-full" onClick={() => authService.logout().then(() => window.location.assign('/'))}>
+                  <Button className="green-gradient text-primary-foreground w-full" onClick={() => authService.logout().then(() => window.location.assign('/'))}>
                     Sign Out
                   </Button>
                 ) : (
-                  <Button className="gold-gradient text-background w-full" onClick={() => authService.redirectToLogin()}>
+                  <Button className="green-gradient text-primary-foreground w-full" onClick={() => authService.redirectToLogin()}>
                     Join Gallery
                   </Button>
                 )}

@@ -1,39 +1,51 @@
 # Android Readiness
 
-Status: **Native project scaffolded — awaiting host-side Gradle build & signing.**
+Status: **READY FOR GOOGLE PLAY INTERNAL TESTING** (signed AAB built & verified; publish intentionally not done).
 
 ## Toolchain (present on host)
 - Java 21 (Android Studio JBR) ✅
 - Android SDK: build-tools 34, 35, 36.0, 36.1; platforms android-34, android-35, android-36 ✅
 - `adb` available ✅
 - Android Studio: Gradle wrapper present at `android/gradlew` (AGP/Capacitor template) ✅
-- `ANDROID_SDK_ROOT` / `ANDROID_HOME`: **unset** ❌ → must export before building.
+- `ANDROID_SDK_ROOT` / `ANDROID_HOME`: configured for builds on this host ✅
 
-## Project state (scaffolded by `npx cap add android` + `npx cap sync`)
+## Project state
 - `android/app/src/main/AndroidManifest.xml` ✅ (Capacitor config + `SplashScreen`-handled launch theme)
-- `android/app/build.gradle` ✅
-- `android/gradle.properties`, `gradle/libs.versions.toml` ✅
-- 6 Capacitor plugins integrated (app, network, status-bar, splash-screen, share, clipboard) ✅
+- `android/app/build.gradle` ✅ (env-driven `signingConfigs.release`; secrets via env, none in repo)
+- `android/gradle.properties` ✅ (documents the signing env contract)
+- 7 Capacitor plugins integrated: app, network, status-bar, splash-screen, share, clipboard,
+  capgo-social-login ✅
+- Native assets: launcher + adaptive icons, splash drawable, `Theme.SplashScreen` ✅
 
-## Native assets (generated this pass)
-- Launcher icons: `mipmap-{ldpi,mdpi,hdpi,xhdpi,xxhdpi,xxxhdpi}/ic_launcher.png` (+ `_round`, `ic_launcher_foreground.png`) ✅
-- Adaptive icon XML: `mipmap-anydpi-v26/ic_launcher.xml` (bg @color, fg @drawable) ✅
-- Splash: `drawable/splash.xml` (layer-list bg + centered `ic_splash_logo`), `drawable/ic_splash_logo.png` ✅
-- `values/ic_launcher_background.xml` (`#0A0A0A`) ✅
-- Theme: `AppTheme.NoActionBarLaunch` → `Theme.SplashScreen` with `windowSplashScreenBackground` + `windowSplashScreenAnimatedIcon` + `postSplashScreenTheme` ✅
+## Production signing
+- Dedicated keystore `C:\Users\PC\keystores\iamanartist-release.keystore` (alias `iamanartist`,
+  RSA 4096, SHA384withRSA, 10,000 days) — **outside the repo, never committed**.
+- Credentials env file `C:\Users\PC\keystores\iamanartist-release.env` — outside repo.
+- Release builds require the env loaded, e.g.:
+  ```powershell
+  Get-Content C:\Users\PC\keystores\iamanartist-release.env |
+    ForEach-Object { $k,$v = $_ -split '=',2; Set-Item -Path "env:$k" -Value $v }
+  cd android
+  .\gradlew.bat clean :app:bundleRelease :app:assembleRelease
+  ```
+- Debug builds need no keystore (Android Studio debug key).
 
-## Required before build (host)
-1. `export ANDROID_SDK_ROOT="/path/to/Android/Sdk"` (and/or `ANDROID_HOME`).
-2. Connect a device or start an AVD (none currently registered).
-3. App signing config: create `android/keystore.jks` (do NOT commit) + add `signingConfigs` to `build.gradle` → **stop condition: production signing credentials**.
+## Build verification (clean, post-facelift, 2026-08-11)
+- `npm run lint` ✅ · `npm run typecheck` ✅ · `npm run build` ✅ · `npx cap sync android` ✅
+- `.\gradlew.bat clean :app:bundleRelease :app:assembleRelease` ✅
+- Release AAB: `android/app/build/outputs/bundle/release/app-release.aab` (8,465,733 B, `jar verified`)
+- Release APK: `android/app/build/outputs/apk/release/app-release.apk` (8,785,535 B,
+  apksigner `Verifies`, v2 scheme, signer = production keystore)
 
-## To build (macOS/Windows, once SDK env ready)
-```
-cd android
-./gradlew assembleRelease     # debug: assembleDebug
-./gradlew bundleRelease       # AAB for Play
-```
-Then `npx cap copy android && npx cap open android` to open in Studio for run/debug.
+## Firebase (Android) — COMPLETED
+- `android/app/google-services.json` (gitignored) refreshed from live `apps:sdkconfig`;
+  contains two `client_type: 1` Android OAuth clients + the web `client_type: 3` client.
+- SHA fingerprints registered & verified (release + debug, SHA-1 + SHA-256) — see
+  `FIREBASE_ANDROID_RELEASE_REPORT.md` for the full table and API verification.
+- Native Google Sign-In uses `@capgo/capacitor-social-login@8.3.40` + `signInWithCredential`.
 
-## Firebase (Android)
-- Add `google-services.json` to `android/app/` (see FIREBASE_NATIVE_SETUP.md).
+## Remaining before/at Play submission (user actions, not automated)
+1. Upload `app-release.aab` to Google Play → Internal testing track (do NOT promote to production).
+2. Play App Signing: verify Play's signing certificate SHA-1/256; if rotated, register that SHA-1
+   in Firebase too.
+3. Install the debug build on a device and smoke-test native "Continue with Google".

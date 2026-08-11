@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+﻿import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,8 @@ import { firebaseClient } from "@/api/firebaseClient";
 import { hapticMedium } from "@/utils/native";
 
 const categoryEmoji = {
-  painting: "🎨", sculpture: "🗿", photography: "📷", music: "🎵",
-  digital_art: "💻", mixed_media: "🎭", textile: "🧵", pottery: "🏺", performance: "🎬",
+  painting: "ðŸŽ¨", sculpture: "ðŸ—¿", photography: "ðŸ“·", music: "ðŸŽµ",
+  digital_art: "ðŸ’»", mixed_media: "ðŸŽ­", textile: "ðŸ§µ", pottery: "ðŸº", performance: "ðŸŽ¬",
 };
 
 const socialIcons = {
@@ -107,14 +107,14 @@ export default function ArtistProfile() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
       {/* Back */}
-      <Link to="/artists" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-gold transition-colors mb-6">
+      <Link to="/artists" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" /> Back to Artists
       </Link>
 
       {/* Hero */}
       <div className="relative rounded-2xl overflow-hidden bg-card border border-border mb-8">
         {/* Banner */}
-        <div className="h-36 gold-gradient opacity-20" />
+        <div className="h-36 green-gradient opacity-20" />
         <div className="px-6 pb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-12">
             {/* Avatar */}
@@ -130,7 +130,7 @@ export default function ArtistProfile() {
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-foreground">{artist.full_name}</h1>
                 {artist.artist_category && (
-                  <Badge className="bg-gold/15 text-gold border-gold/30 text-xs">
+                  <Badge className="bg-primary/15 text-primary border-primary/30 text-xs">
                     {categoryEmoji[artist.artist_category]} {artist.artist_category.replace(/_/g, " ")}
                   </Badge>
                 )}
@@ -176,7 +176,7 @@ export default function ArtistProfile() {
                     href={url.startsWith("http") ? url : `https://${url}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gold transition-colors border border-border hover:border-gold/40 rounded-full px-3 py-1.5"
+                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors border border-border hover:border-primary/40 rounded-full px-3 py-1.5"
                   >
                     <Icon className="w-3.5 h-3.5" />
                     <span className="capitalize">{platform}</span>
@@ -218,7 +218,7 @@ export default function ArtistProfile() {
         <div className="max-w-5xl mx-auto p-4 flex items-center justify-between gap-4">
           <div className="min-w-0">
             <p className="font-display font-bold text-lg truncate">{artist.full_name}</p>
-            <p className="text-xs text-muted-foreground font-body">{artworks.length} works · {totalLikes} likes</p>
+            <p className="text-xs text-muted-foreground font-body">{artworks.length} works Â· {totalLikes} likes</p>
           </div>
           <Button
             onClick={() => { hapticMedium(); setContactOpen(true); }}

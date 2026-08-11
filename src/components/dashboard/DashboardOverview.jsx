@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { TrendingUp, ShoppingBag, Eye, Star, DollarSign, Package } from 'lucide-react';
 
@@ -19,7 +19,7 @@ export default function DashboardOverview({ user }) {
 
   const stats = [
     { label: 'Total Artworks', value: artworks.length, icon: Package, color: 'text-blue-400' },
-    { label: 'Total Earnings (ZMW)', value: `K${totalEarnings.toLocaleString()}`, icon: DollarSign, color: 'text-gold' },
+    { label: 'Total Earnings (ZMW)', value: `K${totalEarnings.toLocaleString()}`, icon: DollarSign, color: 'text-primary' },
     { label: 'Pending Orders', value: pendingOrders, icon: ShoppingBag, color: 'text-amber-400' },
     { label: 'Total Views', value: totalViews.toLocaleString(), icon: Eye, color: 'text-purple-400' },
     { label: 'Total Likes', value: totalLikes.toLocaleString(), icon: Star, color: 'text-pink-400' },
@@ -49,10 +49,10 @@ export default function DashboardOverview({ user }) {
               <div key={order.id} className="flex items-center justify-between p-2 bg-secondary rounded-lg">
                 <div>
                   <p className="text-sm font-semibold text-foreground">{order.artwork_title}</p>
-                  <p className="text-xs text-muted-foreground">{order.buyer_name} · {order.delivery_option?.replace('_', ' ')}</p>
+                  <p className="text-xs text-muted-foreground">{order.buyer_name} Â· {order.delivery_option?.replace('_', ' ')}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-gold text-sm font-bold">ZMW {order.amount_zmw?.toLocaleString()}</p>
+                  <p className="text-primary text-sm font-bold">ZMW {order.amount_zmw?.toLocaleString()}</p>
                   <span className={`text-xs ${
                     order.delivery_status === 'delivered' ? 'text-green-400' :
                     order.delivery_status === 'in_transit' ? 'text-blue-400' : 'text-amber-400'

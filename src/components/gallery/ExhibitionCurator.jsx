@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -113,7 +113,7 @@ export default function ExhibitionCurator() {
         {!showForm && (
           <Button
             onClick={() => setShowForm(true)}
-            className="gold-gradient text-background font-semibold gap-2"
+            className="green-gradient text-primary-foreground font-semibold gap-2"
           >
             <Plus className="w-4 h-4" />
             New Exhibition
@@ -168,8 +168,8 @@ export default function ExhibitionCurator() {
                     onClick={() => toggleArtwork(artwork.id)}
                     className={`relative rounded-lg overflow-hidden border-2 transition-all ${
                       selectedArtworks.includes(artwork.id)
-                        ? 'border-gold ring-2 ring-gold/50'
-                        : 'border-border hover:border-gold/50'
+                        ? 'border-primary ring-2 ring-primary/50'
+                        : 'border-border hover:border-primary/50'
                     }`}
                   >
                     <img
@@ -178,10 +178,10 @@ export default function ExhibitionCurator() {
                       className="w-full aspect-square object-cover"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Check className="w-6 h-6 text-gold" />
+                      <Check className="w-6 h-6 text-primary" />
                     </div>
                     {selectedArtworks.includes(artwork.id) && (
-                      <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-gold flex items-center justify-center">
+                      <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                         <Check className="w-4 h-4 text-background" />
                       </div>
                     )}
@@ -195,7 +195,7 @@ export default function ExhibitionCurator() {
           <div className="flex gap-2">
             <Button
               onClick={handleCreateExhibition}
-              className="flex-1 gold-gradient text-background font-semibold"
+              className="flex-1 green-gradient text-primary-foreground font-semibold"
               disabled={loading || !formData.title || selectedArtworks.length === 0}
             >
               {loading ? (

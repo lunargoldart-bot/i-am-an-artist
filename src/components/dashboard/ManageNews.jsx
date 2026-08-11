@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { firebaseClient } from '@/api/firebaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -76,13 +76,13 @@ export default function ManageNews({ user }) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="font-playfair font-bold text-xl text-foreground">My Posts & Stories</h2>
-        <Button className="gold-gradient text-background font-semibold" size="sm" onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm); }}>
+        <Button className="green-gradient text-primary-foreground font-semibold" size="sm" onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm); }}>
           <Plus className="w-4 h-4 mr-1" /> New Post
         </Button>
       </div>
 
       <div className="bg-secondary border border-border rounded-lg p-3 text-sm text-muted-foreground">
-        <p className="flex items-center gap-2"><Zap className="w-4 h-4 text-gold" /> <strong className="text-foreground">Earn from your content!</strong> Posts with high engagement boost your artist ranking and visibility, leading to more sales and exhibition opportunities.</p>
+        <p className="flex items-center gap-2"><Zap className="w-4 h-4 text-primary" /> <strong className="text-foreground">Earn from your content!</strong> Posts with high engagement boost your artist ranking and visibility, leading to more sales and exhibition opportunities.</p>
       </div>
 
       {showForm && (
@@ -115,13 +115,13 @@ export default function ManageNews({ user }) {
             <label className="text-xs text-muted-foreground mb-1 block">Featured Image</label>
             <div className="flex gap-3 items-center">
               {imageUrl && <img src={imageUrl} alt="preview" className="w-16 h-16 rounded-md object-cover border border-border" />}
-              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-gold hover:text-gold transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer bg-secondary border border-border rounded-md px-4 py-2 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors">
                 <Upload className="w-4 h-4" /> Upload Image
                 <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               </label>
             </div>
           </div>
-          <Button type="submit" className="gold-gradient text-background font-semibold w-full" disabled={loading}>
+          <Button type="submit" className="green-gradient text-primary-foreground font-semibold w-full" disabled={loading}>
             {loading ? 'Publishing...' : editing ? 'Update Post' : 'Publish Story'}
           </Button>
         </form>
@@ -140,7 +140,7 @@ export default function ManageNews({ user }) {
               {item.image && <img src={item.image} alt={item.title} className="w-16 h-16 rounded-md object-cover shrink-0" />}
               <div className="flex-1 min-w-0">
                 <h4 className="font-playfair font-semibold text-foreground line-clamp-1">{item.title}</h4>
-                <p className="text-xs text-muted-foreground capitalize">{item.category?.replace('_', ' ')} · {item.views_count || 0} views</p>
+                <p className="text-xs text-muted-foreground capitalize">{item.category?.replace('_', ' ')} Â· {item.views_count || 0} views</p>
               </div>
               <div className="flex gap-2 shrink-0">
                 <Button size="sm" variant="outline" className="border-border text-xs" onClick={() => handleEdit(item)}>

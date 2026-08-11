@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Users, Palette, ImageIcon, ShoppingCart, X } from 'lucide-react';
 import { useCollectionSnapshot } from '@/hooks/useCollectionSnapshot';
@@ -45,8 +45,8 @@ export default function GlobalSearch({ onClose }) {
   const subtitle = (type, row) => {
     if (type === 'Users') return row.email;
     if (type === 'Artists') return row.artist_name || row.user_email;
-    if (type === 'Artwork') return `${row.artist_email || ''} · ${row.category || ''}`;
-    return `${row.buyer_email || ''} · ${row.artwork_title || ''}`;
+    if (type === 'Artwork') return `${row.artist_email || ''} Â· ${row.category || ''}`;
+    return `${row.buyer_email || ''} Â· ${row.artwork_title || ''}`;
   };
 
   return (
@@ -57,7 +57,7 @@ export default function GlobalSearch({ onClose }) {
           autoFocus
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search users, artists, artwork, orders…"
+          placeholder="Search users, artists, artwork, ordersâ€¦"
           className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
         />
         <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
@@ -82,7 +82,7 @@ export default function GlobalSearch({ onClose }) {
                 onClick={() => { navigate(result.href); onClose?.(); }}
                 className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-secondary"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary text-gold">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary text-primary">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -98,7 +98,7 @@ export default function GlobalSearch({ onClose }) {
         )}
       </div>
       <div className="border-t border-border bg-muted/40 px-4 py-2 text-[11px] text-muted-foreground">
-        Navigate with results · Esc to close
+        Navigate with results Â· Esc to close
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+﻿import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Palette } from 'lucide-react';
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
@@ -18,7 +18,7 @@ function SidebarNav() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg gold-gradient text-primary-foreground">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg green-gradient text-primary-foreground">
             <Palette className="h-4 w-4" />
           </div>
           <div className="group-data-[collapsible=icon]:hidden">

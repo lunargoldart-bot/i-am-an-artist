@@ -28,7 +28,7 @@ export default function ZambianChangemakers() {
             <Star className="w-3 h-3 text-primary fill-primary" />
             <span className="text-primary/80 font-semibold text-xs uppercase tracking-widest">This Week's Feature</span>
           </div>
-          <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-3 text-white">
+          <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-3 text-foreground">
             Featured Artists
           </h2>
           <p className="text-primary/70 font-inter text-base max-w-2xl mx-auto">

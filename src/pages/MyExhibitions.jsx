@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -118,7 +118,7 @@ export default function MyExhibitions() {
             <h2 className="text-2xl font-playfair font-bold text-foreground">Your Exhibitions</h2>
             <div className="grid gap-4">
               {exhibitions.map(exhibition => (
-                <Card key={exhibition.id} className="p-4 border-border hover:border-gold/50 transition-colors relative">
+                <Card key={exhibition.id} className="p-4 border-border hover:border-primary/50 transition-colors relative">
                   {editing?.id === exhibition.id ? (
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
@@ -156,7 +156,7 @@ export default function MyExhibitions() {
                           <button
                             type="submit"
                             disabled={loading}
-                            className="px-4 py-2 bg-gold text-background rounded-md hover:bg-gold/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
                           >
                             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                           </button>
@@ -229,14 +229,14 @@ export default function MyExhibitions() {
 
                         <div className="mt-3 flex gap-2">
                           <Link to={`/gallery/${exhibition.id}`}>
-                            <Button size="sm" className="gold-gradient text-background">
+                            <Button size="sm" className="green-gradient text-primary-foreground">
                               View Gallery
                             </Button>
                           </Link>
                           <Button
                             size="sm"
                             variant="outline"
-                            className="border-border hover:border-gold"
+                            className="border-border hover:border-primary"
                             onClick={() => handleEditStart(exhibition)}
                           >
                             <Edit className="w-3 h-3 mr-1" /> Edit

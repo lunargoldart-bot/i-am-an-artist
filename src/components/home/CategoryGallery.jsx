@@ -95,7 +95,7 @@ export default function CategoryGallery() {
       <div className="absolute inset-0 opacity-30" style={{backgroundImage: "url('https://media.firebaseClient.com/images/public/69fc831faa42f7d02c44d368/bd040c8d8_generated_image.png')"}} />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
-          <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-3 text-white">Browse by Category</h2>
+          <h2 className="font-playfair text-4xl sm:text-5xl font-bold mb-3 text-foreground">Browse by Category</h2>
           <p className="text-primary/60 font-inter text-sm">Find your perfect piece</p>
         </div>
 

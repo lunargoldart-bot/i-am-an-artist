@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Moon, Sun, Search, LogOut } from 'lucide-react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
@@ -26,10 +26,10 @@ export default function AdminHeader() {
       <SidebarTrigger />
       <button
         onClick={() => setSearchOpen(true)}
-        className="flex flex-1 items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-gold/40 hover:text-foreground sm:max-w-md"
+        className="flex flex-1 items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:max-w-md"
       >
         <Search className="h-5 w-5" />
-        <span className="text-left">Search anything…</span>
+        <span className="text-left">Search anythingâ€¦</span>
         <kbd className="ml-auto rounded border border-border bg-card px-2 py-1 text-[10px]">Ctrl K</kbd>
       </button>
 

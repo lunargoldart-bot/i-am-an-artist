@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import SwipeCard from "./SwipeCard";
 import { Heart, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,12 +30,12 @@ export default function SwipeDeck({ artworks }) {
   if (stack.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6 px-6">
-        <div className="text-7xl">🎨</div>
+        <div className="text-7xl">ðŸŽ¨</div>
         <h3 className="font-playfair text-3xl font-bold text-foreground">You've seen it all!</h3>
         <p className="text-muted-foreground text-base">
           {liked.length} artwork{liked.length !== 1 ? "s" : ""} liked
         </p>
-        <Button onClick={handleReset} variant="outline" className="gap-2 border-gold/50 text-gold hover:bg-gold/10 h-11">
+        <Button onClick={handleReset} variant="outline" className="gap-2 border-primary/50 text-primary hover:bg-primary/10 h-11">
           <RotateCcw className="w-5 h-5" /> Start Over
         </Button>
       </div>

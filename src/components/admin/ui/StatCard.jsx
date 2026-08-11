@@ -1,14 +1,14 @@
-import CountUp from 'react-countup';
+﻿import CountUp from 'react-countup';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function StatCard({ label, value = 0, icon: Icon, delta, suffix, prefix, accent = 'text-gold', loading }) {
+export default function StatCard({ label, value = 0, icon: Icon, delta, suffix, prefix, accent = 'text-primary', loading }) {
   const isDelta = typeof delta === 'number';
   const TrendIcon = !isDelta || delta === 0 ? Minus : delta > 0 ? TrendingUp : TrendingDown;
   const trendClass = !isDelta || delta === 0 ? 'text-slate-400' : delta > 0 ? 'text-emerald-500' : 'text-rose-500';
 
   return (
-    <div className="group rounded-xl border border-border bg-card p-5 transition-colors hover:border-gold/40">
+    <div className="group rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40">
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
         {Icon && (

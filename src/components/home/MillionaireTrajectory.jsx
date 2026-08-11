@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { TrendingUp, Zap, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ const milestones = [
 
 const trustPoints = [
   { icon: Shield, title: 'Zero-Risk Escrow', desc: 'We hold payment securely. You only receive funds once the buyer confirms delivery. No more chasing payments.' },
-  { icon: CheckCircle2, title: 'Verified Buyers Only', desc: 'Every buyer on Zartia is verified. No scammers, no ghost buyers — only genuine collectors investing in your work.' },
+  { icon: CheckCircle2, title: 'Verified Buyers Only', desc: 'Every buyer on Zartia is verified. No scammers, no ghost buyers â€” only genuine collectors investing in your work.' },
   { icon: Zap, title: 'Instant Dispute Resolution', desc: 'Any issue? Our team resolves disputes within 24 hours. Your money and reputation are always protected.' },
 ];
 
@@ -57,7 +57,7 @@ export default function MillionaireTrajectory() {
               </div>
               {i === milestones.length - 1 && (
                 <div className="absolute top-2 right-2">
-                  <span className="text-base">👑</span>
+                  <span className="text-base">ðŸ‘‘</span>
                 </div>
               )}
             </motion.div>
@@ -97,7 +97,7 @@ export default function MillionaireTrajectory() {
         </div>
         <div className="text-center">
           <Link to="/sell">
-            <Button size="lg" className="gold-gradient text-background font-bold hover:opacity-90 px-10">
+            <Button size="lg" className="gold-gradient text-[#1F1F1F] font-bold hover:opacity-90 px-10">
               Start Your Journey Today <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
