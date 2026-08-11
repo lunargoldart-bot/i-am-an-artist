@@ -80,7 +80,7 @@ signingConfig signingConfigs.release }`. No secrets live in the repo.
     the old `@codetrix-studio/capacitor-google-auth` peers on Capacitor 6 and is **not** used).
   - `MainActivity.java` updated per the plugin contract (implements
     `ModifiedMainActivityForSocialLoginPlugin`, forwards Google login intents).
-  - `src/lib/firebaseAuth.js` `signInWithGoogle` now detects `Capacitor.isNative()`, calls
+  - `src/lib/firebaseAuth.js` `signInWithGoogle` now detects `Capacitor.isNativePlatform()`, calls
     `SocialLogin.login({ provider: 'google' })`, exchanges `result.idToken` via
     `signInWithCredential(auth, GoogleAuthProvider.credential(idToken))`, and falls back to the
     web popup flow otherwise. Firebase initialization is unchanged.

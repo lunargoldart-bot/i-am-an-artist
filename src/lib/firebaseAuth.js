@@ -50,7 +50,7 @@ let nativeGoogleReady = false;
 
 async function ensureNativeGoogle() {
   const { Capacitor } = await import('@capacitor/core');
-  if (!Capacitor.isNative()) return null;
+  if (!Capacitor.isNativePlatform()) return null;
   const { SocialLogin } = await import('@capgo/capacitor-social-login');
   if (!nativeGoogleReady) {
     await SocialLogin.initialize({
