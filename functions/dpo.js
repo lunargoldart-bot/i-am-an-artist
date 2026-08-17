@@ -1,11 +1,21 @@
 import axios from 'axios';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 
-// DPO CompanyToken must come from environment configuration.
-// Prefer process.env.DPO_COMPANY_TOKEN; a placeholder is kept as a fallback only
-// so that local development does not crash. Rotate the token and set the env var
-// in production (functions config / .env) before going live.
-const COMPANY_TOKEN = process.env.DPO_COMPANY_TOKEN || 'B3F59BE7-0756-420E-BB88-1D98E7A6B040';
+// DPO CompanyToken must come from the environment (functions config / .env).
+// There is intentionally NO hardcoded fallback: if DPO_COMPANY_TOKEN is
+// missing, DPO operations fail server-side so a test/live token is never
+// silently assumed.
+const getCompanyToken = () => {
+  const token = process.env.DPO_COMPANY_TOKEN;
+  if (!token) {
+    throw new Error(
+      'DPO configuration error: DPO_COMPANY_TOKEN is not set. ' +
+      'Configure the functions runtime (functions config or .env) before enabling payments.'
+    );
+  }
+  return token;
+};
+
 const SERVICE_TYPE = process.env.DPO_SERVICE_TYPE || '54841';
 const API_BASE = 'https://secure.3gdirectpay.com/API/v6/';
 const HOSTED_CHECKOUT_BASE = 'https://secure.3gdirectpay.com/payv3.php?ID=';
@@ -26,7 +36,7 @@ const xmlParser = new XMLParser({
 const buildCreateTokenXml = (params) => {
   const doc = {
     API3G: {
-      CompanyToken: COMPANY_TOKEN,
+      CompanyToken: getCompanyToken(),
       Request: 'createToken',
       Transaction: {
         PaymentAmount: params.amount.toFixed(2),
@@ -91,7 +101,7 @@ export const verifyDPOPaymentToken = async (token) => {
   try {
     const doc = {
       API3G: {
-        CompanyToken: COMPANY_TOKEN,
+        CompanyToken: getCompanyToken(),
         Request: 'verifyToken',
         TransactionToken: token,
       },

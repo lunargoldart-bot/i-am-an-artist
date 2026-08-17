@@ -1,11 +1,16 @@
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
   signInWithCredential,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updatePassword,
   updateProfile,
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -89,6 +94,37 @@ export const registerWithEmail = async (email, password, fullName = '') => {
 };
 
 export const logoutUser = async () => signOut(auth);
+
+// ─── Password recovery ─────────────────────────────────────────────────
+// Sends Firebase's secure password-reset email. Uses a non-revealing
+// response so callers never learn whether an account exists.
+export const sendPasswordReset = async (email, actionCodeSettings) => {
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())) {
+    throw new Error('Please enter a valid email address.');
+  }
+  const settings = actionCodeSettings || {
+    url: `${typeof window !== 'undefined' ? window.location.origin : 'https://www.iamanartistapp.com'}/reset-password`,
+    handleCodeInApp: false,
+  };
+  await sendPasswordResetEmail(auth, email.trim(), settings);
+};
+
+// Completes a reset initiated from the email link. `oobCode` is the code
+// in the reset email URL (?mode=resetPassword&oobCode=...).
+export const completePasswordReset = async (oobCode, newPassword) => {
+  if (!oobCode) throw new Error('This password reset link is invalid or has expired.');
+  await confirmPasswordReset(auth, oobCode, newPassword);
+};
+
+// ─── Account management ────────────────────────────────────────────────
+// Changes the signed-in user's password after re-authentication.
+export const changePassword = async (currentPassword, newPassword) => {
+  const user = auth.currentUser;
+  if (!user?.email) throw new Error('This account uses a provider login and does not have a password to change.');
+  const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  await reauthenticateWithCredential(user, credential);
+  await updatePassword(user, newPassword);
+};
 
 export const onAuthChange = (callback) => onAuthStateChanged(auth, async (firebaseUser) => {
   try {

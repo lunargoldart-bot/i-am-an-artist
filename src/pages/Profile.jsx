@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Palette, Edit3, Diamond, Megaphone, Crown, Users, Plus } from "lucide-react";
+import { User, Palette, Edit3, Diamond, Megaphone, Crown, Users, Plus, KeyRound, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Link } from "react-router-dom";
 import ArtworkCard from "../components/artwork/ArtworkCard";
 import EliteFeatureQueue from "../components/elite/EliteFeatureQueue";
 import ManageAds from "../components/ads/ManageAds";
@@ -17,6 +18,12 @@ import ProfileMonetization from "../components/monetization/ProfileMonetization"
 import ArtistVerificationForm from "../components/verification/ArtistVerificationForm";
 import CollaborationManager from "../components/collaboration/CollaborationManager";
 import CollaborationRequestForm from "../components/collaboration/CollaborationRequestForm";
+import { requestIntroReplay } from "@/lib/intro";
+import { changePassword } from "@/lib/firebaseAuth";
+import { useAuth } from "@/lib/AuthContext";
+import { functions } from "@/lib/firebase";
+import { httpsCallable } from "firebase/functions";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const artistCategories = [
   { value: "painting", label: "Painting" },
@@ -33,9 +40,14 @@ const artistCategories = [
 
 export default function Profile() {
   const queryClient = useQueryClient();
+  const { logout } = useAuth();
   const [editing, setEditing] = useState(false);
   const [verificationOpen, setVerificationOpen] = useState(false);
   const [collaborationFormOpen, setCollaborationFormOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({ current: "", next: "", confirm: "" });
+  const [passwordState, setPasswordState] = useState({ loading: false, error: "", done: false });
+  const [deleteState, setDeleteState] = useState({ loading: false, error: "" });
   const [profileForm, setProfileForm] = useState({
     bio: "", location: "", phone: "", artist_categories: [],
     social_links: { instagram: "", facebook: "", twitter: "", tiktok: "", youtube: "" },
@@ -98,6 +110,34 @@ export default function Profile() {
     updateMutation.mutate({ ...profileForm, role: "artist" });
   };
 
+  const submitChangePassword = async (event) => {
+    event.preventDefault();
+    setPasswordState({ loading: true, error: "", done: false });
+    try {
+      if (passwordForm.next.length < 6) throw new Error("New password must be at least 6 characters.");
+      if (passwordForm.next !== passwordForm.confirm) throw new Error("New passwords do not match.");
+      await changePassword(passwordForm.current, passwordForm.next);
+      setPasswordState({ loading: false, error: "", done: true });
+      toast.success("Password updated!");
+    } catch (err) {
+      setPasswordState({ loading: false, error: err.message || "Failed to change password", done: false });
+      toast.error(err.message || "Failed to change password");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleteState({ loading: true, error: "" });
+    try {
+      const callable = httpsCallable(functions, "deleteUserAccount");
+      await callable({});
+      toast.success("Account deleted. Goodbye!");
+      await logout(true);
+    } catch (err) {
+      setDeleteState({ loading: false, error: err.message || "Failed to delete account. Please contact support." });
+      toast.error(err.message || "Failed to delete account");
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -127,6 +167,9 @@ export default function Profile() {
         </div>
         <Button variant="outline" size="sm" onClick={() => setEditing(!editing)} className="font-body gap-1">
           <Edit3 className="w-3 h-3" /> Edit
+        </Button>
+        <Button variant="ghost" size="sm" onClick={requestIntroReplay} className="font-body gap-1 text-muted-foreground" aria-label="Replay the cinematic intro">
+          Replay intro
         </Button>
       </div>
 
@@ -225,6 +268,81 @@ export default function Profile() {
           </div>
         </div>
       )}
+
+      {/* Account settings */}
+      <div className="mb-8 p-6 rounded-xl border border-border bg-card space-y-4">
+        <h3 className="font-display text-lg font-semibold flex items-center gap-2">
+          <KeyRound className="w-4 h-4 text-primary" /> Account
+        </h3>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button variant="outline" className="font-body" onClick={() => setChangePasswordOpen(true)}>
+            <KeyRound className="w-4 h-4 mr-2" /> Change password
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className="font-body text-destructive hover:text-destructive">
+                <Trash2 className="w-4 h-4 mr-2" /> Delete account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="font-display text-xl">Delete your account?</AlertDialogTitle>
+                <AlertDialogDescription className="font-body text-sm">
+                  This permanently deletes your profile and personal data (wishlists, messages, preferences, verification submissions and other content you own). Sales, payment, transaction and payout records connected to your activity are retained but anonymised for legal and accounting reasons. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              {deleteState.error && <p className="text-sm text-destructive font-body">{deleteState.error}</p>}
+              <AlertDialogFooter>
+                <AlertDialogCancel className="font-body">Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteAccount} disabled={deleteState.loading} className="font-body bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  {deleteState.loading ? "Deleting..." : "Yes, delete my account"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+        <p className="text-xs text-muted-foreground font-body">
+          See how deletion is handled (including retention) on our{" "}
+          <Link to="/delete-account" className="text-primary hover:underline inline-flex items-center gap-0.5">
+            account deletion page <ExternalLink className="w-3 h-3" />
+          </Link>. Read the{" "}
+          <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link> and{" "}
+          <Link to="/terms" className="text-primary hover:underline">Terms &amp; Conditions</Link>.
+        </p>
+      </div>
+
+      {/* Change password dialog */}
+      <Dialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-xl">Change password</DialogTitle>
+            <DialogDescription className="font-body text-sm">
+              Enter your current password and a new one. Available for email/password accounts.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={submitChangePassword} className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label className="font-body">Current password</Label>
+              <Input type="password" value={passwordForm.current} onChange={(e) => setPasswordForm((p) => ({ ...p, current: e.target.value }))} required />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-body">New password</Label>
+              <Input type="password" minLength={6} value={passwordForm.next} onChange={(e) => setPasswordForm((p) => ({ ...p, next: e.target.value }))} required />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-body">Confirm new password</Label>
+              <Input type="password" minLength={6} value={passwordForm.confirm} onChange={(e) => setPasswordForm((p) => ({ ...p, confirm: e.target.value }))} required />
+            </div>
+            {passwordState.error && <p className="text-sm text-destructive font-body">{passwordState.error}</p>}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" className="font-body" onClick={() => setChangePasswordOpen(false)}>Cancel</Button>
+              <Button type="submit" disabled={passwordState.loading} className="font-body green-gradient text-primary-foreground">
+                {passwordState.loading ? "Updating..." : "Update password"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Tabs defaultValue="monetize">
         <TabsList>

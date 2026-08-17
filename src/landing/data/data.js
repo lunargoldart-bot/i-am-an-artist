@@ -76,5 +76,5 @@ export const footerLinks = {
   marketplace: ['Explore', 'Artists', 'Auctions', 'Collections', 'Categories', 'Rankings'],
   forArtists: ['Become an Artist', 'Sell Artwork', 'Artist Guide', 'Success Stories', 'Resources'],
   company: ['About Us', 'Careers', 'Press', 'Contact'],
-  support: ['Help Center', 'Terms of Service', 'Privacy Policy', 'Cookie Policy'],
+  support: ['Help Center', 'Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Marketplace Policies'],
 };

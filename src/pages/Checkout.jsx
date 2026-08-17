@@ -173,6 +173,9 @@ export default function Checkout() {
                </div>
              </div>
              <p className="text-xs text-muted-foreground text-center mt-4 font-body">You will be redirected to the DPO Pay portal to complete payment securely. We never store your card details.</p>
+             <div className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/15 text-xs text-muted-foreground font-body">
+               A fixed platform service charge applies to each sale (paid by the artist, not the buyer). You pay only the artwork price. See the <Link to="/terms" className="text-primary hover:underline">Terms &amp; Conditions</Link> for the current schedule.
+             </div>
            </div>
            </div>
       </div>

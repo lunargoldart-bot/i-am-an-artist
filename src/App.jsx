@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import MaintenanceProvider from '@/lib/MaintenanceProvider'
+import CinematicIntroGate from '@/components/CinematicIntroGate'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -29,9 +30,15 @@ import Inventory from './pages/Inventory';
 import VirtualGallery from './pages/VirtualGallery';
 import MyExhibitions from './pages/MyExhibitions';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import MarketplacePolicies from './pages/MarketplacePolicies';
+import DeleteAccount from './pages/DeleteAccount';
 import Artists from './pages/Artists';
 import Gallery from './pages/Gallery';
 import Dashboard from './pages/Dashboard';
+import Categories from './pages/Categories';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
@@ -95,9 +102,15 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<AppLayout />}>
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/marketplace-policies" element={<MarketplacePolicies />} />
+        <Route path="/delete-account" element={<DeleteAccount />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/marketplace" element={<Explore />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/artists" element={<Artists />} />
         <Route path="/artwork/:id" element={<ArtworkDetail />} />
@@ -165,18 +178,20 @@ const AuthenticatedApp = () => {
 function App() {
 
   return (
-    <MaintenanceProvider>
-      <AuthProvider>
-        <QueryClientProvider client={queryClientInstance}>
-          <CartProvider>
-            <Router>
-              <AuthenticatedApp />
-            </Router>
-            <Toaster />
-          </CartProvider>
-        </QueryClientProvider>
-      </AuthProvider>
-    </MaintenanceProvider>
+    <CinematicIntroGate>
+      <MaintenanceProvider>
+        <AuthProvider>
+          <QueryClientProvider client={queryClientInstance}>
+            <CartProvider>
+              <Router>
+                <AuthenticatedApp />
+              </Router>
+              <Toaster />
+            </CartProvider>
+          </QueryClientProvider>
+        </AuthProvider>
+      </MaintenanceProvider>
+    </CinematicIntroGate>
   )
 }
 

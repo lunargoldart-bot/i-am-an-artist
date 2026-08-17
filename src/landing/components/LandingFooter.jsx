@@ -46,16 +46,27 @@ export default function LandingFooter() {
             <div key={key}>
               <h4 className="text-text-dark text-sm font-semibold font-inter mb-4">{title}</h4>
               <ul className="space-y-2.5">
-                {footerLinks[key].map((link) => (
-                  <li key={link}>
-                    <Link
-                      to={link === 'Become an Artist' ? '/login' : '/explore'}
-                      className="text-text-muted text-sm font-inter hover:text-green-primary transition-colors"
-                    >
-                      {link}
-                    </Link>
-                  </li>
-                ))}
+                {footerLinks[key].map((link) => {
+                  const href =
+                    link === 'Become an Artist' ? '/login'
+                    : link === 'Categories' ? '/categories'
+                    : link === 'Collections' ? '/gallery'
+                    : link === 'Terms of Service' ? '/terms'
+                    : link === 'Privacy Policy' ? '/privacy'
+                    : link === 'Cookie Policy' ? '/privacy'
+                    : link === 'Marketplace Policies' || link === 'Refund Policy' || link === 'Buyer Policy' || link === 'Seller Policy' ? '/marketplace-policies'
+                    : '/explore';
+                  return (
+                    <li key={link}>
+                      <Link
+                        to={href}
+                        className="text-text-muted text-sm font-inter hover:text-green-primary transition-colors"
+                      >
+                        {link}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

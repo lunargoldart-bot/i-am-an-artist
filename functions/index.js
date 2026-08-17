@@ -36,6 +36,265 @@ const getProfile = async (uid) => {
   return snap.exists ? { id: snap.id, ...snap.data() } : null;
 };
 
+// Initialize membership payments table (idempotent).
+// In production, you would run a proper migration script, but this is a safe no-op for existing setups.
+const ensureMembershipTable = async () => {
+  const snapshot = await db.collection('membership_payments').limit(1).get();
+  if (snapshot.empty) {
+    await db.collection('membership_payments').doc('__init__').set({ _ignore: true }, { merge: true });
+  }
+};
+
+ensureMembershipTable();
+
+// Membership tiers (server-side source of truth; never trust client-supplied pricing).
+const MEMBERSHIP_TIERS = {
+  pro: { label: 'Pro Artist', price: 800, durationDays: 30 },
+  elite: { label: 'Elite Member', price: 2800, durationDays: 30 },
+};
+
+// ─── Tiered Fixed Platform Service Charge (seller-paid) ────────────────
+// The client approves a FIXED platform service charge per artwork piece
+// (no percentage commission). The buyer pays the full artwork price; the
+// fixed charge is deducted from the artist's payout at sale finalisation.
+//
+// Approved schedule (business-approved values, stored in the platform
+// app_settings doc so admins can view/edit them):
+//   K1 – K250        → K2
+//   K251 – K1,000    → K5
+//   K1,001 – K2,500  → K10
+//   K2,501 – K5,000  → K20
+//   K5,001 – K10,000 → K40
+//   K10,001+         → K75
+const DEFAULT_SERVICE_CHARGE_TIERS = [
+  { min_amount: 1, max_amount: 250, fixed_charge: 2, currency: 'ZMW', active: true },
+  { min_amount: 251, max_amount: 1000, fixed_charge: 5, currency: 'ZMW', active: true },
+  { min_amount: 1001, max_amount: 2500, fixed_charge: 10, currency: 'ZMW', active: true },
+  { min_amount: 2501, max_amount: 5000, fixed_charge: 20, currency: 'ZMW', active: true },
+  { min_amount: 5001, max_amount: 10000, fixed_charge: 40, currency: 'ZMW', active: true },
+  { min_amount: 10001, max_amount: null, fixed_charge: 75, currency: 'ZMW', active: true },
+];
+
+// Authoritative source of truth for the service-charge schedule.
+// Reads from Firestore app_settings/platform.service_charge_tiers when
+// present; falls back to the client-approved defaults otherwise.
+const getServiceChargeTiers = async () => {
+  try {
+    const snap = await db.collection('app_settings').doc('platform').get();
+    const stored = snap.data()?.service_charge_tiers;
+    if (Array.isArray(stored) && stored.length) {
+      return stored.filter((tier) => tier.active !== false && tier.fixed_charge != null);
+    }
+  } catch (err) {
+    console.error('Failed to read service charge tiers, using defaults:', err.message);
+  }
+  return DEFAULT_SERVICE_CHARGE_TIERS;
+};
+
+// Fixed charge lookup. price is the gross artwork sale price in ZMW.
+// Returns a fixed charge; unmatched prices fall back to the highest tier.
+const calculateServiceCharge = (price, tiers) => {
+  const value = Number(price) || 0;
+  const sorted = [...tiers].sort((a, b) => (a.min_amount ?? 0) - (b.min_amount ?? 0));
+  const match = sorted.find((tier) => {
+    const min = Number(tier.min_amount ?? 0);
+    const max = tier.max_amount == null ? Infinity : Number(tier.max_amount);
+    return value >= min && value <= max;
+  });
+  const charge = match ? Number(match.fixed_charge) || 0 : Number(sorted[sorted.length - 1]?.fixed_charge) || 0;
+  return Math.round(charge * 100) / 100;
+};
+
+// Finalize an approved DPO session once, safely (idempotent).
+// - artwork sessions: create orders/transactions/payments/payouts, mark artwork sold
+// - membership sessions: activate the subscription, record the membership payment
+const finalizeApprovedSession = async (sessionRef, session, dpoToken) => {
+  if (session.type === 'membership') {
+    const existing = await db.collection('membership_payments')
+      .where('checkout_session_id', '==', sessionRef.id)
+      .limit(1)
+      .get();
+    if (!existing.empty) {
+      return { status: 'completed', alreadyProcessed: true };
+    }
+
+    const tierId = session.tier_id;
+    const tier = MEMBERSHIP_TIERS[tierId];
+    if (!tier) throw new HttpsError('failed-precondition', `Unknown membership tier: ${tierId}`);
+    const now = nowIso();
+    const expires = new Date(Date.now() + tier.durationDays * 24 * 60 * 60 * 1000).toISOString();
+
+    await db.collection('membership_payments').add({
+      user_uid: session.buyer_uid,
+      user_email: session.buyer_email,
+      tier_id: tierId,
+      tier_label: tier.label,
+      amount: tier.price,
+      status: 'paid',
+      payment_status: 'paid',
+      payment_method: 'dpo',
+      dpo_token: dpoToken,
+      checkout_session_id: sessionRef.id,
+      start_date: now,
+      expires_date: expires,
+      paid_date: now,
+      created_date: now,
+      updated_date: now,
+    });
+
+    await db.collection('users').doc(session.buyer_uid).set({
+      subscription_tier: tierId,
+      subscription_status: 'active',
+      subscription_start_date: now,
+      subscription_expires_date: expires,
+      updated_date: now,
+    }, { merge: true });
+
+    if (process.env.SENDGRID_API_KEY && process.env.FROM_EMAIL) {
+      try {
+        await sendMail({
+          to: session.buyer_email,
+          subject: '🎨 Your I Am An Artist membership is active!',
+          html: `<h2>Welcome to ${tier.label}</h2><p>Your ${tier.label} membership (ZMW ${tier.price}) is now active until ${new Date(expires).toLocaleDateString()}.</p>`,
+        });
+      } catch (e) { /* email is optional */ }
+    }
+
+    return { status: 'completed', alreadyProcessed: false };
+  }
+
+  // ── Artwork orders ──
+  const existingOrders = await db.collection('orders')
+    .where('checkout_session_id', '==', sessionRef.id)
+    .limit(1)
+    .get();
+  if (!existingOrders.empty) {
+    return { status: 'completed', alreadyProcessed: true };
+  }
+
+  const orders = [];
+  const serviceChargeTiers = await getServiceChargeTiers();
+  for (const artworkId of session.artworkIds) {
+    const artworkRef = db.collection('artworks').doc(artworkId);
+    const artworkSnap = await artworkRef.get();
+    if (!artworkSnap.exists) continue;
+    const artwork = artworkSnap.data();
+
+    const grossAmount = Number(session.amounts[artworkId]) || 0;
+    const serviceCharge = calculateServiceCharge(grossAmount, serviceChargeTiers);
+    const artistPayout = Math.round((grossAmount - serviceCharge) * 100) / 100;
+
+    const orderRef = db.collection('orders').doc();
+    const orderPayload = {
+      artwork_id: artworkId,
+      artwork_title: safeText(artwork.title, 200),
+      artwork_image: artwork.image_urls?.[0] || artwork.images?.[0] || '',
+      buyer_uid: session.buyer_uid,
+      buyer_email: session.buyer_email,
+      buyer_name: session.buyer_name,
+      seller_email: artwork.artist_email,
+      seller_name: safeText(artwork.artist_name, 160),
+      gross_amount: grossAmount,
+      amount: session.amounts[artworkId],
+      amount_zmw: session.amounts[artworkId],
+      service_charge: serviceCharge,
+      artist_payout: artistPayout,
+      service_charge_model: 'tiered_fixed_seller_paid',
+      delivery_method: session.delivery_method,
+      delivery_address: session.delivery_address,
+      delivery_phone: session.delivery_phone,
+      delivery_notes: session.delivery_notes,
+      status: 'confirmed',
+      delivery_status: 'pending',
+      payment_status: 'paid',
+      payment_method: 'dpo',
+      dpo_token: dpoToken,
+      dpo_reference: session.dpo_reference,
+      checkout_session_id: sessionRef.id,
+      paid_date: nowIso(),
+      created_date: nowIso(),
+      updated_date: nowIso(),
+    };
+    await orderRef.set(orderPayload);
+    orders.push({ id: orderRef.id, ...orderPayload });
+
+    await artworkRef.update({
+      status: 'sold',
+      sold_price_zmw: session.amounts[artworkId],
+      sold_date: nowIso(),
+      buyer_email: session.buyer_email,
+      updated_date: nowIso(),
+    });
+
+    await db.collection('transactions').add({
+      type: 'sale',
+      order_id: orderRef.id,
+      artwork_id: artworkId,
+      artwork_title: safeText(artwork.title, 200),
+      buyer_uid: session.buyer_uid,
+      buyer_email: session.buyer_email,
+      seller_email: artwork.artist_email,
+      seller_name: safeText(artwork.artist_name, 160),
+      gross_amount: grossAmount,
+      amount: session.amounts[artworkId],
+      service_charge: serviceCharge,
+      service_charge_model: 'tiered_fixed_seller_paid',
+      platform_fee: serviceCharge,
+      artist_payout: artistPayout,
+      payment_method: 'dpo',
+      dpo_token: dpoToken,
+      status: 'completed',
+      created_date: nowIso(),
+      updated_date: nowIso(),
+    });
+
+    await db.collection('payments').add({
+      order_id: orderRef.id,
+      checkout_session_id: sessionRef.id,
+      buyer_uid: session.buyer_uid,
+      buyer_email: session.buyer_email,
+      seller_email: artwork.artist_email,
+      amount: session.amounts[artworkId],
+      amount_zmw: session.amounts[artworkId],
+      payment_method: 'dpo',
+      dpo_token: dpoToken,
+      dpo_reference: session.dpo_reference,
+      status: 'completed',
+      created_date: nowIso(),
+      updated_date: nowIso(),
+    });
+
+    await db.collection('artistPayouts').add({
+      order_id: orderRef.id,
+      artwork_id: artworkId,
+      seller_email: artwork.artist_email,
+      seller_name: safeText(artwork.artist_name, 160),
+      gross_amount: grossAmount,
+      total_amount: grossAmount,
+      service_charge: serviceCharge,
+      service_charge_model: 'tiered_fixed_seller_paid',
+      platform_fee: serviceCharge,
+      payout_amount: artistPayout,
+      amount_zmw: artistPayout,
+      status: 'pending',
+      created_date: nowIso(),
+      updated_date: nowIso(),
+    });
+
+    if (process.env.SENDGRID_API_KEY && process.env.FROM_EMAIL) {
+      try {
+        await sendMail({
+          to: artwork.artist_email,
+          subject: '🎨 Your artwork has been sold!',
+          html: `<h2>Congratulations!</h2><p>Your artwork <strong>${safeText(artwork.title, 200)}</strong> has been purchased.</p><p>Sale price: ZMW ${grossAmount.toLocaleString()}</p><p>Platform service charge (fixed, tiered): ZMW ${serviceCharge.toLocaleString()}</p><p>Your payout: ZMW ${artistPayout.toLocaleString()}</p><p>Please arrange delivery with the buyer.</p>`,
+        });
+      } catch (e) { /* email is optional */ }
+    }
+  }
+
+  return { status: 'completed', alreadyProcessed: false, orders };
+};
+
 const getOpenAI = () => {
   if (!process.env.OPENAI_API_KEY) throw new HttpsError('failed-precondition', 'OPENAI_API_KEY is not configured');
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -52,6 +311,102 @@ const sendMail = async ({ to, subject, html, text }) => {
     content: [{ type: html ? 'text/html' : 'text/plain', value: html || text || '' }],
   }, { headers: { Authorization: `Bearer ${process.env.SENDGRID_API_KEY}` } });
 };
+
+// ─── Platform Service Charge Disclosure ────────────────────────────────
+// Public read of the active fixed service-charge schedule for transparent
+// disclosure in checkout, terms and marketplace documentation.
+export const getServiceChargeSchedule = onCall(async () => {
+  const tiers = await getServiceChargeTiers();
+  return {
+    model: 'tiered_fixed_seller_paid',
+    description: 'Fixed platform service charge per artwork piece, deducted from the artist payout. No percentage commission.',
+    currency: 'ZMW',
+    tiers: tiers.map(({ min_amount, max_amount, fixed_charge, active }) => ({
+      min_amount,
+      max_amount,
+      fixed_charge,
+      active,
+    })),
+  };
+});
+
+// ─── Account Deletion (self-service) ───────────────────────────────────
+// Deletes the caller's account and user-generated content while retaining
+// transactional records (orders, transactions, payments, payouts) required
+// for legal/record-keeping, anonymising their identity within them.
+export const deleteUserAccount = onCall(async (request) => {
+  const caller = requireUser(request);
+  const uid = caller.uid;
+  const email = caller.email;
+  const now = nowIso();
+
+  const profile = await getProfile(uid);
+  const accountEmail = profile?.email || email;
+
+  // 1. Anonymise retained transactional records (legal/tax retention).
+  const retentionCollections = ['orders', 'transactions', 'payments', 'artistPayouts', 'grievances', 'membership_payments'];
+  for (const collection of retentionCollections) {
+    for (const role of ['buyer', 'seller']) {
+      const field = `${role}_email`;
+      const snap = await db.collection(collection).where(field, '==', accountEmail).get();
+      const batch = db.batch();
+      snap.docs.forEach((doc) => {
+        const data = doc.data();
+        const update = {
+          [field]: `deleted-user-${uid.slice(0, 8)}@deleted.iamanartist.app`,
+          updated_date: now,
+        };
+        const nameField = `${role}_name`;
+        if (data[nameField] !== undefined) update[nameField] = 'Deleted user';
+        batch.update(doc.ref, update);
+      });
+      if (snap.size) await batch.commit();
+    }
+  }
+
+  // 2. Delete user-generated content owned by this account.
+  const delByUserUid = async (collection, uidField) => {
+    const snap = await db.collection(collection).where(uidField, '==', uid).get();
+    const batch = db.batch();
+    snap.docs.forEach((doc) => batch.delete(doc.ref));
+    if (snap.size) await batch.commit();
+  };
+  const delByEmail = async (collection, emailField) => {
+    const snap = await db.collection(collection).where(emailField, '==', accountEmail).get();
+    const batch = db.batch();
+    snap.docs.forEach((doc) => batch.delete(doc.ref));
+    if (snap.size) await batch.commit();
+  };
+
+  // Exact-match ownership paths
+  await delByEmail('wishlists', 'user_email');
+  await delByEmail('buyer_preferences', 'user_email');
+  await delByEmail('collaboration_requests', 'initiator_email');
+  await delByEmail('collaboration_requests', 'collaborator_email');
+  await delByEmail('collaborations', 'initiator_email');
+  await delByEmail('collaborations', 'collaborator_email');
+  await delByEmail('messages', 'sender_email');
+  await delByEmail('messages', 'recipient_email');
+  await delByEmail('feature_queue', 'artist_email');
+  await delByEmail('artists', 'user_email');
+  await delByEmail('artist_registry', 'user_email');
+  await delByEmail('artworks', 'artist_email');
+  await delByUid('user_progress', 'user_uid');
+  await delByUid('user_verifications', 'user_uid');
+  await delByUid('notifications', 'user_uid');
+
+  // 3. Delete the user profile document and the Firebase Auth account.
+  await db.collection('users').doc(uid).delete();
+
+  try {
+    const { getAuth } = await import('firebase-admin/auth');
+    await getAuth().deleteUser(uid);
+  } catch (err) {
+    console.error('Auth deleteUser failed (may have already been removed):', err.message);
+  }
+
+  return { success: true, message: 'Account deleted. Transactional records were retained and anonymised as required.' };
+});
 
 // ─── Track Sponsored Ad Events ────────────────────────────────────────
 export const trackSponsoredAdEvent = onCall(async (request) => {
@@ -81,6 +436,7 @@ export const sendEmail = onCall(async (request) => {
 
 // ─── Invoke LLM ───────────────────────────────────────────────────────
 export const invokeLLM = onCall(async (request) => {
+  rateLimitUser(request, 20, 60 * 1000, 'llm');
   requireUser(request);
   const prompt = String(request.data?.prompt || '').trim();
   if (!prompt) throw new HttpsError('invalid-argument', 'prompt is required');
@@ -120,6 +476,7 @@ export const markMessagesRead = onCall(async (request) => {
 });
 
 export const sendMessage = onCall(async (request) => {
+  rateLimitUser(request, 30, 60 * 1000, 'sendMessage');
   const caller = requireUser(request);
   const { artwork_id, recipient_email, content, message_type = 'text', offer_amount = null } = request.data || {};
   if (!recipient_email || !content?.trim()) throw new HttpsError('invalid-argument', 'recipient_email and content are required');
@@ -290,6 +647,91 @@ export const createCheckoutSession = onCall(async (request) => {
   };
 });
 
+// ─── Membership Payment (DPO hosted checkout, same session pattern) ─────
+export const initiateMembershipPayment = onCall(async (request) => {
+  const caller = requireUser(request);
+  const { tierId } = request.data || {};
+  if (!tierId || !MEMBERSHIP_TIERS[tierId]) throw new HttpsError('invalid-argument', 'Valid tierId (pro | elite) is required');
+
+  const tier = MEMBERSHIP_TIERS[tierId];
+  const profile = await getProfile(caller.uid);
+  if (profile?.subscription_tier === tierId && profile?.subscription_status === 'active') {
+    throw new HttpsError('already-exists', `You are already on the ${tier.label} plan`);
+  }
+
+  const sessionRef = db.collection('checkoutSessions').doc();
+  const reference = generateReference();
+
+  const sessionData = {
+    type: 'membership',
+    tier_id: tierId,
+    tier_label: tier.label,
+    buyer_uid: caller.uid,
+    buyer_email: caller.email,
+    buyer_name: safeText(profile?.full_name || caller.email, 160),
+    artworkIds: [],
+    amounts: { membership: tier.price },
+    totalAmount: tier.price,
+    delivery_method: 'none',
+    delivery_address: '',
+    delivery_phone: '',
+    delivery_notes: '',
+    companyRef: reference,
+    status: 'pending',
+    payment_status: 'pending',
+    created_date: nowIso(),
+    updated_date: nowIso(),
+  };
+
+  await sessionRef.set(sessionData);
+  await logPayment(db, {
+    type: 'membership_session_created',
+    sessionId: sessionRef.id,
+    reference,
+    tierId,
+    totalAmount: tier.price,
+    buyer_email: caller.email,
+  });
+
+  const baseUrl = process.env.APP_BASE_URL || 'https://www.iamanartistapp.com';
+  const dpoParams = {
+    amount: tier.price,
+    reference,
+    firstName: safeText(profile?.full_name?.split(' ')[0] || 'Buyer', 50),
+    lastName: safeText(profile?.full_name?.split(' ').slice(1).join(' ') || '', 50),
+    email: caller.email,
+    phone: '',
+    address: '',
+    redirectUrl: `${baseUrl}/order/success?sessionId=${sessionRef.id}`,
+    backUrl: `${baseUrl}/profile?membership=cancelled`,
+  };
+
+  const dpoResult = await createDPOPaymentToken(dpoParams);
+  const redirectUrl = getHostedCheckoutUrl(dpoResult.token);
+
+  await sessionRef.update({
+    dpo_token: dpoResult.token,
+    dpo_reference: dpoResult.reference,
+    redirect_url: redirectUrl,
+    updated_date: nowIso(),
+  });
+
+  await logPayment(db, {
+    type: 'membership_token_created',
+    sessionId: sessionRef.id,
+    tierId,
+    result: dpoResult.result,
+  });
+
+  return {
+    success: true,
+    sessionId: sessionRef.id,
+    redirectUrl,
+    reference,
+    totalAmount: tier.price,
+  };
+});
+
 export const verifyDPOPayment = onCall(async (request) => {
   const caller = requireUser(request);
   const { sessionId } = request.data || {};
@@ -326,113 +768,13 @@ export const verifyDPOPayment = onCall(async (request) => {
   });
 
   if (approved) {
-    const orders = [];
-    for (const artworkId of session.artworkIds) {
-      const artworkRef = db.collection('artworks').doc(artworkId);
-      const artworkSnap = await artworkRef.get();
-      if (!artworkSnap.exists) continue;
-      const artwork = artworkSnap.data();
-
-      const orderRef = db.collection('orders').doc();
-      const orderPayload = {
-        artwork_id: artworkId,
-        artwork_title: safeText(artwork.title, 200),
-        artwork_image: artwork.image_urls?.[0] || artwork.images?.[0] || '',
-        buyer_uid: session.buyer_uid,
-        buyer_email: session.buyer_email,
-        buyer_name: session.buyer_name,
-        seller_email: artwork.artist_email,
-        seller_name: safeText(artwork.artist_name, 160),
-        amount: session.amounts[artworkId],
-        amount_zmw: session.amounts[artworkId],
-        delivery_method: session.delivery_method,
-        delivery_address: session.delivery_address,
-        delivery_phone: session.delivery_phone,
-        delivery_notes: session.delivery_notes,
-        status: 'confirmed',
-        delivery_status: 'pending',
-        payment_status: 'paid',
-        payment_method: 'dpo',
-        dpo_token: session.dpo_token,
-        dpo_reference: session.dpo_reference,
-        checkout_session_id: sessionId,
-        paid_date: nowIso(),
-        created_date: nowIso(),
-        updated_date: nowIso(),
-      };
-      await orderRef.set(orderPayload);
-      orders.push({ id: orderRef.id, ...orderPayload });
-
-      await artworkRef.update({
-        status: 'sold',
-        sold_price_zmw: session.amounts[artworkId],
-        sold_date: nowIso(),
-        buyer_email: session.buyer_email,
-        updated_date: nowIso(),
-      });
-
-      await db.collection('transactions').add({
-        type: 'sale',
-        order_id: orderRef.id,
-        artwork_id: artworkId,
-        artwork_title: safeText(artwork.title, 200),
-        buyer_uid: session.buyer_uid,
-        buyer_email: session.buyer_email,
-        seller_email: artwork.artist_email,
-        seller_name: safeText(artwork.artist_name, 160),
-        amount: session.amounts[artworkId],
-        platform_fee: Math.round(session.amounts[artworkId] * 0.1),
-        artist_payout: Math.round(session.amounts[artworkId] * 0.9),
-        payment_method: 'dpo',
-        dpo_token: session.dpo_token,
-        status: 'completed',
-        created_date: nowIso(),
-        updated_date: nowIso(),
-      });
-
-      await db.collection('payments').add({
-        order_id: orderRef.id,
-        checkout_session_id: sessionId,
-        buyer_uid: session.buyer_uid,
-        buyer_email: session.buyer_email,
-        seller_email: artwork.artist_email,
-        amount: session.amounts[artworkId],
-        payment_method: 'dpo',
-        dpo_token: session.dpo_token,
-        dpo_reference: session.dpo_reference,
-        status: 'completed',
-        created_date: nowIso(),
-        updated_date: nowIso(),
-      });
-
-      await db.collection('artistPayouts').add({
-        order_id: orderRef.id,
-        artwork_id: artworkId,
-        seller_email: artwork.artist_email,
-        seller_name: safeText(artwork.artist_name, 160),
-        total_amount: session.amounts[artworkId],
-        platform_fee: Math.round(session.amounts[artworkId] * 0.1),
-        payout_amount: Math.round(session.amounts[artworkId] * 0.9),
-        status: 'pending',
-        created_date: nowIso(),
-        updated_date: nowIso(),
-      });
-
-      if (process.env.SENDGRID_API_KEY && process.env.FROM_EMAIL) {
-        try {
-          await sendMail({
-            to: artwork.artist_email,
-            subject: '🎨 Your artwork has been sold!',
-            html: `<h2>Congratulations!</h2><p>Your artwork <strong>${safeText(artwork.title, 200)}</strong> has been purchased.</p><p>Amount: ZMW ${session.amounts[artworkId].toLocaleString()}</p><p>Please arrange delivery with the buyer.</p>`,
-          });
-        } catch (e) { /* email is optional */ }
-      }
-    }
+    const finalized = await finalizeApprovedSession(sessionRef, session, session.dpo_token);
 
     return {
       success: true,
       status: 'completed',
-      orders: orders.map((o) => ({ id: o.id, artwork_title: o.artwork_title, amount: o.amount })),
+      alreadyProcessed: finalized.alreadyProcessed || false,
+      orders: (finalized.orders || []).map((o) => ({ id: o.id, artwork_title: o.artwork_title, amount: o.amount })),
       session,
     };
   }
@@ -470,40 +812,7 @@ export const dpoCallback = onRequest(async (request, response) => {
         });
 
         if (approved) {
-          for (const artworkId of session.artworkIds) {
-            const artworkRef = db.collection('artworks').doc(artworkId);
-            const artworkSnap = await artworkRef.get();
-            if (!artworkSnap.exists) continue;
-            const artwork = artworkSnap.data();
-            const orderRef = db.collection('orders').doc();
-            const orderPayload = {
-              artwork_id: artworkId,
-              artwork_title: safeText(artwork.title, 200),
-              artwork_image: artwork.image_urls?.[0] || artwork.images?.[0] || '',
-              buyer_uid: session.buyer_uid,
-              buyer_email: session.buyer_email,
-              buyer_name: session.buyer_name,
-              seller_email: artwork.artist_email,
-              seller_name: safeText(artwork.artist_name, 160),
-              amount: session.amounts[artworkId],
-              amount_zmw: session.amounts[artworkId],
-              delivery_method: session.delivery_method,
-              delivery_address: session.delivery_address,
-              delivery_phone: session.delivery_phone,
-              delivery_notes: session.delivery_notes,
-              status: 'confirmed',
-              delivery_status: 'pending',
-              payment_status: 'paid',
-              payment_method: 'dpo',
-              dpo_token: TransactionToken,
-              checkout_session_id: sessionRef.id,
-              paid_date: nowIso(),
-              created_date: nowIso(),
-              updated_date: nowIso(),
-            };
-            await orderRef.set(orderPayload);
-            await artworkRef.update({ status: 'sold', sold_price_zmw: session.amounts[artworkId], sold_date: nowIso(), buyer_email: session.buyer_email, updated_date: nowIso() });
-          }
+          await finalizeApprovedSession(sessionRef, session, TransactionToken);
         }
       }
     }
@@ -524,6 +833,7 @@ export const dpoCallback = onRequest(async (request, response) => {
 
 // ─── Place Bid ────────────────────────────────────────────────────────
 export const placeBid = onCall(async (request) => {
+  rateLimitUser(request, 30, 60 * 1000, 'placeBid');
   const caller = requireUser(request);
   const artworkId = request.data?.artwork_id;
   const amount = Number(request.data?.amount);
@@ -581,6 +891,7 @@ export const suggestArtworkPrice = onCall(async (request) => {
 
 // ─── Verification ─────────────────────────────────────────────────────
 export const submitVerification = onCall(async (request) => {
+  rateLimitUser(request, 5, 60 * 1000, 'submitVerification');
   const caller = requireUser(request);
   const data = request.data || {};
   if (!data.full_name || !data.nrc_number || !data.phone_number) throw new HttpsError('invalid-argument', 'Full name, NRC and phone number are required');

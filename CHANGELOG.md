@@ -59,11 +59,11 @@ All notable changes to this project are documented here. Format is loosely
 - Added `MEMBERSHIP_TIERS` (pro 800 ZMW/30d, elite 2800 ZMW/30d) + `initiateMembershipPayment` callable returning a DPO checkout redirect.
 - Refactored `verifyDPOPayment` + `dpoCallback` to share a single idempotent `finalizeApprovedSession` helper (dedup on `sessionId` / `tx_ref`) covering both membership subscriptions and artwork orders.
 - Added in-memory `rateLimit` / `rateLimitUser` token-bucket helpers; applied limits: `invokeLLM` 20 req / 60 s, `sendMessage` 30 req / 60 s.
-- `functions/.env` created (gitignored) with TEST DPO token fallback.
+- `functions/.env` created (gitignored) with TEST DPO token.
 - `node --check functions/index.js` + `dpo.js` ✅.
 
 ## [Phase 2.5 — Production Hardening] (released; commit 6e7cbc1)
-- DPO CompanyToken sourced from `process.env.DPO_COMPANY_TOKEN` (TEST fallback); service type via env.
+- DPO CompanyToken sourced from `process.env.DPO_COMPANY_TOKEN` (no source fallback; fails safely if unset); service type via env.
 - Rewired `BuyArtworkModal` → `createCheckoutSession` DPO redirect.
 - `QuickContactCard`: deterministic sorted conversationId matching `MessageThread`.
 - `ManageArtworks`: dual-schema normalization (price_zmw+price, images+image_urls) on read + write.

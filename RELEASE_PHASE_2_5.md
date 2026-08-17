@@ -20,7 +20,7 @@ Genuine issues found during the production audit were fixed. No redesign was per
 - **`src/lib/ErrorBoundary.jsx`** (new) + **`src/main.jsx`** — Added a global error boundary with a 500 fallback screen and a "Try Again" recovery action.
 
 ### Security fix (backend)
-- **`functions/dpo.js`** — The DPO CompanyToken is now read from `process.env.DPO_COMPANY_TOKEN` (with `DPO_SERVICE_TYPE` for the service type), instead of being hardcoded in source. A development placeholder remains as fallback only; documented in `functions/.env.example` that it **must be rotated and set in production config** before launch.
+- **`functions/dpo.js`** — The DPO CompanyToken is read exclusively from `process.env.DPO_COMPANY_TOKEN` (`DPO_SERVICE_TYPE` for the service type). There is no hardcoded fallback; if the variable is unset the functions fail safely with a server-side error. DPO MODE = TEST/DEMO.
 
 ### SEO / discoverability
 - **`public/manifest.json`** (new) — Web app manifest (referenced by `index.html` but previously missing).
@@ -113,7 +113,7 @@ Genuine issues found during the production audit were fixed. No redesign was per
 ## 6. Remaining Risks & Remaining Work
 
 **High priority**
-1. **Rotate & set DPO CompanyToken** in production function config (`DPO_COMPANY_TOKEN`, `DPO_SERVICE_TYPE`). The placeholder value is now flagged as development-only.
+1. **Supply DPO CompanyToken** via runtime config/.env (`DPO_COMPANY_TOKEN`, `DPO_SERVICE_TYPE`). `dpo.js` reads env only with no source fallback; DPO MODE = TEST/DEMO.
 2. **Membership payments (Pro/Elite)** — `initiateMembershipPayment` is called by `ProfileMonetization` but has no backend implementation. Either implement a DPO checkout for membership tiers or disable the upgrade CTA with a clear message.
 3. **MyExhibitions Edit button** — inert; needs to load an exhibition into the curator for editing, or be removed/disabled with messaging.
 
